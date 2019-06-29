@@ -5,22 +5,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
+class Main implements ActionListener {
+    GraphicsPanel graphicsPanel;
 
-public class Main {
-
-    public static void main(String[] args) {
-        JFrame frame = createFrame();
-        JMenuBar menuBar = createMenuBar();
-        JPanel statusBar = createStatusBar();
-        GraphicsPanel graphicsPanel = new GraphicsPanel();
-
-        frame.add(graphicsPanel);
-        frame.add(statusBar, BorderLayout.SOUTH);
-        frame.setJMenuBar(menuBar);
-        frame.setVisible(true);
-    }
-
-    public static JFrame createFrame() {
+    public Main() {
         Image iconOfApp = new ImageIcon("Иконка приложения.png").getImage();
 
         JFrame frame = new JFrame("Graph application");
@@ -30,24 +18,6 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
-        return frame;
-    }
-    public static JPanel createStatusBar() {
-        JPanel statusBar = new JPanel();
-
-        statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        statusBar.setLayout(new BorderLayout());
-
-        BoundedRangeModel model = new DefaultBoundedRangeModel(30, 0, 0, 200);
-
-        JSlider slider = new JSlider(model);
-
-        statusBar.add(slider, BorderLayout.EAST);
-
-        return statusBar;
-    }
-
-    public static JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu menuFile = new JMenu("Файл");
@@ -86,6 +56,7 @@ public class Main {
 
         subMenuAlgorithm.add(itemAlgorithm);
 
+        itemAddVertices.addActionListener(this);
         menuAction.add(itemAddVertices);
         menuAction.add(itemConnectVertices);
         menuAction.add(itemDelete);
@@ -98,6 +69,43 @@ public class Main {
 
         menuHelp.add(itemAboutProgram);
 
-        return  menuBar;
+        JPanel statusBar = new JPanel();
+
+        statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        statusBar.setLayout(new BorderLayout());
+
+        BoundedRangeModel model = new DefaultBoundedRangeModel(30, 0, 0, 200);
+
+        JSlider slider = new JSlider(model);
+
+        statusBar.add(slider, BorderLayout.EAST);
+
+        graphicsPanel = new GraphicsPanel();
+
+        frame.add(graphicsPanel);
+        frame.add(statusBar, BorderLayout.SOUTH);
+        frame.setJMenuBar(menuBar);
+        frame.setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent ae){
+        String comStr = ae.getActionCommand();
+        if(comStr.equals("Добавить вершины")){
+            graphicsPanel.AddVertex = !graphicsPanel.AddVertex;
+
+            JButton button = new JButton("Завершить");
+            SpringLayout r = new SpringLayout();
+            r.putConstraint(SpringLayout.NORTH,button,10,SpringLayout.EAST,graphicsPanel);
+            //graphicsPanel.setLayout(new BoxLayout());
+            graphicsPanel.add(button, r);
+            graphicsPanel.updateUI();
+        }
+    }
+    public static void main(String[] args) {
+        SwingUtilities. invokeLater(new Runnable() {
+            public void run() {
+                new Main();
+            }
+        } ) ;
     }
 }
