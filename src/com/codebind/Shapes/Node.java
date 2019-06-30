@@ -20,6 +20,10 @@ public class Node implements Movable, Drawable {
         position = newPosition;
     }
 
+    public Point getPosition() {
+        return position;
+    }
+
     @Override
     public Rectangle getBoundingRect() {
         return new Rectangle(position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);

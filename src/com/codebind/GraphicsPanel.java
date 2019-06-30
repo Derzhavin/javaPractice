@@ -1,5 +1,6 @@
 package com.codebind;
 
+import com.codebind.Shapes.Edge;
 import com.codebind.Shapes.Node;
 
 import javax.swing.*;
@@ -11,11 +12,13 @@ import java.util.*;
 
 public class GraphicsPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-    public ArrayList<Node> nodes;
+    private ArrayList<Node> nodes;
+    private ArrayList<Edge> edges;
+
     public static boolean AddVertex = false;
-    public static boolean drag = false;
+    public static boolean connectVertices = false;
+    public boolean drag = false;
     private Node nodeDrag = null;
-    private Point movableCirclePosition;
 
     public GraphicsPanel() {
         nodes = new ArrayList<>();
