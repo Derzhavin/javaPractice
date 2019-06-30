@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 enum GraphState {
     CREATE_NODE,
@@ -176,6 +177,18 @@ public class Graph implements Drawable {
 
     public void setState(GraphState state) {
         this.state = state;
+    }
+
+    public void connectAllVertices() {
+        for (int i = 0; i < nodes.size() - 1; i++) {
+            for (int j = i + 1; j < nodes.size(); j++) {
+                Edge edge = new Edge(nodes.get(i), nodes.get(j));
+
+                nodes.get(i).addEdge(edge);
+                nodes.get(j).addEdge(edge);
+                edges.add(edge);
+            }
+        }
     }
 
     @Override

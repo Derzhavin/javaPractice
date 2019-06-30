@@ -31,7 +31,9 @@ public class Node implements Movable, Drawable {
     }
 
     public void addEdge(Edge edge) {
-        edges.add(edge);
+        if (!edges.contains(edge)) {
+            edges.add(edge);
+        }
     }
 
     public void removeEdge(Edge edge) {

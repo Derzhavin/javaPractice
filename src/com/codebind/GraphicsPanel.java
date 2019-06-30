@@ -42,6 +42,7 @@ public class GraphicsPanel extends JPanel {
     }
 
     Graph getGraph() {return graph;}
+
     void setGraphState(GraphState state) {
         graph.setState(state);
     }
