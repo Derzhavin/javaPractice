@@ -8,6 +8,13 @@ import javax.swing.border.BevelBorder;
 class Main implements ActionListener {
     GraphicsPanel graphicsPanel;
 
+    public enum GraphStates {
+        CREATE_NODE,
+        CONNECT_NODE,
+        MOVE_NODE,
+        NOTHING
+    }
+
     public Main() {
         Image iconOfApp = new ImageIcon("Иконка приложения.png").getImage();
 
@@ -88,17 +95,15 @@ class Main implements ActionListener {
         frame.setVisible(true);
     }
 
-    public void actionPerformed(ActionEvent ae){
+    public void actionPerformed(ActionEvent ae) {
         String comStr = ae.getActionCommand();
-        if(comStr.equals("Добавить вершины")){
-            graphicsPanel.AddVertex = !graphicsPanel.AddVertex;
 
-            JButton button = new JButton("Завершить");
-            SpringLayout r = new SpringLayout();
-            r.putConstraint(SpringLayout.NORTH,button,10,SpringLayout.EAST,graphicsPanel);
-            //graphicsPanel.setLayout(new BoxLayout());
-            graphicsPanel.add(button, r);
-            graphicsPanel.updateUI();
+        if(comStr.equals("Добавить вершины")) {
+            GraphicsPanel.AddVertex = !GraphicsPanel.AddVertex;
+        }
+        else if (comStr.equals("Соединить вершины")) {
+            GraphicsPanel.AddVertex = false;
+            GraphicsPanel.connectVertices = true;
         }
     }
     public static void main(String[] args) {
