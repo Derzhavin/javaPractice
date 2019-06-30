@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 enum GraphState {
@@ -25,6 +26,7 @@ public class Graph implements Drawable {
     private ArrayList<Node> nodes;
     private DraggData draggData;
     private ConnectData connectData;
+    private DeleteData deleteData;
 
     public MouseListener mouseListener = new MouseAdapter() {
         @Override
@@ -78,6 +80,9 @@ public class Graph implements Drawable {
                 case NOTHING:
                     break;
                 case DELETE_NODE:
+                    deleteData.setFirstPoint(e.getPoint());
+                    deleteData.secondPoint = e.getPoint();
+
                     for (Node node : nodes) {
                         if (node.getBoundingRect().contains(e.getPoint())) {
                             nodes.remove(node);
@@ -106,6 +111,26 @@ public class Graph implements Drawable {
                     break;
                 case NOTHING:
                     break;
+                case DELETE_NODE:
+                    deleteData.setSecondPoint(e.getPoint());
+                    ArrayList<Edge> edgesToDelete = new ArrayList<>();
+
+                    for (Edge edge : edges) {
+                        if (Line2D.linesIntersect(edge.getNodes()[0].getPosition().x, edge.getNodes()[0].getPosition().y,
+                                edge.getNodes()[1].getPosition().x, edge.getNodes()[1].getPosition().y,
+                                deleteData.firstPoint.x, deleteData.firstPoint.y,
+                                deleteData.secondPoint.x, deleteData.secondPoint.y)) {
+                            edgesToDelete.add(edge);
+                        }
+                    }
+
+                    for (Edge edge : edgesToDelete) {
+                        edge.destroy();
+                    }
+
+                    edges.removeAll(edgesToDelete);
+
+                    break;
             }
         }
     };
@@ -128,6 +153,9 @@ public class Graph implements Drawable {
                     break;
                 case NOTHING:
                     break;
+                case DELETE_NODE:
+                    deleteData.secondPoint = e.getPoint();
+                    break;
             }
         }
 
@@ -143,6 +171,7 @@ public class Graph implements Drawable {
         state = GraphState.NOTHING;
         draggData = new DraggData();
         connectData = new ConnectData();
+        deleteData = new DeleteData();
     }
 
     public void setState(GraphState state) {
@@ -158,6 +187,11 @@ public class Graph implements Drawable {
         for (Node node : nodes) {
             node.draw(g);
         }
+
+        if (deleteData.cutting) {
+            g.setColor(Color.yellow);
+            g.drawLine(deleteData.firstPoint.x, deleteData.firstPoint.y, deleteData.secondPoint.x, deleteData.secondPoint.y);
+        }
     }
 
     private static class DraggData {
@@ -167,6 +201,28 @@ public class Graph implements Drawable {
         public DraggData() {
             isDragg = false;
             node = null;
+        }
+    }
+
+    private static class DeleteData {
+        private Point firstPoint;
+        private Point secondPoint;
+        private boolean cutting;
+
+        public DeleteData() {
+            firstPoint = null;
+            secondPoint = null;
+            cutting = false;
+        }
+
+        public void setFirstPoint(Point point) {
+            firstPoint = point;
+            cutting = true;
+        }
+
+        public void setSecondPoint(Point point) {
+            secondPoint = point;
+            cutting = false;
         }
     }
 
