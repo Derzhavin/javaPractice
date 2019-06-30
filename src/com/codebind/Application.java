@@ -53,6 +53,7 @@ class Application implements ActionListener {
         JMenuItem itemDelete = new JMenuItem("Удалить", iconCross);
         JMenu subMenuAlgorithm = new JMenu("Алгоритм");
         JMenuItem itemClearScene = new JMenuItem("Очистить полотно", iconBroom);
+        JMenuItem itemTransfer = new JMenuItem("Перемещение", iconArrow);
         JMenuItem itemNothing = new JMenuItem("Перемещение", iconArrow);
 
         subMenuAlgorithm.setIcon(iconGear);
@@ -62,16 +63,17 @@ class Application implements ActionListener {
 
         itemAddVertices.addActionListener(this);
         itemConnectVertices.addActionListener(this);
-        itemNothing.addActionListener(this);
+        itemTransfer.addActionListener(this);
         itemClearScene.addActionListener(this);
         itemDelete.addActionListener(this);
+        itemNothing.addActionListener(this);
 
         menuAction.add(itemAddVertices);
         menuAction.add(itemConnectVertices);
         menuAction.add(itemDelete);
         menuAction.add(subMenuAlgorithm);
         menuAction.add(itemClearScene);
-        menuAction.add(itemNothing);
+        menuAction.add(itemTransfer);
 
         ImageIcon iconQuestion = new ImageIcon("img/Вопрос.png");
 
@@ -115,7 +117,7 @@ class Application implements ActionListener {
         } else if (command.equals("Очистить полотно")) {
             graphicsPanel.getGraph().removeGraph();
         } else if (command.equals("Удалить")) {
-
+            graphicsPanel.setGraphState(GraphState.DELETE_NODE);
         } else if(command.equals("Ничего не делать")){
             graphicsPanel.setGraphState(GraphState.NOTHING);
 
