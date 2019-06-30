@@ -182,11 +182,13 @@ public class Graph implements Drawable {
     public void connectAllVertices() {
         for (int i = 0; i < nodes.size() - 1; i++) {
             for (int j = i + 1; j < nodes.size(); j++) {
-                Edge edge = new Edge(nodes.get(i), nodes.get(j));
+                if (!nodes.get(i).getNeighbours().contains(nodes.get(j))) {
+                    Edge edge = new Edge(nodes.get(i), nodes.get(j));
 
-                nodes.get(i).addEdge(edge);
-                nodes.get(j).addEdge(edge);
-                edges.add(edge);
+                    nodes.get(i).addEdge(edge);
+                    nodes.get(j).addEdge(edge);
+                    edges.add(edge);
+                }
             }
         }
     }
