@@ -91,14 +91,7 @@ class Main implements ActionListener {
     public void actionPerformed(ActionEvent ae){
         String comStr = ae.getActionCommand();
         if(comStr.equals("Добавить вершины")){
-            graphicsPanel.AddVertex = !graphicsPanel.AddVertex;
-
-            JButton button = new JButton("Завершить");
-            SpringLayout r = new SpringLayout();
-            r.putConstraint(SpringLayout.NORTH,button,10,SpringLayout.EAST,graphicsPanel);
-            //graphicsPanel.setLayout(new BoxLayout());
-            graphicsPanel.add(button, r);
-            graphicsPanel.updateUI();
+            GraphicsPanel.AddVertex = !GraphicsPanel.AddVertex;
         }
     }
     public static void main(String[] args) {
