@@ -38,6 +38,7 @@ public class GraphicsPanel extends JPanel {
             g2.fillOval(point.x - 10, point.y - 10, 20, 20);
         }
     }
+
 }
 
 

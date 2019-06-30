@@ -81,7 +81,7 @@ class Main implements ActionListener {
         statusBar.add(slider, BorderLayout.EAST);
 
         graphicsPanel = new GraphicsPanel();
-
+        addInst();
         frame.add(graphicsPanel);
         frame.add(statusBar, BorderLayout.SOUTH);
         frame.setJMenuBar(menuBar);
@@ -90,16 +90,28 @@ class Main implements ActionListener {
 
     public void actionPerformed(ActionEvent ae){
         String comStr = ae.getActionCommand();
+        MyButton tbut = (MyButton)ae.getSource();
+        tbut.pressed = true;
         if(comStr.equals("Добавить вершины")){
             graphicsPanel.AddVertex = !graphicsPanel.AddVertex;
-
-            JButton button = new JButton("Завершить");
-            SpringLayout r = new SpringLayout();
-            r.putConstraint(SpringLayout.NORTH,button,10,SpringLayout.EAST,graphicsPanel);
-            //graphicsPanel.setLayout(new BoxLayout());
-            graphicsPanel.add(button, r);
-            graphicsPanel.updateUI();
+            tbut.newstate();
         }
+        if(comStr.equals("Ничего не делать")){
+            graphicsPanel.AddVertex = false;
+            Component[] all = graphicsPanel.getComponents();
+            JPanel p = (JPanel) all[0];
+            Component[] buts = p.getComponents();
+            for(Component cbut: buts){
+                MyButton but = (MyButton)cbut;
+                if(but.pressed == true){
+                    but.pressed = false;
+                    but.newstate();
+
+                }
+            }
+
+        }
+        graphicsPanel.updateUI();
     }
     public static void main(String[] args) {
         SwingUtilities. invokeLater(new Runnable() {
@@ -107,5 +119,52 @@ class Main implements ActionListener {
                 new Main();
             }
         } ) ;
+    }
+
+    public void addInst(){
+
+        String[] icons = {"mouse.png","add.png","path.png","delete.png","alg.png","clean.png"};
+        String[] com = {"Ничего не делать","Добавить вершины","Соединить вершины",
+                "Удалить","Алгоритм","Очистить полотно"};
+        //Container inst = new Container();
+        JPanel inst = new JPanel(new GridLayout(3,2,0,0));
+        //inst.setSize(64, (icons.length/2)*32);
+        MyButton button;
+        //inst.setBackground(new Color(165, 165, 197));
+        for(int i =0; i < icons.length; i++ ){
+            button = new MyButton();
+            button.setIcon        (new ImageIcon(icons[i]));
+            //button.setRolloverIcon(new ImageIcon("mouse.png" ));
+            //button.setPressedIcon ();
+            //button.setDisabledIcon(new ImageIcon("mouse.png"));
+            // Убираем все ненужные рамки и закраску
+            //button.setBorderPainted(false);
+            //button.setFocusPainted(false);
+            //button.setContentAreaFilled(false);
+
+            button.setActionCommand(com[i]);
+            button.setBackground(new Color(205, 210, 255));
+
+            //button.addActionListener();
+            button.setPreferredSize(new Dimension(32,32));
+            button.addActionListener(this);
+            inst.add(button);
+        }
+        //inst.setMinimumSize();
+
+        graphicsPanel.add(inst);
+        graphicsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+    }
+}
+
+class MyButton extends JButton{
+    public boolean pressed = false;
+    void newstate() {
+        if (pressed) {
+            this.setBackground(new Color(165, 165, 197));
+        } else {
+            this.setBackground(new Color(205, 210, 255));
+        }
     }
 }
