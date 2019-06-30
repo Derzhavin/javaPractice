@@ -1,19 +1,12 @@
 package com.codebind;
 
-import com.codebind.Shapes.Edge;
-import com.codebind.Shapes.Node;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-
-import java.util.*;
-
 public class GraphicsPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private Graph graph;
-
 
     public GraphicsPanel() {
         graph = new Graph();
@@ -49,7 +42,7 @@ public class GraphicsPanel extends JPanel {
         });
     }
 
-    void setGraphState(Main.GraphStates state) {
+    void setGraphState(GraphState state) {
         graph.setState(state);
     }
 

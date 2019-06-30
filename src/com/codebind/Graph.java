@@ -11,10 +11,17 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
+enum GraphState {
+    CREATE_NODE,
+    CONNECT_NODE,
+    MOVE_NODE,
+    NOTHING
+}
+
 public class Graph implements Drawable {
+    private GraphState state;
     private ArrayList<Edge> edges;
     private ArrayList<Node> nodes;
-    private Main.GraphStates state;
     private DraggData draggData;
     private ConnectData connectData;
 
@@ -105,12 +112,12 @@ public class Graph implements Drawable {
     public Graph() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
-        state = Main.GraphStates.NOTHING;
+        state = GraphState.NOTHING;
         draggData = new DraggData();
         connectData = new ConnectData();
     }
 
-    public void setState(Main.GraphStates state) {
+    public void setState(GraphState state) {
         this.state = state;
     }
 
