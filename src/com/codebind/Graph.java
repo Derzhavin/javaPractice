@@ -32,7 +32,7 @@ public class Graph implements Drawable {
 
             switch (state) {
                 case CREATE_NODE:
-                    nodes.add(new Node(e.getPoint(), new Dimension(20, 20)));
+                    nodes.add(new Node(e.getPoint(), new Dimension(20, 20), "a"));
                     break;
                 case CONNECT_NODE:
                     for (Node node : nodes) {
@@ -175,5 +175,10 @@ public class Graph implements Drawable {
             secondNode = null;
             edgeCreated = false;
         }
+    }
+
+    void removeGraph() {
+        nodes.clear();
+        edges.clear();
     }
 }
