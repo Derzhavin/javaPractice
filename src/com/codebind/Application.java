@@ -4,12 +4,14 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 
 class Application implements ActionListener {
-    private JFrame frame;
+    public JFrame frame;
     private GraphicsPanel graphicsPanel;
     private JMenuBar menuBar;
     private JPanel statusBar;
+    JPanel instrumentPanel;
 
     public Application() {
         Image iconOfApp = new ImageIcon("img/Иконка приложения.png").getImage();
@@ -94,12 +96,10 @@ class Application implements ActionListener {
 
         graphicsPanel = new GraphicsPanel();
 
-        JPanel instrumentPanel = createInstrumentPanel();
-
-        graphicsPanel.add(instrumentPanel);
-        graphicsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        instrumentPanel = createInstrumentPanel();
 
         frame.add(graphicsPanel);
+        frame.add(instrumentPanel, BorderLayout.NORTH);
         frame.add(statusBar, BorderLayout.SOUTH);
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
@@ -121,8 +121,6 @@ class Application implements ActionListener {
         } else if(command.equals("Ничего не делать")){
             graphicsPanel.setGraphState(GraphState.NOTHING);
 
-            JPanel instrumentPanel = (JPanel) graphicsPanel.getComponents()[0];
-
             Component[] instrumentPanelComponents = instrumentPanel.getComponents();
 
             for(Component instrumentPanelComponent: instrumentPanelComponents){
@@ -143,14 +141,14 @@ class Application implements ActionListener {
         String[] commands = {"Ничего не делать","Добавить вершины","Соединить вершины",
                 "Удалить","Алгоритм","Очистить полотно"};
 
-        JPanel instrumentPanel = new JPanel(new GridLayout(3,2,0,0));
+        JPanel instrumentPanel = new JPanel(new GridLayout(1,6,0,0));
 
         for(int i =0; i < icons.length; i++ ){
             Button button = new Button();
             button.setIcon(new ImageIcon(icons[i]));
             button.setActionCommand(commands[i]);
-            button.setBackground(new Color(205, 210, 255));
-            button.setPreferredSize(new Dimension(32,32));
+            //button.setBackground(new Color(205, 210, 255));
+            button.setPreferredSize(new Dimension(32, 32));
             button.addActionListener(this);
             instrumentPanel.add(button);
         }

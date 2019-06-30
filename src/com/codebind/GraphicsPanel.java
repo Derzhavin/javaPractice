@@ -11,7 +11,6 @@ public class GraphicsPanel extends JPanel {
     public GraphicsPanel() {
         graph = new Graph();
         setBackground(new Color(205, 210, 255));
-        setBorder(BorderFactory.createLineBorder(Color.black));
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
