@@ -63,6 +63,8 @@ class Application implements ActionListener {
         itemAddVertices.addActionListener(this);
         itemConnectVertices.addActionListener(this);
         itemNothing.addActionListener(this);
+        itemClearScene.addActionListener(this);
+        itemDelete.addActionListener(this);
 
         menuAction.add(itemAddVertices);
         menuAction.add(itemConnectVertices);
@@ -73,7 +75,7 @@ class Application implements ActionListener {
 
         ImageIcon iconQuestion = new ImageIcon("img/Вопрос.png");
 
-        JMenuItem itemAboutProgram = new JMenuItem("img/О программе", iconQuestion);
+        JMenuItem itemAboutProgram = new JMenuItem("О программе", iconQuestion);
 
         menuHelp.add(itemAboutProgram);
 
@@ -102,15 +104,19 @@ class Application implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
-        String comStr = ae.getActionCommand();
+        String command = ae.getActionCommand();
 
-        if (comStr.equals("Добавить вершины")) {
+        if (command.equals("Добавить вершины")) {
             graphicsPanel.setGraphState(GraphState.CREATE_NODE);
-        } else if (comStr.equals("Соединить вершины")) {
+        } else if (command.equals("Соединить вершины")) {
             graphicsPanel.setGraphState(GraphState.CONNECT_NODE);
-        } else if (comStr.equals("Перемещение")) {
+        } else if (command.equals("Перемещение")) {
             graphicsPanel.setGraphState(GraphState.MOVE_NODE);
-        } else if(comStr.equals("Ничего не делать")){
+        } else if (command.equals("Очистить полотно")) {
+            graphicsPanel.getGraph().removeGraph();
+        } else if (command.equals("Удалить")) {
+
+        } else if(command.equals("Ничего не делать")){
             graphicsPanel.setGraphState(GraphState.NOTHING);
 
             JPanel instrumentPanel = (JPanel) graphicsPanel.getComponents()[0];
@@ -142,7 +148,6 @@ class Application implements ActionListener {
             button.setIcon(new ImageIcon(icons[i]));
             button.setActionCommand(commands[i]);
             button.setBackground(new Color(205, 210, 255));
-
             button.setPreferredSize(new Dimension(32,32));
             button.addActionListener(this);
             instrumentPanel.add(button);
