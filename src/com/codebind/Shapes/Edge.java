@@ -1,7 +1,6 @@
 package com.codebind.Shapes;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
 
 
 public class Edge implements Drawable {

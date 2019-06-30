@@ -207,4 +207,9 @@ public class Graph implements Drawable {
             edgeCreated = false;
         }
     }
+
+    void removeGraph() {
+        nodes.clear();
+        edges.clear();
+    }
 }
