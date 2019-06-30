@@ -16,6 +16,7 @@ public class Graph implements Drawable {
     private ArrayList<Node> nodes;
     private Main.GraphStates state;
     private DraggData draggData;
+    private ConnectData connectData;
 
     public MouseListener mouseListener = new MouseAdapter() {
         @Override
@@ -27,6 +28,18 @@ public class Graph implements Drawable {
                     nodes.add(new Node(e.getPoint(), new Dimension(20, 20)));
                     break;
                 case CONNECT_NODE:
+                    for (Node node : nodes) {
+                        if (node.getBoundingRect().contains(e.getPoint())) {
+                            connectData.addNode(node);
+                            break;
+                        }
+                    }
+
+                    if (connectData.edgeCreated) {
+                        edges.add(new Edge(connectData.firstNode, connectData.secondNode));
+                        connectData.clear();
+                    }
+
                     break;
                 case MOVE_NODE:
                     for (Node node : nodes) {
@@ -94,6 +107,7 @@ public class Graph implements Drawable {
         edges = new ArrayList<>();
         state = Main.GraphStates.NOTHING;
         draggData = new DraggData();
+        connectData = new ConnectData();
     }
 
     public void setState(Main.GraphStates state) {
@@ -102,6 +116,10 @@ public class Graph implements Drawable {
 
     @Override
     public void draw(Graphics2D g) {
+        for (Edge edge : edges) {
+            edge.draw(g);
+        }
+
         for (Node node : nodes) {
             node.draw(g);
         }
@@ -117,4 +135,38 @@ public class Graph implements Drawable {
         }
     }
 
+    private static class ConnectData {
+        private Node firstNode;
+        private Node secondNode;
+        private boolean edgeCreated;
+
+        public ConnectData() {
+            firstNode = null;
+            secondNode = null;
+            edgeCreated = false;
+        }
+
+        private void addNode(Node node) {
+            if (secondNode != null) {
+                return;
+            }
+            else if (firstNode == null) {
+                node.setColor(Color.green);
+                firstNode = node;
+            }
+            else {
+                node.setColor(Color.green);
+                secondNode = node;
+                edgeCreated = true;
+            }
+        }
+
+        public void clear() {
+            firstNode.setColor(Color.red);
+            secondNode.setColor(Color.red);
+            firstNode = null;
+            secondNode = null;
+            edgeCreated = false;
+        }
+    }
 }
