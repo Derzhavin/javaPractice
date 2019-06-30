@@ -1,6 +1,7 @@
 package com.codebind.Shapes;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 
 public class Edge implements Drawable {
@@ -19,6 +20,17 @@ public class Edge implements Drawable {
         else {
             return (node == sourceNode) ? destNode : sourceNode;
         }
+    }
+
+    public Node[] getNodes() {
+        Node[] pair = { sourceNode, destNode };
+
+        return pair;
+    }
+
+    public void destroy() {
+        sourceNode.removeEdge(this);
+        destNode.removeEdge(this);
     }
 
     @Override

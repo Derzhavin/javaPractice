@@ -34,6 +34,10 @@ public class Node implements Movable, Drawable {
         edges.add(edge);
     }
 
+    public void removeEdge(Edge edge) {
+        edges.remove(edge);
+    }
+
     public ArrayList<Node> getNeighbours() {
         ArrayList<Node> nbs = new ArrayList<>();
 
