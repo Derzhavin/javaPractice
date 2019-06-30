@@ -12,28 +12,21 @@ import java.util.*;
 
 public class GraphicsPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-    private ArrayList<Node> nodes;
-    private ArrayList<Edge> edges;
+    private Graph graph;
 
-    public static boolean AddVertex = false;
-    public static boolean connectVertices = false;
-    public boolean drag = false;
-    private Node nodeDrag = null;
 
     public GraphicsPanel() {
-        nodes = new ArrayList<>();
+        graph = new Graph();
         setBackground(new Color(205, 210, 255));
         setBorder(BorderFactory.createLineBorder(Color.black));
+
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
                 super.mouseDragged(mouseEvent);
-                System.out.println("AA");
+                graph.mouseMotionListener.mouseDragged(mouseEvent);
 
-                if (drag) {
-                    nodeDrag.moveTo(mouseEvent.getPoint());
-                    repaint();
-                }
+                repaint();
             }
         });
 
@@ -41,20 +34,7 @@ public class GraphicsPanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 super.mousePressed(mouseEvent);
-
-                if (AddVertex) {
-                    nodes.add(new Node(mouseEvent.getPoint(), new Dimension(20, 20)));
-                }
-                else {
-                    for (Node node : nodes) {
-                        if (node.getBoundingRect().contains(mouseEvent.getPoint())) {
-                            drag = true;
-                            nodeDrag = node;
-                            break;
-                        }
-                    }
-
-                }
+                graph.mouseListener.mousePressed(mouseEvent);
 
                 repaint();
             }
@@ -62,12 +42,16 @@ public class GraphicsPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 super.mouseReleased(mouseEvent);
+                graph.mouseListener.mouseReleased(mouseEvent);
 
-                drag = false;
+                repaint();
             }
         });
     }
 
+    void setGraphState(Main.GraphStates state) {
+        graph.setState(state);
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -75,10 +59,7 @@ public class GraphicsPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.red);
-
-        for (Node node : nodes) {
-            node.draw(g2);
-        }
+        graph.draw(g2);
     }
 }
 

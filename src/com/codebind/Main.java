@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
 class Main implements ActionListener {
-    GraphicsPanel graphicsPanel;
+    private GraphicsPanel graphicsPanel;
 
     public enum GraphStates {
         CREATE_NODE,
@@ -57,6 +57,7 @@ class Main implements ActionListener {
         JMenuItem itemDelete = new JMenuItem("Удалить", iconCross);
         JMenu subMenuAlgorithm = new JMenu("Алгоритм");
         JMenuItem itemClearScene = new JMenuItem("Очистить полотно", iconBroom);
+        JMenuItem itemNothing = new JMenuItem("Перемещение", iconArrow);
 
         subMenuAlgorithm.setIcon(iconGear);
         JMenuItem itemAlgorithm = new JMenuItem("<Конкретный алгоритм>");
@@ -64,11 +65,15 @@ class Main implements ActionListener {
         subMenuAlgorithm.add(itemAlgorithm);
 
         itemAddVertices.addActionListener(this);
+        itemConnectVertices.addActionListener(this);
+        itemNothing.addActionListener(this);
+
         menuAction.add(itemAddVertices);
         menuAction.add(itemConnectVertices);
         menuAction.add(itemDelete);
         menuAction.add(subMenuAlgorithm);
         menuAction.add(itemClearScene);
+        menuAction.add(itemNothing);
 
         ImageIcon iconQuestion = new ImageIcon("Вопрос.png");
 
@@ -99,11 +104,13 @@ class Main implements ActionListener {
         String comStr = ae.getActionCommand();
 
         if(comStr.equals("Добавить вершины")) {
-            GraphicsPanel.AddVertex = !GraphicsPanel.AddVertex;
+            graphicsPanel.setGraphState(GraphStates.CREATE_NODE);
         }
         else if (comStr.equals("Соединить вершины")) {
-            GraphicsPanel.AddVertex = false;
-            GraphicsPanel.connectVertices = true;
+            graphicsPanel.setGraphState(GraphStates.CONNECT_NODE);
+        }
+        else if (comStr.equals("Перемещение")) {
+            graphicsPanel.setGraphState(GraphStates.MOVE_NODE);
         }
     }
     public static void main(String[] args) {
