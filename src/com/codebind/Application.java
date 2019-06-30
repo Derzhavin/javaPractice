@@ -53,7 +53,7 @@ class Application implements ActionListener {
         JMenuItem itemDelete = new JMenuItem("Удалить", iconCross);
         JMenu subMenuAlgorithm = new JMenu("Алгоритм");
         JMenuItem itemClearScene = new JMenuItem("Очистить полотно", iconBroom);
-        JMenuItem itemNothing = new JMenuItem("Перемещение", iconArrow);
+        JMenuItem itemTransfer = new JMenuItem("Перемещение", iconArrow);
 
         subMenuAlgorithm.setIcon(iconGear);
         JMenuItem itemAlgorithm = new JMenuItem("<Конкретный алгоритм>");
@@ -62,14 +62,15 @@ class Application implements ActionListener {
 
         itemAddVertices.addActionListener(this);
         itemConnectVertices.addActionListener(this);
-        itemNothing.addActionListener(this);
+        itemTransfer.addActionListener(this);
+        itemDelete.addActionListener(this);
 
         menuAction.add(itemAddVertices);
         menuAction.add(itemConnectVertices);
         menuAction.add(itemDelete);
         menuAction.add(subMenuAlgorithm);
         menuAction.add(itemClearScene);
-        menuAction.add(itemNothing);
+        menuAction.add(itemTransfer);
 
         ImageIcon iconQuestion = new ImageIcon("img/Вопрос.png");
 
@@ -108,6 +109,8 @@ class Application implements ActionListener {
             graphicsPanel.setGraphState(GraphState.CREATE_NODE);
         } else if (comStr.equals("Соединить вершины")) {
             graphicsPanel.setGraphState(GraphState.CONNECT_NODE);
+        }else if (comStr.equals("Удалить"))  {
+            graphicsPanel.setGraphState(GraphState.DELETE_NODE);
         } else if (comStr.equals("Перемещение")) {
             graphicsPanel.setGraphState(GraphState.MOVE_NODE);
         } else if(comStr.equals("Ничего не делать")){

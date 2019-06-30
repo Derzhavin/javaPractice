@@ -15,7 +15,8 @@ enum GraphState {
     CREATE_NODE,
     CONNECT_NODE,
     MOVE_NODE,
-    NOTHING
+    NOTHING,
+    DELETE_NODE
 }
 
 public class Graph implements Drawable {
@@ -35,16 +36,32 @@ public class Graph implements Drawable {
                     nodes.add(new Node(e.getPoint(), new Dimension(20, 20)));
                     break;
                 case CONNECT_NODE:
-                    for (Node node : nodes) {
-                        if (node.getBoundingRect().contains(e.getPoint())) {
-                            connectData.addNode(node);
-                            break;
-                        }
-                    }
-
-                    if (connectData.edgeCreated) {
-                        edges.add(new Edge(connectData.firstNode, connectData.secondNode));
+                    if (e.getButton() == MouseEvent.BUTTON3) { //Button3 - RightButton
                         connectData.clear();
+                        break;
+                    }
+                    else if (e.getButton() == MouseEvent.BUTTON1) {
+
+                        for (Node node : nodes) {
+                            if (node.getBoundingRect().contains(e.getPoint())) {
+                                connectData.addNode(node);
+                                break;
+                            }
+                        }
+
+                        if (connectData.edgeCreated) {
+                            if (!connectData.firstNode.getNeighbours().contains(connectData.secondNode)) {
+                                Edge newEdge = new Edge(connectData.firstNode, connectData.secondNode);
+                                edges.add(newEdge);
+                                connectData.firstNode.addEdge(newEdge);
+                                connectData.secondNode.addEdge(newEdge);
+                                connectData.clear();
+                            } else {
+                                connectData.secondNode.setColor(Color.red);
+                                connectData.secondNode = null;
+                                connectData.edgeCreated = false;
+                            }
+                        }
                     }
 
                     break;
@@ -59,6 +76,17 @@ public class Graph implements Drawable {
 
                     break;
                 case NOTHING:
+                    break;
+                case DELETE_NODE:
+                    for (Node node : nodes) {
+                        if (node.getBoundingRect().contains(e.getPoint())) {
+                            nodes.remove(node);
+                            edges.removeAll(node.getEdges());
+                            node.destroy();
+
+                            break;
+                        }
+                    }
                     break;
             }
         }
@@ -162,15 +190,18 @@ public class Graph implements Drawable {
                 firstNode = node;
             }
             else {
-                node.setColor(Color.green);
-                secondNode = node;
-                edgeCreated = true;
+                if (node != firstNode) {
+                    node.setColor(Color.green);
+                    secondNode = node;
+                    edgeCreated = true;
+                }
             }
         }
 
         public void clear() {
-            firstNode.setColor(Color.red);
-            secondNode.setColor(Color.red);
+            if (firstNode != null) firstNode.setColor(Color.red);
+            if (secondNode != null) secondNode.setColor(Color.red);
+
             firstNode = null;
             secondNode = null;
             edgeCreated = false;
