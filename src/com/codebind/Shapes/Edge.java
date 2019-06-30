@@ -6,7 +6,7 @@ import java.awt.geom.Line2D;
 public class Edge implements Drawable {
     private Node[] nodes = new Node[2];
 
-    Edge(Node n1, Node n2) {
+    public Edge(Node n1, Node n2) {
         nodes[0] = n1;
         nodes[1] = n2;
     }
