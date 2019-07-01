@@ -2,11 +2,16 @@ package com.codebind;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Point2D;
+
+import com.codebind.Shapes.Node;
 
 public class GraphicsPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private Graph graph;
     private JPanel panelNodesEdges;
+
+    private double scale = 1D;
 
     public GraphicsPanel() {
         graph = new Graph();
@@ -46,6 +51,42 @@ public class GraphicsPanel extends JPanel {
                 updatePanelNodesEdges();
 
                 repaint();
+            }
+        });
+
+        addMouseWheelListener(new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getPreciseWheelRotation() < 0) {
+                    scale -= 0.1;
+                } else {
+                    scale += 0.1;
+                }
+
+                if (scale < 0.01) {
+                    scale = 0.01;
+                }
+                System.out.println(scale);
+                Point2D.Double center = new Point2D.Double(getWidth()/2.0, getHeight()/2.0);
+
+                Node.scale *= scale;
+
+                for(Node node: graph.getNodes()) {
+                    Point2D.Double nodePoint2D = node.getPosition();
+                    if (center.y > nodePoint2D.y)
+                        nodePoint2D.y = center.y - Math.abs(center.y - nodePoint2D.y) * scale;
+                    else if (center.y < nodePoint2D.y)
+                        nodePoint2D.y = center.y + Math.abs(center.y - nodePoint2D.y) * scale;
+
+                    if (center.x > nodePoint2D.x)
+                        nodePoint2D.x = center.x - Math.abs(center.x - nodePoint2D.x) * scale;
+                    else if (center.x < nodePoint2D.x)
+                        nodePoint2D.x = center.x + Math.abs(center.x - nodePoint2D.x) * scale;
+                }
+
+                repaint();
+
+                scale = 1D;
             }
         });
     }

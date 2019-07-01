@@ -1,8 +1,8 @@
 package com.codebind.Shapes;
 
-import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 @FunctionalInterface
 public interface Movable {
-    Rectangle getBoundingRect();
+    Rectangle2D getBoundingRect();
 }

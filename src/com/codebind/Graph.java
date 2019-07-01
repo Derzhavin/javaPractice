@@ -10,8 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 enum GraphState {
     CREATE_NODE,
@@ -36,7 +36,7 @@ public class Graph implements Drawable {
 
             switch (state) {
                 case CREATE_NODE:
-                    nodes.add(new Node(e.getPoint(), new Dimension(20, 20)));
+                    nodes.add(new Node(new Point2D.Double(e.getX(), e.getY()), new Dimension(20, 20)));
                     break;
                 case CONNECT_NODE:
                     if (e.getButton() == MouseEvent.BUTTON3) { //Button3 - RightButton
@@ -148,7 +148,7 @@ public class Graph implements Drawable {
                     break;
                 case MOVE_NODE:
                     if (draggData.isDragg) {
-                        draggData.node.moveTo(e.getPoint());
+                        draggData.node.moveTo(new Point2D.Double(e.getX(), e.getY()));
                     }
 
                     break;
