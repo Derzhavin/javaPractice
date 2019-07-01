@@ -86,18 +86,29 @@ class Application implements ActionListener {
 
         menuHelp.add(itemAboutProgram);
 
-        statusBar = new JPanel();
+        graphicsPanel = new GraphicsPanel();
 
-        statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        statusBar.setLayout(new BorderLayout());
+        statusBar = new JPanel(new GridLayout(1,3,0,0));
 
         BoundedRangeModel model = new DefaultBoundedRangeModel(30, 0, 0, 200);
 
         JSlider slider = new JSlider(model);
 
-        statusBar.add(slider, BorderLayout.EAST);
+        JLabel labelAction = new JLabel();
 
-        graphicsPanel = new GraphicsPanel();
+        JLabel labelNodes = new JLabel("Nodes: " + 0);
+        JLabel labelEdges = new JLabel("Edges: " + 0);
+
+        JPanel panelNodesEdges= new JPanel(new GridLayout(1, 0, 0, 2));
+
+        panelNodesEdges.add(labelNodes);
+        panelNodesEdges.add(labelEdges);
+
+        graphicsPanel.setPanelNodesEdges(panelNodesEdges);
+
+        statusBar.add(labelAction);
+        statusBar.add(panelNodesEdges);
+        statusBar.add(slider);
 
         instrumentPanel = createInstrumentPanel();
 
@@ -111,21 +122,30 @@ class Application implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String command = ae.getActionCommand();
 
+        JLabel labelAction = (JLabel)statusBar.getComponents()[0];
+
         if (command.equals("Добавить вершины")) {
+            labelAction.setText("Добавление вершин");
             graphicsPanel.setGraphState(GraphState.CREATE_NODE);
         } else if (command.equals("Соединить вершины")) {
+            labelAction.setText("Соединение вершин");
             graphicsPanel.setGraphState(GraphState.CONNECT_NODE);
         } else if (command.equals("Перемещение")) {
+            labelAction.setText("Перемещение");
             graphicsPanel.setGraphState(GraphState.MOVE_NODE);
         } else if (command.equals("Очистить полотно")) {
+            labelAction.setText("Очищение полотна");
             graphicsPanel.getGraph().removeGraph();
+            graphicsPanel.updatePanelNodesEdges();
         } else if (command.equals("Удалить")) {
+            labelAction.setText("Удаление вершин и рёбер");
             graphicsPanel.setGraphState(GraphState.DELETE_NODE);
         } else if (command.equals("Соеденить всё")) {
+            labelAction.setText("Соединение всех вершин");
             graphicsPanel.getGraph().connectAllVertices();
         }else if(command.equals("Ничего не делать")){
+            labelAction.setText("");
             graphicsPanel.setGraphState(GraphState.NOTHING);
-
             Component[] instrumentPanelComponents = instrumentPanel.getComponents();
 
             for(Component instrumentPanelComponent: instrumentPanelComponents){
@@ -137,6 +157,7 @@ class Application implements ActionListener {
             }
 
         }
+
         graphicsPanel.updateUI();
     }
 
