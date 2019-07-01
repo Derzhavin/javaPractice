@@ -3,8 +3,6 @@ package com.codebind;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 
 class Application implements ActionListener {
     public JFrame frame;
@@ -99,7 +97,7 @@ class Application implements ActionListener {
         JLabel labelNodes = new JLabel("Nodes: " + 0);
         JLabel labelEdges = new JLabel("Edges: " + 0);
 
-        JPanel panelNodesEdges= new JPanel(new GridLayout(1, 0, 0, 2));
+        JPanel panelNodesEdges= new JPanel(new GridLayout(1, 2, 0, 0));
 
         panelNodesEdges.add(labelNodes);
         panelNodesEdges.add(labelEdges);
@@ -136,7 +134,6 @@ class Application implements ActionListener {
         } else if (command.equals("Очистить полотно")) {
             labelAction.setText("Очищение полотна");
             graphicsPanel.getGraph().removeGraph();
-            graphicsPanel.updatePanelNodesEdges();
         } else if (command.equals("Удалить")) {
             labelAction.setText("Удаление вершин и рёбер");
             graphicsPanel.setGraphState(GraphState.DELETE_NODE);
@@ -158,22 +155,22 @@ class Application implements ActionListener {
 
         }
 
+        graphicsPanel.updatePanelNodesEdges();
         graphicsPanel.updateUI();
     }
 
     public JPanel createInstrumentPanel(){
 
-        String[] icons = {"img/mouse.png","img/add.png","img/path.png","img/delete.png","img/alg.png","img/clean.png"};
+        String[] icons = {"img/mouse.png","img/add.png","img/path.png","img/delete.png","img/alg.png","img/clean.png", "img/Перемещение.png"};
         String[] commands = {"Ничего не делать","Добавить вершины","Соединить вершины",
-                "Удалить","Алгоритм","Очистить полотно"};
+                "Удалить","Алгоритм","Очистить полотно", "Перемещение"};
 
-        JPanel instrumentPanel = new JPanel(new GridLayout(1,6,0,0));
+        JPanel instrumentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         for(int i =0; i < icons.length; i++ ){
             Button button = new Button();
             button.setIcon(new ImageIcon(icons[i]));
             button.setActionCommand(commands[i]);
-            //button.setBackground(new Color(205, 210, 255));
             button.setPreferredSize(new Dimension(32, 32));
             button.addActionListener(this);
             instrumentPanel.add(button);
