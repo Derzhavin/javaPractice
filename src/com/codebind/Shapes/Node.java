@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Node implements Movable, Drawable {
+    public static double scale = 2D;
     private Point position = null;
     private Dimension size = new Dimension(20, 20);
     private ArrayList<Edge> edges;
@@ -63,12 +64,12 @@ public class Node implements Movable, Drawable {
 
     @Override
     public Rectangle getBoundingRect() {
-        return new Rectangle(position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);
+        return new Rectangle(position.x - (int) (size.width*scale) / 2, position.y - (int) (size.height*scale) / 2, (int) (size.width*scale), (int)(size.height*scale));
     }
 
     @Override
     public void draw(Graphics2D g) {
         g.setColor(color);
-        g.fillOval(position.x - size.width / 2, position.y - size.height / 2, size.width, size.height);
+        g.fillOval(position.x - (int) (size.width*scale) / 2, position.y - (int) (size.height*scale) / 2,(int)(size.width*scale), (int)(size.height*scale));
     }
 }

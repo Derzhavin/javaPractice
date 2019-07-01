@@ -283,4 +283,16 @@ public class Graph implements Drawable {
         nodes.clear();
         edges.clear();
     }
+
+    public ArrayList<Node> getNodes() {
+        return nodes;
+    }
+
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
+    public GraphState getState() {
+        return  state;
+    }
 }
