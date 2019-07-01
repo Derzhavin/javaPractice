@@ -1,5 +1,7 @@
 package com.codebind;
 
+import com.codebind.graphComonents.Graph;
+
 import java.util.concurrent.Callable;
 
 public interface Algorithm {

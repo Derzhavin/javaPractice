@@ -1,5 +1,8 @@
 package com.codebind;
 
+import com.codebind.graphComonents.GraphEventManager;
+import com.codebind.graphComonents.GraphStates;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -124,25 +127,25 @@ class Application implements ActionListener {
 
         if (command.equals("Добавить вершины")) {
             labelAction.setText("Добавление вершин");
-            graphicsPanel.setGraphState(GraphState.CREATE_NODE);
+            graphicsPanel.setGraphState(GraphStates.CREATE_NODE);
         } else if (command.equals("Соединить вершины")) {
             labelAction.setText("Соединение вершин");
-            graphicsPanel.setGraphState(GraphState.CONNECT_NODE);
+            graphicsPanel.setGraphState(GraphStates.CONNECT_NODE);
         } else if (command.equals("Перемещение")) {
             labelAction.setText("Перемещение");
-            graphicsPanel.setGraphState(GraphState.MOVE_NODE);
+            graphicsPanel.setGraphState(GraphStates.MOVE_NODE);
         } else if (command.equals("Очистить полотно")) {
             labelAction.setText("Очищение полотна");
-            graphicsPanel.getGraph().removeGraph();
+            GraphEventManager.getInstance().removeGraph();
         } else if (command.equals("Удалить")) {
             labelAction.setText("Удаление вершин и рёбер");
-            graphicsPanel.setGraphState(GraphState.DELETE_NODE);
+            graphicsPanel.setGraphState(GraphStates.DELETE_NODE);
         } else if (command.equals("Соеденить всё")) {
             labelAction.setText("Соединение всех вершин");
-            graphicsPanel.getGraph().connectAllVertices();
+            GraphEventManager.getInstance().connectAllVertices();
         }else if(command.equals("Ничего не делать")){
             labelAction.setText("");
-            graphicsPanel.setGraphState(GraphState.NOTHING);
+            graphicsPanel.setGraphState(GraphStates.NOTHING);
             Component[] instrumentPanelComponents = instrumentPanel.getComponents();
 
             for(Component instrumentPanelComponent: instrumentPanelComponents){

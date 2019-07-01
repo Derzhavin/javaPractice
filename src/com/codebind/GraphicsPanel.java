@@ -1,22 +1,27 @@
 package com.codebind;
+import com.codebind.graphComonents.GraphEventManager;
+import com.codebind.graphComonents.GraphStates;
+import com.codebind.viewComponents.DrawGraph;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-    private Graph graph;
+    private DrawGraph graph;
     private JPanel panelNodesEdges;
 
     public GraphicsPanel() {
-        graph = new Graph();
+        graph = new DrawGraph();
         setBackground(new Color(205, 210, 255));
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
                 super.mouseDragged(mouseEvent);
-                graph.mouseMotionListener.mouseDragged(mouseEvent);
+                GraphEventManager.getInstance().mouseDragged(mouseEvent);
 
                 repaint();
             }
@@ -26,9 +31,9 @@ public class GraphicsPanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 super.mousePressed(mouseEvent);
-                graph.mouseListener.mousePressed(mouseEvent);
+                GraphEventManager.getInstance().mousePressed(mouseEvent);
 
-                if (graph.getState() == GraphState.MOVE_NODE) {
+                if (GraphEventManager.getInstance().getState() == GraphStates.MOVE_NODE) {
                     setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
                 }
 
@@ -40,7 +45,7 @@ public class GraphicsPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 super.mouseReleased(mouseEvent);
-                graph.mouseListener.mouseReleased(mouseEvent);
+                GraphEventManager.getInstance().mouseReleased(mouseEvent);
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
                 updatePanelNodesEdges();
@@ -50,10 +55,8 @@ public class GraphicsPanel extends JPanel {
         });
     }
 
-    Graph getGraph() {return graph;}
-
-    void setGraphState(GraphState state) {
-        graph.setState(state);
+    void setGraphState(GraphStates state) {
+        GraphEventManager.getInstance().setState(state);
     }
 
     @Override
@@ -64,14 +67,21 @@ public class GraphicsPanel extends JPanel {
         g2.setFont(new Font("Times New Roman", Font.BOLD + Font.ITALIC, 15));
 
         graph.draw(g2);
+
+        if (GraphEventManager.getInstance().isCutting()) {
+            ArrayList<Point> pair = GraphEventManager.getInstance().getScissors();
+
+            g.setColor(Color.yellow);
+            g.drawLine(pair.get(0).x, pair.get(0).y, pair.get(1).x, pair.get(1).y);
+        }
     }
 
     public void updatePanelNodesEdges() {
         JLabel labelNodes = (JLabel)panelNodesEdges.getComponents()[0];
         JLabel labelEdges = (JLabel)panelNodesEdges.getComponents()[1];
 
-        labelNodes.setText("Nodes: " + graph.getNodes().size());
-        labelEdges.setText("Edges: " + graph.getEdges().size());
+        labelNodes.setText("Nodes: " + GraphEventManager.getInstance().getNodesCount());
+        labelEdges.setText("Edges: " + GraphEventManager.getInstance().getEdgesCount());
     }
 
     public void setPanelNodesEdges(JPanel panelNodesEdges) {
