@@ -44,7 +44,6 @@ public class Graph implements Drawable {
                         break;
                     }
                     else if (e.getButton() == MouseEvent.BUTTON1) {
-
                         for (Node node : nodes) {
                             if (node.getBoundingRect().contains(e.getPoint())) {
                                 connectData.addNode(node);
@@ -176,6 +175,7 @@ public class Graph implements Drawable {
     }
 
     public void setState(GraphState state) {
+        connectData.clear();
         this.state = state;
     }
 
@@ -296,3 +296,4 @@ public class Graph implements Drawable {
         return  state;
     }
 }
+
