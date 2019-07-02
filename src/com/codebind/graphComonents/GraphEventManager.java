@@ -165,11 +165,13 @@ public class GraphEventManager {
 
     public void mouseWheelMoved(MouseWheelEvent e, Point2D.Double center) {
         double scale = 1D;
+        center.x = e.getPoint().x;
+        center.y = e.getPoint().y;
 
         if (e.getPreciseWheelRotation() < 0) {
-            scale -= 0.1;
-        } else {
             scale += 0.1;
+        } else {
+            scale -= 0.1;
         }
 
         DrawNode.scale *= scale;

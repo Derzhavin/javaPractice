@@ -5,6 +5,7 @@ import com.codebind.graphComonents.Edge;
 import com.codebind.graphComonents.Graph;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.Node;
+import com.codebind.viewComponents.DrawNode;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -75,7 +76,7 @@ public class DFSAlgorithm implements Algorithm {
         currentStep++;
         checkInitialization();
     }
-    
+
     @Override
     public void doRun() {
         currentNode = startNode;
@@ -91,6 +92,7 @@ public class DFSAlgorithm implements Algorithm {
     public void doStep() {
         if (stack.isEmpty()) {
             timer.stop();
+            reset();
             return;
         }
 
@@ -141,12 +143,19 @@ public class DFSAlgorithm implements Algorithm {
 
     @Override
     public void reset() {
+        if (graph != null) {
+            for (Node node : graph.getNodes()) {
+                node.getView().setColor(DrawNode.BASIC_COLOR);
+            }
+
+            if (graphicsPanel != null) {
+                graphicsPanel.repaint();
+            }
+        }
+
         currentStep = 0;
         initialized = false;
     }
-
-
-
 
     private class AlgorithmNodeStructure {
         private boolean isVisited;
