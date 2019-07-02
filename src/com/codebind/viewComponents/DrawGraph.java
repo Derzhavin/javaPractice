@@ -18,12 +18,12 @@ public class DrawGraph implements Drawable {
 
     @Override
     public void draw(Graphics2D g) {
-        for (Edge edge : graph.getEdges()) {
-            edge.getView().draw(g);
-        }
-
         for (Node node : graph.getNodes()) {
             node.getView().draw(g);
+        }
+
+        for (Edge edge : graph.getEdges()) {
+            edge.getView().draw(g);
         }
     }
 }

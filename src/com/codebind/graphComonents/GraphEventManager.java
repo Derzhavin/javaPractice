@@ -1,5 +1,6 @@
 package com.codebind.graphComonents;
 
+import com.codebind.viewComponents.DrawDirectedEdge;
 import com.codebind.viewComponents.DrawEdge;
 import com.codebind.viewComponents.DrawNode;
 
@@ -52,6 +53,10 @@ public class GraphEventManager {
 
     public boolean isCutting() {
         return deleteData.cutting;
+    }
+
+    public void setNodeConnectionType(boolean isDirected) {
+        ConnectData.IS_DIRECTED_CONNECTION = isDirected;
     }
 
     public ArrayList<Point> getScissors() {
@@ -243,10 +248,11 @@ public class GraphEventManager {
         }
     }
 
-    private static class ConnectData {
+    public static class ConnectData {
         private Node firstNode;
         private Node secondNode;
         private boolean edgeCreated;
+        public static boolean IS_DIRECTED_CONNECTION = false;
 
         public ConnectData() {
             firstNode = null;
@@ -282,7 +288,7 @@ public class GraphEventManager {
 
         private Edge getEdgeIfNotExists() {
             if (!firstNode.getNeighbours().contains(secondNode)) {
-                Edge newEdge = new Edge(firstNode, secondNode, new DrawEdge(firstNode.getView(), secondNode.getView()));
+                Edge newEdge = new Edge(firstNode, secondNode, IS_DIRECTED_CONNECTION);
 
                 firstNode.addEdge(newEdge);
                 secondNode.addEdge(newEdge);

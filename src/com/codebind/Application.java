@@ -131,6 +131,7 @@ class Application implements ActionListener {
         } else if (command.equals("Соединить вершины")) {
             labelAction.setText("Соединение вершин");
             graphicsPanel.setGraphState(GraphStates.CONNECT_NODE);
+            GraphEventManager.getInstance().setNodeConnectionType(true);
         } else if (command.equals("Перемещение")) {
             labelAction.setText("Перемещение");
             graphicsPanel.setGraphState(GraphStates.MOVE_NODE);

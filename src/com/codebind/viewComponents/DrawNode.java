@@ -44,6 +44,8 @@ public class DrawNode implements Drawable, Movable {
     public void draw(Graphics2D g) {
         g.setColor(color);
         g.fillOval((int)(position.x - radius*scale), (int)(position.y - radius*scale), (int)(2 * radius*scale), (int)(2 * radius*scale));
+        g.setColor(Color.blue);
+        g.drawOval((int)(position.x - radius*scale), (int)(position.y - radius*scale), (int)(2 * radius*scale), (int)(2 * radius*scale));
     }
 
     @Override
