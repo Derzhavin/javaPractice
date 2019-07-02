@@ -1,11 +1,11 @@
-package com.codebind;
+package com.codebind.algorithmComponents;
 
 import com.codebind.graphComonents.Graph;
 
 import java.util.concurrent.Callable;
 
 public interface Algorithm {
-    void doRun(Integer stepsCount);
+    void doRun();
     void doStep();
     void doWhile(Callable<?> func);
     void setGraph(Graph graph);

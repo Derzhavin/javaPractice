@@ -24,6 +24,16 @@ public class Node {
         return edges;
     }
 
+    public Edge getEdge(Node neighbour) {
+        for (Edge edge : edges) {
+            if (edge.getNeighbour(this) == neighbour) {
+                return edge;
+            }
+        }
+
+        return null;
+    }
+
     public void destroy() {
         for (Edge edge : edges) {
             Node neighbour = edge.getNeighbour(this);

@@ -1,5 +1,7 @@
 package com.codebind.graphComonents;
 
+import com.codebind.algorithmComponents.Algorithm;
+import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.viewComponents.DrawDirectedEdge;
 import com.codebind.viewComponents.DrawEdge;
 import com.codebind.viewComponents.DrawNode;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 
 public class GraphEventManager {
     private Graph graph;
+    private DFSAlgorithm algorithm;
     private GraphStates graphState;
     private DraggData draggData;
     private ConnectData connectData;
@@ -27,6 +30,7 @@ public class GraphEventManager {
 
     public void setGraph(Graph graph) {
         this.graph = graph;
+        this.algorithm = new DFSAlgorithm(graph);
     }
 
     public GraphStates getState() {
@@ -71,6 +75,7 @@ public class GraphEventManager {
 
     private GraphEventManager() {
         graph = null;
+        algorithm = null;
         graphState = GraphStates.NOTHING;
         draggData = new DraggData();
         connectData = new ConnectData();
@@ -119,6 +124,11 @@ public class GraphEventManager {
 
                         break;
                     }
+                }
+                break;
+            case ALGORITHM:
+                if (!algorithm.isInitialized()) {
+                    algorithm.initialize(graph.getNodes().get(0));
                 }
                 break;
         }

@@ -7,9 +7,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-class Application implements ActionListener {
+public class Application implements ActionListener {
     public JFrame frame;
-    private GraphicsPanel graphicsPanel;
+    public static GraphicsPanel graphicsPanel;
     private JMenuBar menuBar;
     private JPanel statusBar;
     JPanel instrumentPanel;
@@ -120,6 +120,10 @@ class Application implements ActionListener {
         frame.setVisible(true);
     }
 
+    public static GraphicsPanel getPanel() {
+        return graphicsPanel;
+    }
+
     public void actionPerformed(ActionEvent ae) {
         String command = ae.getActionCommand();
 
@@ -143,7 +147,8 @@ class Application implements ActionListener {
             graphicsPanel.setGraphState(GraphStates.DELETE_NODE);
         } else if (command.equals("Соеденить всё")) {
             labelAction.setText("Соединение всех вершин");
-            GraphEventManager.getInstance().connectAllVertices();
+            graphicsPanel.setGraphState(GraphStates.ALGORITHM);
+            //GraphEventManager.getInstance().connectAllVertices();
         }else if(command.equals("Ничего не делать")){
             labelAction.setText("");
             graphicsPanel.setGraphState(GraphStates.NOTHING);

@@ -46,6 +46,10 @@ public class DrawEdge implements Drawable {
                 destNode.getPosition().y - offsetVector.y);
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     @Override
     public void draw(Graphics2D g) {
         updateOffsetVector();

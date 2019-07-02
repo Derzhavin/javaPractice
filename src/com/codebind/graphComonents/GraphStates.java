@@ -5,5 +5,6 @@ public enum GraphStates {
     CONNECT_NODE,
     MOVE_NODE,
     NOTHING,
-    DELETE_NODE
+    DELETE_NODE,
+    ALGORITHM
 }
