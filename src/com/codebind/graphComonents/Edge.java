@@ -37,6 +37,19 @@ public class Edge {
         }
     }
 
+    public Node getSmartNeighbour(Node node) {
+        if (!isDirected) {
+            return getNeighbour(node);
+        }
+
+        if (node != sourceNode && node != destNode) {
+            return null;
+        }
+        else {
+            return (node == sourceNode) ? destNode : null;
+        }
+    }
+
     public void destroy() {
         sourceNode.removeEdge(this);
         destNode.removeEdge(this);

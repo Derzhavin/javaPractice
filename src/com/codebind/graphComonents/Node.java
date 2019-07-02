@@ -24,6 +24,16 @@ public class Node {
         return edges;
     }
 
+    public Edge getEdge(Node neighbour) {
+        for (Edge edge : edges) {
+            if (edge.getNeighbour(this) == neighbour) {
+                return edge;
+            }
+        }
+
+        return null;
+    }
+
     public void destroy() {
         for (Edge edge : edges) {
             Node neighbour = edge.getNeighbour(this);
@@ -42,6 +52,20 @@ public class Node {
 
         for (Edge edge : edges) {
             nbs.add(edge.getNeighbour(this));
+        }
+
+        return nbs;
+    }
+
+    public ArrayList<Node> getSmartNeighbours() {
+        ArrayList<Node> nbs = new ArrayList<>();
+
+        for (Edge edge : edges) {
+            Node neighbour = edge.getSmartNeighbour(this);
+
+            if (neighbour != null) {
+                nbs.add(edge.getSmartNeighbour(this));
+            }
         }
 
         return nbs;
