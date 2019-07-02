@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.awt.geom.*;
 
 public class GraphicsPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -49,6 +50,17 @@ public class GraphicsPanel extends JPanel {
                 setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
                 updatePanelNodesEdges();
+
+                repaint();
+            }
+        });
+
+        addMouseWheelListener(new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                Point2D.Double center = new Point2D.Double(getWidth()/2.0, getHeight()/2.0);
+
+                GraphEventManager.getInstance().mouseWheelMoved(e, center);
 
                 repaint();
             }
