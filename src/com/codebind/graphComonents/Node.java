@@ -56,4 +56,18 @@ public class Node {
 
         return nbs;
     }
+
+    public ArrayList<Node> getSmartNeighbours() {
+        ArrayList<Node> nbs = new ArrayList<>();
+
+        for (Edge edge : edges) {
+            Node neighbour = edge.getSmartNeighbour(this);
+
+            if (neighbour != null) {
+                nbs.add(edge.getSmartNeighbour(this));
+            }
+        }
+
+        return nbs;
+    }
 }

@@ -1,9 +1,9 @@
 package com.codebind.algorithmComponents;
 
-import com.codebind.Application;
 import com.codebind.GraphicsPanel;
 import com.codebind.graphComonents.Edge;
 import com.codebind.graphComonents.Graph;
+import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.Node;
 
 import javax.swing.*;
@@ -13,31 +13,34 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 
-public class DFSAlgorithm implements Algorithm, Initialized {
+public class DFSAlgorithm implements Algorithm {
     private static final int INIT_STEPS_COUNT = 1;
-    private static final int TIMER_BASIC_DELAY = 500;
+    private static final int TIMER_BASIC_DELAY = 400;
     private boolean initialized = false;
     private int currentStep = 0;
     private Graph graph;
     private Node startNode;
     private Node currentNode;
 
+    private GraphicsPanel graphicsPanel;
+
     private Stack<Node> stack = new Stack<>();
     private HashMap<Node, AlgorithmNodeStructure> nodes = new HashMap<>();
     private Timer timer;
 
-    public DFSAlgorithm(Graph graph) {
-        this.graph = graph;
+    public DFSAlgorithm() {
+        this.graphicsPanel = null;
+        this.graph = null;
         this.startNode = null;
         this.currentNode = null;
         this.timer = new Timer(TIMER_BASIC_DELAY, e->doStep());
     }
 
-    void setDealy(int dealy) {
+    public void setDealy(int dealy) {
         this.timer.setDelay(dealy);
     }
 
-    void checkInitialization() {
+    private void checkInitialization() {
         if (currentStep == INIT_STEPS_COUNT) {
             initialized = true;
             createStructures();
@@ -72,15 +75,15 @@ public class DFSAlgorithm implements Algorithm, Initialized {
         currentStep++;
         checkInitialization();
     }
-
-
-
+    
     @Override
     public void doRun() {
         currentNode = startNode;
         nodes.get(currentNode).setVisited(true);
         stack.push(startNode);
-        Application.getPanel().repaint();
+
+        graphicsPanel.repaint();
+
         timer.start();
     }
 
@@ -94,21 +97,21 @@ public class DFSAlgorithm implements Algorithm, Initialized {
         currentNode = stack.peek();
         nodes.get(currentNode).setVisited(true);
 
-        ArrayList<Node> neighbours = currentNode.getNeighbours();
+        ArrayList<Node> neighbours = currentNode.getSmartNeighbours();
 
         for (Node neighbour : neighbours) {
             if (!nodes.get(neighbour).isVisited) {
                 currentNode.getEdge(neighbour).getView().setColor(Color.MAGENTA);
                 stack.push(neighbour);
                 updatePictures();
-                Application.getPanel().repaint();
+                graphicsPanel.repaint();
                 return;
             }
         }
 
         stack.pop();
         updatePictures();
-        Application.getPanel().repaint();
+        graphicsPanel.repaint();
     }
 
     private void updatePictures() {
@@ -128,12 +131,18 @@ public class DFSAlgorithm implements Algorithm, Initialized {
 
     @Override
     public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
 
+    @Override
+    public void setGraphicsPanel(GraphicsPanel panel) {
+        this.graphicsPanel = panel;
     }
 
     @Override
     public void reset() {
-
+        currentStep = 0;
+        initialized = false;
     }
 
 

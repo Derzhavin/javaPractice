@@ -1,17 +1,22 @@
 package com.codebind.algorithmComponents;
 
+import com.codebind.GraphicsPanel;
 import com.codebind.graphComonents.Edge;
 import com.codebind.graphComonents.Graph;
 import com.codebind.graphComonents.Node;
 
 import java.util.concurrent.Callable;
 
-public class KosarajuAlgorithm implements Algorithm, Initialized {
+public class KosarajuAlgorithm implements Algorithm {
     private static final int INIT_STEPS_COUNT = 0;
     private Graph graph;
 
-    KosarajuAlgorithm(Graph graph) {
-        this.graph = graph;
+    public KosarajuAlgorithm() {
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return false;
     }
 
     @Override
@@ -41,6 +46,11 @@ public class KosarajuAlgorithm implements Algorithm, Initialized {
 
     @Override
     public void setGraph(Graph graph) {
+
+    }
+
+    @Override
+    public void setGraphicsPanel(GraphicsPanel panel) {
 
     }
 

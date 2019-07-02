@@ -1,5 +1,6 @@
 package com.codebind.graphComonents;
 
+import com.codebind.GraphicsPanel;
 import com.codebind.algorithmComponents.Algorithm;
 import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.viewComponents.DrawDirectedEdge;
@@ -15,12 +16,14 @@ import java.util.ArrayList;
 
 public class GraphEventManager {
     private Graph graph;
-    private DFSAlgorithm algorithm;
+    private Algorithm algorithm;
     private GraphStates graphState;
     private DraggData draggData;
     private ConnectData connectData;
     private DeleteData deleteData;
     private Point oldDragPoint;
+
+    private GraphicsPanel graphicsPanel;
 
     private static final GraphEventManager instance = new GraphEventManager();
 
@@ -30,7 +33,6 @@ public class GraphEventManager {
 
     public void setGraph(Graph graph) {
         this.graph = graph;
-        this.algorithm = new DFSAlgorithm(graph);
     }
 
     public GraphStates getState() {
@@ -65,6 +67,28 @@ public class GraphEventManager {
         ConnectData.IS_DIRECTED_CONNECTION = isDirected;
     }
 
+    public void setAlgorithm(Algorithm algorithm) {
+        algorithm.reset();
+        algorithm.setGraph(this.graph);
+        algorithm.setGraphicsPanel(this.graphicsPanel);
+
+        this.algorithm = algorithm;
+    }
+
+    public void setGraphicsPanel(GraphicsPanel graphicsPanel) {
+        this.graphicsPanel = graphicsPanel;
+    }
+
+    public Node getNodeOnPos(Point position, ArrayList<Node> nodes) {
+        for (Node node : nodes) {
+            if (node.getView().getBoundingRect().contains(position)) {
+                return node;
+            }
+        }
+
+        return null;
+    }
+
     public ArrayList<Point> getScissors() {
         ArrayList<Point> pair = new ArrayList<>();
         pair.add(deleteData.firstPoint);
@@ -80,6 +104,7 @@ public class GraphEventManager {
         draggData = new DraggData();
         connectData = new ConnectData();
         deleteData = new DeleteData();
+        graphicsPanel = null;
     }
 
     public void mousePressed(MouseEvent mouseEvent) {
@@ -128,7 +153,11 @@ public class GraphEventManager {
                 break;
             case ALGORITHM:
                 if (!algorithm.isInitialized()) {
-                    algorithm.initialize(graph.getNodes().get(0));
+                    Node selectedNode = getNodeOnPos(mouseEvent.getPoint(), graph.getNodes());
+
+                    if (selectedNode != null) {
+                        algorithm.initialize(selectedNode);
+                    }
                 }
                 break;
         }
@@ -145,18 +174,31 @@ public class GraphEventManager {
 
         DrawNode.scale *= scale;
 
-        for(Node node: graph.getNodes()) {
-            Point2D.Double nodePoint2D = node.getView().getPosition();
+        if (DrawNode.scale > 4) {
+            DrawNode.scale /= scale;
+            scale = 1;
+        }
+        if (DrawNode.scale < 0.5) {
+            DrawNode.scale /= scale;
+            scale = 1;
+        }
 
-            if (center.y > nodePoint2D.y)
-                nodePoint2D.y = center.y - Math.abs(center.y - nodePoint2D.y) * scale;
-            else if (center.y < nodePoint2D.y)
-                nodePoint2D.y = center.y + Math.abs(center.y - nodePoint2D.y) * scale;
+        if (scale != 1) {
+            for (Node node : graph.getNodes()) {
+                Point2D.Double nodePoint2D = node.getView().getPosition();
 
-            if (center.x > nodePoint2D.x)
-                nodePoint2D.x = center.x - Math.abs(center.x - nodePoint2D.x) * scale;
-            else if (center.x < nodePoint2D.x)
-                nodePoint2D.x = center.x + Math.abs(center.x - nodePoint2D.x) * scale;
+                if (center.y > nodePoint2D.y) {
+                    nodePoint2D.y = center.y - Math.abs(center.y - nodePoint2D.y) * scale;
+                } else if (center.y < nodePoint2D.y) {
+                    nodePoint2D.y = center.y + Math.abs(center.y - nodePoint2D.y) * scale;
+                }
+
+                if (center.x > nodePoint2D.x) {
+                    nodePoint2D.x = center.x - Math.abs(center.x - nodePoint2D.x) * scale;
+                } else if (center.x < nodePoint2D.x) {
+                    nodePoint2D.x = center.x + Math.abs(center.x - nodePoint2D.x) * scale;
+                }
+            }
         }
     }
     public void mouseReleased(MouseEvent mouseEvent) {
