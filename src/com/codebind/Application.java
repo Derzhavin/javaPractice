@@ -144,6 +144,10 @@ class Application implements ActionListener {
         } else if (command.equals("Соеденить всё")) {
             labelAction.setText("Соединение всех вершин");
             GraphEventManager.getInstance().connectAllVertices();
+        } else if (command.equals("Ориентированное ребро")) {
+            GraphEventManager.getInstance().setNodeConnectionType(true);
+        }else if (command.equals("Неориентированное ребро")) {
+            GraphEventManager.getInstance().setNodeConnectionType(false);
         }else if(command.equals("Ничего не делать")){
             labelAction.setText("");
             graphicsPanel.setGraphState(GraphStates.NOTHING);
@@ -165,9 +169,10 @@ class Application implements ActionListener {
 
     public JPanel createInstrumentPanel(){
 
-        String[] icons = {"img/mouse.png","img/add.png","img/path.png","img/delete.png","img/alg.png","img/clean.png", "img/Перемещение.png"};
+        String[] icons = {"img/mouse.png","img/add.png","img/path.png","img/delete.png","img/alg.png","img/clean.png", "img/Перемещение.png",
+                "img/Направленное ребро.png", "img/Ненаправленное ребро.png"};
         String[] commands = {"Ничего не делать","Добавить вершины","Соединить вершины",
-                "Удалить","Алгоритм","Очистить полотно", "Перемещение"};
+                "Удалить","Алгоритм","Очистить полотно", "Перемещение", "Ориентированное ребро", "Неориентированное ребро"};
 
         JPanel instrumentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 

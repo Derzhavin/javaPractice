@@ -135,18 +135,31 @@ public class GraphEventManager {
 
         DrawNode.scale *= scale;
 
-        for(Node node: graph.getNodes()) {
-            Point2D.Double nodePoint2D = node.getView().getPosition();
+        if (DrawNode.scale > 4) {
+            DrawNode.scale /= scale;
+            scale = 1;
+        }
+        if (DrawNode.scale < 0.5) {
+            DrawNode.scale /= scale;
+            scale = 1;
+        }
 
-            if (center.y > nodePoint2D.y)
-                nodePoint2D.y = center.y - Math.abs(center.y - nodePoint2D.y) * scale;
-            else if (center.y < nodePoint2D.y)
-                nodePoint2D.y = center.y + Math.abs(center.y - nodePoint2D.y) * scale;
+        if (scale != 1) {
+            for (Node node : graph.getNodes()) {
+                Point2D.Double nodePoint2D = node.getView().getPosition();
 
-            if (center.x > nodePoint2D.x)
-                nodePoint2D.x = center.x - Math.abs(center.x - nodePoint2D.x) * scale;
-            else if (center.x < nodePoint2D.x)
-                nodePoint2D.x = center.x + Math.abs(center.x - nodePoint2D.x) * scale;
+                if (center.y > nodePoint2D.y) {
+                    nodePoint2D.y = center.y - Math.abs(center.y - nodePoint2D.y) * scale;
+                } else if (center.y < nodePoint2D.y) {
+                    nodePoint2D.y = center.y + Math.abs(center.y - nodePoint2D.y) * scale;
+                }
+
+                if (center.x > nodePoint2D.x) {
+                    nodePoint2D.x = center.x - Math.abs(center.x - nodePoint2D.x) * scale;
+                } else if (center.x < nodePoint2D.x) {
+                    nodePoint2D.x = center.x + Math.abs(center.x - nodePoint2D.x) * scale;
+                }
+            }
         }
     }
     public void mouseReleased(MouseEvent mouseEvent) {
