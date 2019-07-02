@@ -4,8 +4,10 @@ import com.codebind.viewComponents.DrawEdge;
 import com.codebind.viewComponents.DrawNode;
 
 import java.awt.*;
+import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class GraphEventManager {
@@ -71,7 +73,7 @@ public class GraphEventManager {
     public void mousePressed(MouseEvent mouseEvent) {
         switch (graphState) {
             case CREATE_NODE:
-                DrawNode nodeView = new DrawNode(mouseEvent.getPoint());
+                DrawNode nodeView = new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()));
                 graph.add(new Node(nodeView));
                 break;
             case CONNECT_NODE:
@@ -113,7 +115,31 @@ public class GraphEventManager {
         }
     }
 
+    public void mouseWheelMoved(MouseWheelEvent e, Point2D.Double center) {
+        double scale = 1D;
 
+        if (e.getPreciseWheelRotation() < 0) {
+            scale -= 0.1;
+        } else {
+            scale += 0.1;
+        }
+
+        DrawNode.scale *= scale;
+
+        for(Node node: graph.getNodes()) {
+            Point2D.Double nodePoint2D = node.getView().getPosition();
+
+            if (center.y > nodePoint2D.y)
+                nodePoint2D.y = center.y - Math.abs(center.y - nodePoint2D.y) * scale;
+            else if (center.y < nodePoint2D.y)
+                nodePoint2D.y = center.y + Math.abs(center.y - nodePoint2D.y) * scale;
+
+            if (center.x > nodePoint2D.x)
+                nodePoint2D.x = center.x - Math.abs(center.x - nodePoint2D.x) * scale;
+            else if (center.x < nodePoint2D.x)
+                nodePoint2D.x = center.x + Math.abs(center.x - nodePoint2D.x) * scale;
+        }
+    }
     public void mouseReleased(MouseEvent mouseEvent) {
         switch (graphState) {
             case CREATE_NODE:
@@ -185,7 +211,7 @@ public class GraphEventManager {
 
         public void moveNodeIfGrabed(Point mousePosition) {
             if (isDragg) {
-                node.getView().moveTo(mousePosition);
+                node.getView().moveTo(new Point2D.Double(mousePosition.getX(), mousePosition.getY()));
             }
         }
 

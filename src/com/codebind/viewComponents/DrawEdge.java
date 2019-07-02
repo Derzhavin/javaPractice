@@ -25,6 +25,6 @@ public class DrawEdge implements Drawable {
     @Override
     public void draw(Graphics2D g) {
         g.setColor(Color.BLUE);
-        g.drawLine(sourceNode.getPosition().x, sourceNode.getPosition().y, destNode.getPosition().x, destNode.getPosition().y);
+        g.drawLine((int)sourceNode.getPosition().x, (int)sourceNode.getPosition().y, (int)destNode.getPosition().x, (int)destNode.getPosition().y);
     }
 }
