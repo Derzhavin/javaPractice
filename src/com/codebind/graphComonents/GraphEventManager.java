@@ -17,6 +17,8 @@ public class GraphEventManager {
     private DraggData draggData;
     private ConnectData connectData;
     private DeleteData deleteData;
+    private Point oldDragPoint;
+
     private static final GraphEventManager instance = new GraphEventManager();
 
     public static GraphEventManager getInstance() {
@@ -76,6 +78,8 @@ public class GraphEventManager {
     }
 
     public void mousePressed(MouseEvent mouseEvent) {
+        oldDragPoint = mouseEvent.getPoint();
+
         switch (graphState) {
             case CREATE_NODE:
                 DrawNode nodeView = new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()));
@@ -185,7 +189,18 @@ public class GraphEventManager {
             case CONNECT_NODE:
                 break;
             case MOVE_NODE:
-                draggData.moveNodeIfGrabed(mouseEvent.getPoint());
+                if (draggData.getIsDragg()) {
+                    draggData.moveNodeIfGrabed(mouseEvent.getPoint());
+                } else {
+                    double xMotion = mouseEvent.getX() - oldDragPoint.getX();
+                    double yMotion = mouseEvent.getY() - oldDragPoint.getY();
+
+                    for(Node node:graph.getNodes()) {
+                        Point2D.Double oldPoint2D = node.getView().getPosition();
+                        node.getView().moveTo(new Point2D.Double(oldPoint2D.getX()+xMotion, oldPoint2D.getY()+yMotion));
+                    }
+                    oldDragPoint = mouseEvent.getPoint();
+                }
                 break;
             case NOTHING:
                 break;
@@ -199,6 +214,8 @@ public class GraphEventManager {
     private static class DraggData {
         private boolean isDragg;
         private Node node;
+
+        public boolean getIsDragg() {return isDragg;}
 
         public DraggData() {
             clear();
