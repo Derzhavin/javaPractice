@@ -124,6 +124,10 @@ public class GraphEventManager {
     public void mousePressed(MouseEvent mouseEvent) {
         oldDragPoint = mouseEvent.getPoint();
 
+        if (SwingUtilities.isMiddleMouseButton(mouseEvent)) {
+            return;
+        }
+
         switch (graphState) {
             case CREATE_NODE:
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
@@ -221,6 +225,10 @@ public class GraphEventManager {
         }
     }
     public void mouseReleased(MouseEvent mouseEvent) {
+        if (SwingUtilities.isMiddleMouseButton(mouseEvent)) {
+            return;
+        }
+
         switch (graphState) {
             case CREATE_NODE:
                 break;
