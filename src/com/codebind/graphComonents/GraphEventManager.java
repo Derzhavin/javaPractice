@@ -1,10 +1,15 @@
 package com.codebind.graphComonents;
 
+import com.codebind.GraphicsPanel;
+import com.codebind.algorithmComponents.Algorithm;
+import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.viewComponents.DrawDirectedEdge;
 import com.codebind.viewComponents.DrawEdge;
 import com.codebind.viewComponents.DrawNode;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.dnd.MouseDragGestureRecognizer;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
@@ -13,11 +18,14 @@ import java.util.ArrayList;
 
 public class GraphEventManager {
     private Graph graph;
+    private Algorithm algorithm;
     private GraphStates graphState;
     private DraggData draggData;
     private ConnectData connectData;
     private DeleteData deleteData;
     private Point oldDragPoint;
+
+    private GraphicsPanel graphicsPanel;
 
     private static final GraphEventManager instance = new GraphEventManager();
 
@@ -61,6 +69,28 @@ public class GraphEventManager {
         ConnectData.IS_DIRECTED_CONNECTION = isDirected;
     }
 
+    public void setAlgorithm(Algorithm algorithm) {
+        algorithm.reset();
+        algorithm.setGraph(this.graph);
+        algorithm.setGraphicsPanel(this.graphicsPanel);
+
+        this.algorithm = algorithm;
+    }
+
+    public void setGraphicsPanel(GraphicsPanel graphicsPanel) {
+        this.graphicsPanel = graphicsPanel;
+    }
+
+    public Node getNodeOnPos(Point position, ArrayList<Node> nodes) {
+        for (Node node : nodes) {
+            if (node.getView().getBoundingRect().contains(position)) {
+                return node;
+            }
+        }
+
+        return null;
+    }
+
     public ArrayList<Point> getScissors() {
         ArrayList<Point> pair = new ArrayList<>();
         pair.add(deleteData.firstPoint);
@@ -71,10 +101,12 @@ public class GraphEventManager {
 
     private GraphEventManager() {
         graph = null;
+        algorithm = null;
         graphState = GraphStates.NOTHING;
         draggData = new DraggData();
         connectData = new ConnectData();
         deleteData = new DeleteData();
+        graphicsPanel = null;
     }
 
     public void mousePressed(MouseEvent mouseEvent) {
@@ -82,8 +114,11 @@ public class GraphEventManager {
 
         switch (graphState) {
             case CREATE_NODE:
-                DrawNode nodeView = new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()));
-                graph.add(new Node(nodeView));
+                if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+                    DrawNode nodeView = new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()));
+                    graph.add(new Node(nodeView));
+                }
+
                 break;
             case CONNECT_NODE:
                 if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
@@ -121,32 +156,56 @@ public class GraphEventManager {
                     }
                 }
                 break;
+            case ALGORITHM:
+                if (!algorithm.isInitialized()) {
+                    Node selectedNode = getNodeOnPos(mouseEvent.getPoint(), graph.getNodes());
+
+                    if (selectedNode != null) {
+                        algorithm.initialize(selectedNode);
+                    }
+                }
+                break;
         }
     }
 
     public void mouseWheelMoved(MouseWheelEvent e, Point2D.Double center) {
         double scale = 1D;
+        center.x = e.getPoint().x;
+        center.y = e.getPoint().y;
 
         if (e.getPreciseWheelRotation() < 0) {
-            scale -= 0.1;
-        } else {
             scale += 0.1;
+        } else {
+            scale -= 0.1;
         }
 
         DrawNode.scale *= scale;
 
-        for(Node node: graph.getNodes()) {
-            Point2D.Double nodePoint2D = node.getView().getPosition();
+        if (DrawNode.scale > 4) {
+            DrawNode.scale /= scale;
+            scale = 1;
+        }
+        if (DrawNode.scale < 0.5) {
+            DrawNode.scale /= scale;
+            scale = 1;
+        }
 
-            if (center.y > nodePoint2D.y)
-                nodePoint2D.y = center.y - Math.abs(center.y - nodePoint2D.y) * scale;
-            else if (center.y < nodePoint2D.y)
-                nodePoint2D.y = center.y + Math.abs(center.y - nodePoint2D.y) * scale;
+        if (scale != 1) {
+            for (Node node : graph.getNodes()) {
+                Point2D.Double nodePoint2D = node.getView().getPosition();
 
-            if (center.x > nodePoint2D.x)
-                nodePoint2D.x = center.x - Math.abs(center.x - nodePoint2D.x) * scale;
-            else if (center.x < nodePoint2D.x)
-                nodePoint2D.x = center.x + Math.abs(center.x - nodePoint2D.x) * scale;
+                if (center.y > nodePoint2D.y) {
+                    nodePoint2D.y = center.y - Math.abs(center.y - nodePoint2D.y) * scale;
+                } else if (center.y < nodePoint2D.y) {
+                    nodePoint2D.y = center.y + Math.abs(center.y - nodePoint2D.y) * scale;
+                }
+
+                if (center.x > nodePoint2D.x) {
+                    nodePoint2D.x = center.x - Math.abs(center.x - nodePoint2D.x) * scale;
+                } else if (center.x < nodePoint2D.x) {
+                    nodePoint2D.x = center.x + Math.abs(center.x - nodePoint2D.x) * scale;
+                }
+            }
         }
     }
     public void mouseReleased(MouseEvent mouseEvent) {
@@ -183,6 +242,18 @@ public class GraphEventManager {
     }
 
     public void mouseDragged(MouseEvent mouseEvent) {
+        if (SwingUtilities.isMiddleMouseButton(mouseEvent)) {
+            double xMotion = mouseEvent.getX() - oldDragPoint.getX();
+            double yMotion = mouseEvent.getY() - oldDragPoint.getY();
+
+            for(Node node : graph.getNodes()) {
+                Point2D.Double oldPoint2D = node.getView().getPosition();
+                node.getView().moveTo(new Point2D.Double(oldPoint2D.getX()+xMotion, oldPoint2D.getY()+yMotion));
+            }
+
+            oldDragPoint = mouseEvent.getPoint();
+        }
+
         switch (graphState) {
             case CREATE_NODE:
                 break;
@@ -191,16 +262,8 @@ public class GraphEventManager {
             case MOVE_NODE:
                 if (draggData.getIsDragg()) {
                     draggData.moveNodeIfGrabed(mouseEvent.getPoint());
-                } else {
-                    double xMotion = mouseEvent.getX() - oldDragPoint.getX();
-                    double yMotion = mouseEvent.getY() - oldDragPoint.getY();
-
-                    for(Node node:graph.getNodes()) {
-                        Point2D.Double oldPoint2D = node.getView().getPosition();
-                        node.getView().moveTo(new Point2D.Double(oldPoint2D.getX()+xMotion, oldPoint2D.getY()+yMotion));
-                    }
-                    oldDragPoint = mouseEvent.getPoint();
                 }
+
                 break;
             case NOTHING:
                 break;

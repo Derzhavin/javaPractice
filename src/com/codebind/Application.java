@@ -1,5 +1,6 @@
 package com.codebind;
 
+import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 
@@ -9,7 +10,7 @@ import javax.swing.*;
 
 class Application implements ActionListener {
     public JFrame frame;
-    private GraphicsPanel graphicsPanel;
+    private static GraphicsPanel graphicsPanel;
     private JMenuBar menuBar;
     private JPanel statusBar;
     JPanel instrumentPanel;
@@ -118,6 +119,13 @@ class Application implements ActionListener {
         frame.add(statusBar, BorderLayout.SOUTH);
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
+
+        GraphEventManager.getInstance().setGraphicsPanel(graphicsPanel);
+        Algorithms.init();
+    }
+
+    public static GraphicsPanel getPanel() {
+        return graphicsPanel;
     }
 
     public void actionPerformed(ActionEvent ae) {
@@ -144,6 +152,14 @@ class Application implements ActionListener {
         } else if (command.equals("Соеденить всё")) {
             labelAction.setText("Соединение всех вершин");
             GraphEventManager.getInstance().connectAllVertices();
+        } else if (command.equals("Алгоритм")) {
+            labelAction.setText("Алгоритм");
+            GraphEventManager.getInstance().setAlgorithm(Algorithms.getAlgorithmByName("DFS"));
+            graphicsPanel.setGraphState(GraphStates.ALGORITHM);
+        }else if (command.equals("Ориентированное ребро")) {
+            GraphEventManager.getInstance().setNodeConnectionType(true);
+        }else if (command.equals("Неориентированное ребро")) {
+            GraphEventManager.getInstance().setNodeConnectionType(false);
         }else if(command.equals("Ничего не делать")){
             labelAction.setText("");
             graphicsPanel.setGraphState(GraphStates.NOTHING);
@@ -165,9 +181,10 @@ class Application implements ActionListener {
 
     public JPanel createInstrumentPanel(){
 
-        String[] icons = {"img/mouse.png","img/add.png","img/path.png","img/delete.png","img/alg.png","img/clean.png", "img/Перемещение.png"};
+        String[] icons = {"img/mouse.png","img/add.png","img/path.png","img/delete.png","img/alg.png","img/clean.png", "img/Перемещение.png",
+                "img/Направленное ребро.png", "img/Ненаправленное ребро.png"};
         String[] commands = {"Ничего не делать","Добавить вершины","Соединить вершины",
-                "Удалить","Алгоритм","Очистить полотно", "Перемещение"};
+                "Удалить","Алгоритм","Очистить полотно", "Перемещение", "Ориентированное ребро", "Неориентированное ребро"};
 
         JPanel instrumentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
