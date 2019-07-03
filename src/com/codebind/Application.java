@@ -3,7 +3,6 @@ package com.codebind;
 //import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
-import com.codebind.viewComponents.DrawGraph;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -79,7 +78,8 @@ class Application implements ActionListener {
         itemClearScene.addActionListener(this);
         itemDelete.addActionListener(this);
         itemConnectAllNodes.addActionListener(this);
-        itemOpenFile.addActionListener(this);
+        itemDFS.addActionListener(this);
+        itemKosaraju.addActionListener(this);
 
         menuAction.add(itemAddVertices);
         menuAction.add(itemAddUndirectedEdge);
@@ -141,47 +141,63 @@ class Application implements ActionListener {
 
         JLabel labelAction = (JLabel)statusBar.getComponents()[0];
 
-        if (command.equals("Добавить вершины")) {
-            labelAction.setText("Добавление вершин");
-            graphicsPanel.setGraphState(GraphStates.CREATE_NODE);
-        } else if (command.equals("Соединить вершины")) {
-            labelAction.setText("Соединение вершин");
-            graphicsPanel.setGraphState(GraphStates.CONNECT_NODE);
-            GraphEventManager.getInstance().setNodeConnectionType(true);
-        } else if (command.equals("Перемещение")) {
-            labelAction.setText("Перемещение");
-            graphicsPanel.setGraphState(GraphStates.MOVE_NODE);
-        } else if (command.equals("Очистить полотно")) {
-            labelAction.setText("Очищение полотна");
-            GraphEventManager.getInstance().removeGraph();
-        } else if (command.equals("Удалить")) {
-            labelAction.setText("Удаление вершин и рёбер");
-            graphicsPanel.setGraphState(GraphStates.DELETE_NODE);
-        } else if (command.equals("Соеденить всё")) {
-            labelAction.setText("Соединение всех вершин");
-            GraphEventManager.getInstance().connectAllVertices();
-        } else if(command.equals("Открыть")){
-            labelAction.setText("Открыть");
-            InputReader newOne = new InputReader();
-            if(newOne.FileOpen){ graphicsPanel.setGraph(new DrawGraph(newOne.initFromData())); }
-        } else if (command.equals("Алгоритм")) {
-            labelAction.setText("Алгоритм");
-            GraphEventManager.getInstance().setAlgorithm(Algorithms.getAlgorithmByName("DFS"));
-            graphicsPanel.setGraphState(GraphStates.ALGORITHM);
-        }else if (command.equals("Ориентированное ребро")) {
-            GraphEventManager.getInstance().setNodeConnectionType(true);
-        }else if (command.equals("Неориентированное ребро")) {
-            GraphEventManager.getInstance().setNodeConnectionType(false);
-        }else if(command.equals("Ничего не делать")){
-            labelAction.setText("");
-            graphicsPanel.setGraphState(GraphStates.NOTHING);
-            Component[] instrumentPanelComponents = instrumentPanel.getComponents();
+        switch(command) {
+            case "Добавить вершины":
+                labelAction.setText("Добавление вершин");
+                graphicsPanel.setGraphState(GraphStates.CREATE_NODE);
+                break;
+            case "Добавить ориентированное ребро":
+                labelAction.setText("Добавление ориентированных рёбер");
+                graphicsPanel.setGraphState(GraphStates.CONNECT_NODE);
+                GraphEventManager.getInstance().setNodeConnectionType(true);
+                break;
+            case "Добавить неориентированное ребро":
+                labelAction.setText("Добавление неориентированных рёбер");
+                graphicsPanel.setGraphState(GraphStates.CONNECT_NODE);
+                GraphEventManager.getInstance().setNodeConnectionType(false);
+                break;
+            case "Перемещение":
+                labelAction.setText("Перемещение");
+                graphicsPanel.setGraphState(GraphStates.MOVE_NODE);
+                break;
+            case "Очистить полотно":
+                labelAction.setText("Очищение полотна");
+                GraphEventManager.getInstance().removeGraph();
+                break;
+            case "Удалить вершины и рёбра":
+                labelAction.setText("Удалиение вершин и рёбер");
+                graphicsPanel.setGraphState(GraphStates.DELETE_NODE);
+                break;
+            case "Соеденить все вершины":
+                labelAction.setText("Соединение всех вершин");
+                GraphEventManager.getInstance().connectAllVertices();
+                break;
+            case "Поиск в глубину":
+                labelAction.setText("DFS");
+                Algorithms.selectAlgorithmByName("DFS");
+                Algorithms.currentAlgorithm.reset();
+                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
+                Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+                graphicsPanel.setGraphState(GraphStates.ALGORITHM);
+                break;
+            case "Косарайю":
+                labelAction.setText("Kosaraju");
+                Algorithms.selectAlgorithmByName("Kosaraju");
+                Algorithms.currentAlgorithm.reset();
+                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
+                Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+                graphicsPanel.setGraphState(GraphStates.ALGORITHM);
+                break;
+            default:
+                labelAction.setText("");
+                graphicsPanel.setGraphState(GraphStates.NOTHING);
+                Component[] toolBarComponents = toolBar.getComponents();
 
-            for(Component instrumentPanelComponent: instrumentPanelComponents){
-                Button button = (Button) instrumentPanelComponent;
-                if(button.getState() == ButtonState.ACTIVE){
-                    button.setState(ButtonState.INACTIVE);
-                    button.changeState();
+                for(Component toolBarComponent: toolBarComponents){
+                    Button button = (Button) toolBarComponent;
+                    if(button.getState() == ButtonState.ACTIVE){
+                        button.setState(ButtonState.INACTIVE);
+                        button.changeState();
                     }
                 }
         }
@@ -202,12 +218,12 @@ class Application implements ActionListener {
         };
 
         String[] commands = {   "Добавить вершины",
-                                "Добавить ориентированное ребро",
-                                "Добавить неориентированное ребро",
-                                "Удалить вершины и рёбра",
-                                "Алгоритм",
-                                "Очистить полотно",
-                                "Перемещение"
+                "Добавить ориентированное ребро",
+                "Добавить неориентированное ребро",
+                "Удалить вершины и рёбра",
+                "Алгоритм",
+                "Очистить полотно",
+                "Перемещение"
         };
 
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
