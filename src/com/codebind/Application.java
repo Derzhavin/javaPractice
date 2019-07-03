@@ -3,6 +3,7 @@ package com.codebind;
 //import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
+import com.codebind.viewComponents.DrawGraph;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -80,6 +81,7 @@ class Application implements ActionListener {
         itemConnectAllNodes.addActionListener(this);
         itemDFS.addActionListener(this);
         itemKosaraju.addActionListener(this);
+        itemOpenFile.addActionListener(this);
 
         menuAction.add(itemAddVertices);
         menuAction.add(itemAddUndirectedEdge);
@@ -142,6 +144,14 @@ class Application implements ActionListener {
         JLabel labelAction = (JLabel)statusBar.getComponents()[0];
 
         switch(command) {
+            case "Открыть":
+                labelAction.setText("Открыть");
+                InputReader newOne = new InputReader();
+
+                if(newOne.FileOpen){
+                    graphicsPanel.setGraph(new DrawGraph(newOne.initFromData()));
+                }
+                
             case "Добавить вершины":
                 labelAction.setText("Добавление вершин");
                 graphicsPanel.setGraphState(GraphStates.CREATE_NODE);
