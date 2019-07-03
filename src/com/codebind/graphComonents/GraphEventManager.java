@@ -386,9 +386,6 @@ public class GraphEventManager {
             if (!firstNode.getNeighbours().contains(secondNode)) {
                 Edge newEdge = new Edge(firstNode, secondNode, IS_DIRECTED_CONNECTION);
 
-                firstNode.addEdge(newEdge);
-                secondNode.addEdge(newEdge);
-
                 clear();
 
                 return newEdge;

@@ -95,10 +95,8 @@ class InputReader {
                         DestNode = node; break;
                     }
                 }
-                Edge edge = new Edge(SourceNode,DestNode,true);
-                graph.add(edge);
-                SourceNode.addEdge(edge);
-                DestNode.addEdge(edge);
+
+                graph.add(new Edge(SourceNode, DestNode,true));
             }
         }
 

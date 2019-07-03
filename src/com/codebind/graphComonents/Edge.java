@@ -55,6 +55,10 @@ public class Edge {
         destNode.removeEdge(this);
     }
 
+    public boolean isDirected() {
+        return isDirected;
+    }
+
     public ArrayList<Node> getNodes() {
         ArrayList<Node> pair = new ArrayList<>();
         pair.add(sourceNode);
