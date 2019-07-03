@@ -78,8 +78,6 @@ class Application implements ActionListener {
         itemClearScene.addActionListener(this);
         itemDelete.addActionListener(this);
         itemConnectAllNodes.addActionListener(this);
-        itemDFS.addActionListener(this);
-        itemKosaraju.addActionListener(this);
         itemOpenFile.addActionListener(this);
 
         menuAction.add(itemAddVertices);
