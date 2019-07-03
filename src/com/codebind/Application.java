@@ -174,18 +174,12 @@ class Application implements ActionListener {
                 break;
             case "Поиск в глубину":
                 labelAction.setText("DFS");
-                Algorithms.selectAlgorithmByName("DFS");
-                Algorithms.currentAlgorithm.reset();
-                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
-                Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+                GraphEventManager.getInstance().setAlgorithm(Algorithms.getAlgorithmByName("DFS"));
                 graphicsPanel.setGraphState(GraphStates.ALGORITHM);
                 break;
             case "Косарайю":
                 labelAction.setText("Kosaraju");
-                Algorithms.selectAlgorithmByName("Kosaraju");
-                Algorithms.currentAlgorithm.reset();
-                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
-                Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+                GraphEventManager.getInstance().setAlgorithm(Algorithms.getAlgorithmByName("Kosaraju"));
                 graphicsPanel.setGraphState(GraphStates.ALGORITHM);
                 break;
             default:
@@ -209,21 +203,21 @@ class Application implements ActionListener {
     public JPanel createToolBar(){
 
         String[] icons = {  "img/add.png",
-                "img/Направленное ребро.png",
-                "img/Ненаправленное ребро.png",
-                "img/delete.png",
-                "img/alg.png",
-                "img/clean.png",
-                "img/Перемещение.png"
+                            "img/Направленное ребро.png",
+                            "img/Ненаправленное ребро.png",
+                            "img/delete.png",
+                            "img/alg.png",
+                            "img/clean.png",
+                            "img/Перемещение.png"
         };
 
         String[] commands = {   "Добавить вершины",
-                "Добавить ориентированное ребро",
-                "Добавить неориентированное ребро",
-                "Удалить вершины и рёбра",
-                "Алгоритм",
-                "Очистить полотно",
-                "Перемещение"
+                                "Добавить ориентированное ребро",
+                                "Добавить неориентированное ребро",
+                                "Удалить вершины и рёбра",
+                                "Алгоритм",
+                                "Очистить полотно",
+                                "Перемещение"
         };
 
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
