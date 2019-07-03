@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 public class Algorithms {
     private static HashMap<String, Algorithm> algorithmHashMap = new HashMap<>();
+    public static Algorithm currentAlgorithm = null;
 
     public Algorithms() {}
 
@@ -17,7 +18,7 @@ public class Algorithms {
         algorithmHashMap.put("Kosaraju", new KosarajuAlgorithm());
     }
 
-    public static Algorithm getAlgorithmByName(String name) {
-        return algorithmHashMap.get(name);
+    public static void selectAlgorithmByName(String name) {
+        currentAlgorithm = algorithmHashMap.get(name);
     }
 }
