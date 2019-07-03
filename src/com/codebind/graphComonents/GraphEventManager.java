@@ -7,7 +7,9 @@ import com.codebind.viewComponents.DrawDirectedEdge;
 import com.codebind.viewComponents.DrawEdge;
 import com.codebind.viewComponents.DrawNode;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.dnd.MouseDragGestureRecognizer;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
@@ -112,8 +114,11 @@ public class GraphEventManager {
 
         switch (graphState) {
             case CREATE_NODE:
-                DrawNode nodeView = new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()));
-                graph.add(new Node(nodeView));
+                if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+                    DrawNode nodeView = new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()));
+                    graph.add(new Node(nodeView));
+                }
+
                 break;
             case CONNECT_NODE:
                 if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
@@ -237,6 +242,18 @@ public class GraphEventManager {
     }
 
     public void mouseDragged(MouseEvent mouseEvent) {
+        if (SwingUtilities.isMiddleMouseButton(mouseEvent)) {
+            double xMotion = mouseEvent.getX() - oldDragPoint.getX();
+            double yMotion = mouseEvent.getY() - oldDragPoint.getY();
+
+            for(Node node : graph.getNodes()) {
+                Point2D.Double oldPoint2D = node.getView().getPosition();
+                node.getView().moveTo(new Point2D.Double(oldPoint2D.getX()+xMotion, oldPoint2D.getY()+yMotion));
+            }
+
+            oldDragPoint = mouseEvent.getPoint();
+        }
+
         switch (graphState) {
             case CREATE_NODE:
                 break;
@@ -245,16 +262,8 @@ public class GraphEventManager {
             case MOVE_NODE:
                 if (draggData.getIsDragg()) {
                     draggData.moveNodeIfGrabed(mouseEvent.getPoint());
-                } else {
-                    double xMotion = mouseEvent.getX() - oldDragPoint.getX();
-                    double yMotion = mouseEvent.getY() - oldDragPoint.getY();
-
-                    for(Node node:graph.getNodes()) {
-                        Point2D.Double oldPoint2D = node.getView().getPosition();
-                        node.getView().moveTo(new Point2D.Double(oldPoint2D.getX()+xMotion, oldPoint2D.getY()+yMotion));
-                    }
-                    oldDragPoint = mouseEvent.getPoint();
                 }
+
                 break;
             case NOTHING:
                 break;
