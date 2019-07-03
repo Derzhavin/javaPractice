@@ -1,6 +1,6 @@
 package com.codebind;
 
-import com.codebind.algorithmComponents.DFSAlgorithm;
+//import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 import com.codebind.viewComponents.DrawGraph;
@@ -14,7 +14,7 @@ class Application implements ActionListener {
     private static GraphicsPanel graphicsPanel;
     private JMenuBar menuBar;
     private JPanel statusBar;
-    JPanel instrumentPanel;
+    JPanel toolBar;
 
     public Application() {
         Image iconOfApp = new ImageIcon("img/Иконка приложения.png").getImage();
@@ -48,38 +48,44 @@ class Application implements ActionListener {
         menuFile.add(itemSaveGraph);
 
         ImageIcon iconPlus = new ImageIcon("img/Плюс.png");
-        ImageIcon iconArrow = new ImageIcon("img/Стрелка.png");
+        ImageIcon iconDirectedEdge = new ImageIcon("img/Направленное ребро(1).png");
+        ImageIcon iconUndirectedEdge = new ImageIcon("img/Ненаправленное ребро(1).png");
         ImageIcon iconCross = new ImageIcon("img/Крестик.png");
         ImageIcon iconGear = new ImageIcon("img/Шестерёнка.png");
         ImageIcon iconBroom = new ImageIcon("img/Метла.png");
+        ImageIcon iconTransfer = new ImageIcon("img/Перемещение(1).png");
+        ImageIcon iconConnectAllNodes = new ImageIcon("img/Соединить всё.png");
 
         JMenuItem itemAddVertices = new JMenuItem("Добавить вершины", iconPlus);
-        JMenuItem itemConnectVertices = new JMenuItem("Соединить вершины", iconArrow);
-        JMenuItem itemDelete = new JMenuItem("Удалить", iconCross);
-        JMenu subMenuAlgorithm = new JMenu("Алгоритм");
+        JMenuItem itemAddDirectedEdge = new JMenuItem("Добавить ориентированное ребро", iconDirectedEdge);
+        JMenuItem itemAddUndirectedEdge = new JMenuItem("Добавить неориентированное ребро", iconUndirectedEdge);
+        JMenuItem itemDelete = new JMenuItem("Удалить вершины и рёбра", iconCross);
+        JMenu itemSubMenuAlgorithm = new JMenu("Алгоритм");
         JMenuItem itemClearScene = new JMenuItem("Очистить полотно", iconBroom);
-        JMenuItem itemTransfer = new JMenuItem("Перемещение", iconArrow);
-        JMenuItem itemNothing = new JMenuItem("Перемещение", iconArrow);
-        JMenuItem itemConnectAllNodes = new JMenuItem("Соеденить всё", iconArrow);
+        JMenuItem itemTransfer = new JMenuItem("Перемещение", iconTransfer);
+        JMenuItem itemConnectAllNodes = new JMenuItem("Соеденить все вершины", iconConnectAllNodes);
 
-        subMenuAlgorithm.setIcon(iconGear);
-        JMenuItem itemAlgorithm = new JMenuItem("<Конкретный алгоритм>");
+        itemSubMenuAlgorithm.setIcon(iconGear);
+        JMenuItem itemKosaraju = new JMenuItem("Косарайю");
+        JMenuItem itemDFS = new JMenuItem("Поиск в глубину");
 
-        subMenuAlgorithm.add(itemAlgorithm);
+        itemSubMenuAlgorithm.add(itemKosaraju);
+        itemSubMenuAlgorithm.add(itemDFS);
 
         itemAddVertices.addActionListener(this);
-        itemConnectVertices.addActionListener(this);
+        itemAddDirectedEdge.addActionListener(this);
+        itemAddUndirectedEdge.addActionListener(this);
         itemTransfer.addActionListener(this);
         itemClearScene.addActionListener(this);
         itemDelete.addActionListener(this);
-        itemNothing.addActionListener(this);
         itemConnectAllNodes.addActionListener(this);
         itemOpenFile.addActionListener(this);
 
         menuAction.add(itemAddVertices);
-        menuAction.add(itemConnectVertices);
+        menuAction.add(itemAddUndirectedEdge);
+        menuAction.add(itemAddDirectedEdge);
         menuAction.add(itemDelete);
-        menuAction.add(subMenuAlgorithm);
+        menuAction.add(itemSubMenuAlgorithm);
         menuAction.add(itemClearScene);
         menuAction.add(itemTransfer);
         menuAction.add(itemConnectAllNodes);
@@ -114,10 +120,10 @@ class Application implements ActionListener {
         statusBar.add(panelNodesEdges);
         statusBar.add(slider);
 
-        instrumentPanel = createInstrumentPanel();
+        toolBar = createToolBar();
 
         frame.add(graphicsPanel);
-        frame.add(instrumentPanel, BorderLayout.NORTH);
+        frame.add(toolBar, BorderLayout.NORTH);
         frame.add(statusBar, BorderLayout.SOUTH);
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
@@ -176,23 +182,35 @@ class Application implements ActionListener {
                 if(button.getState() == ButtonState.ACTIVE){
                     button.setState(ButtonState.INACTIVE);
                     button.changeState();
+                    }
                 }
-            }
-
         }
 
         graphicsPanel.updatePanelNodesEdges();
         graphicsPanel.updateUI();
     }
 
-    public JPanel createInstrumentPanel(){
+    public JPanel createToolBar(){
 
-        String[] icons = {"img/mouse.png","img/add.png","img/path.png","img/delete.png","img/alg.png","img/clean.png", "img/Перемещение.png",
-                "img/Направленное ребро.png", "img/Ненаправленное ребро.png"};
-        String[] commands = {"Ничего не делать","Добавить вершины","Соединить вершины",
-                "Удалить","Алгоритм","Очистить полотно", "Перемещение", "Ориентированное ребро", "Неориентированное ребро"};
+        String[] icons = {  "img/add.png",
+                "img/Направленное ребро.png",
+                "img/Ненаправленное ребро.png",
+                "img/delete.png",
+                "img/alg.png",
+                "img/clean.png",
+                "img/Перемещение.png"
+        };
 
-        JPanel instrumentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        String[] commands = {   "Добавить вершины",
+                                "Добавить ориентированное ребро",
+                                "Добавить неориентированное ребро",
+                                "Удалить вершины и рёбра",
+                                "Алгоритм",
+                                "Очистить полотно",
+                                "Перемещение"
+        };
+
+        JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         for(int i =0; i < icons.length; i++ ){
             Button button = new Button();
@@ -200,9 +218,9 @@ class Application implements ActionListener {
             button.setActionCommand(commands[i]);
             button.setPreferredSize(new Dimension(32, 32));
             button.addActionListener(this);
-            instrumentPanel.add(button);
+            toolBar.add(button);
         }
 
-        return instrumentPanel;
+        return toolBar;
     }
 }

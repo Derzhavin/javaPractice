@@ -1,5 +1,6 @@
 package com.codebind.graphComonents;
 
+import com.codebind.Algorithms;
 import com.codebind.GraphicsPanel;
 import com.codebind.algorithmComponents.Algorithm;
 import com.codebind.algorithmComponents.DFSAlgorithm;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 
 public class GraphEventManager {
     private Graph graph;
-    private Algorithm algorithm;
     private GraphStates graphState;
     private DraggData draggData;
     private ConnectData connectData;
@@ -47,6 +47,10 @@ public class GraphEventManager {
 
     public int getEdgesCount() {
         return graph.getEdges().size();
+    }
+
+    public Graph getGraph() {
+        return graph;
     }
 
     public void setState(GraphStates state) {
@@ -81,14 +85,6 @@ public class GraphEventManager {
         ConnectData.IS_DIRECTED_CONNECTION = isDirected;
     }
 
-    public void setAlgorithm(Algorithm algorithm) {
-        algorithm.reset();
-        algorithm.setGraph(this.graph);
-        algorithm.setGraphicsPanel(this.graphicsPanel);
-
-        this.algorithm = algorithm;
-    }
-
     public void setGraphicsPanel(GraphicsPanel graphicsPanel) {
         this.graphicsPanel = graphicsPanel;
     }
@@ -113,7 +109,6 @@ public class GraphEventManager {
 
     private GraphEventManager() {
         graph = null;
-        algorithm = null;
         graphState = GraphStates.NOTHING;
         draggData = new DraggData();
         connectData = new ConnectData();
@@ -173,11 +168,11 @@ public class GraphEventManager {
                 }
                 break;
             case ALGORITHM:
-                if (!algorithm.isInitialized()) {
+                if (!Algorithms.currentAlgorithm.isInitialized()) {
                     Node selectedNode = getNodeOnPos(mouseEvent.getPoint(), graph.getNodes());
 
                     if (selectedNode != null) {
-                        algorithm.initialize(selectedNode);
+                        Algorithms.currentAlgorithm.initialize(selectedNode);
                     }
                 }
                 break;
