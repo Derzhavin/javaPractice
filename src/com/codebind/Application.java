@@ -82,6 +82,7 @@ class Application implements ActionListener {
         itemDFS.addActionListener(this);
         itemKosaraju.addActionListener(this);
         itemOpenFile.addActionListener(this);
+        itemSaveGraph.addActionListener(this);
 
         menuAction.add(itemAddVertices);
         menuAction.add(itemAddUndirectedEdge);
@@ -147,11 +148,12 @@ class Application implements ActionListener {
             case "Открыть":
                 labelAction.setText("Открыть");
                 InputReader newOne = new InputReader();
-
-                if(newOne.FileOpen){
-                    graphicsPanel.setGraph(new DrawGraph(newOne.initFromData()));
-                }
-                
+                if(newOne.FileOpen){ graphicsPanel.setGraph(new DrawGraph(newOne.initFromData()));}
+                break;
+            case "Сохранить граф":
+                OutputWriter saveOne = new OutputWriter();
+                saveOne.saveGraph(graphicsPanel.getGraph().getGraph());
+                break;
             case "Добавить вершины":
                 labelAction.setText("Добавление вершин");
                 graphicsPanel.setGraphState(GraphStates.CREATE_NODE);

@@ -25,7 +25,7 @@ class InputReader {
     public InputReader(){
         lines = new ArrayList<String>(50);
         JFileChooser fileopen = new JFileChooser(new File("./GraphExamples"));
-        int ret = fileopen.showDialog(null, "Открыть файл");
+        int ret = fileopen.showOpenDialog(null);
         if (ret == JFileChooser.APPROVE_OPTION) FileOpen = true;
         if (FileOpen) {
             File file = fileopen.getSelectedFile();
