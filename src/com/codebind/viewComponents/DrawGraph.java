@@ -16,6 +16,10 @@ public class DrawGraph implements Drawable {
         this.graph = new Graph();
         GraphEventManager.getInstance().setGraph(graph);
     }
+    public DrawGraph(Graph graph){
+        this.graph = graph;
+        GraphEventManager.getInstance().setGraph(graph);
+    }
 
     @Override
     public void draw(Graphics2D g) {
