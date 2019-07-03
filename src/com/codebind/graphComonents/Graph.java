@@ -14,7 +14,27 @@ public class Graph {
     }
 
     public void add(Edge edge) {
-        edges.add(edge);
+        ArrayList<Node> pair = edge.getNodes();
+
+        Edge e1 = pair.get(0).getEdge(pair.get(1));
+
+        if (e1 != null && edge.isDirected() && e1.isDirected()) {
+            if (pair.get(0) == e1.getNodes().get(1)) {
+                edges.remove(e1);
+                e1.destroy();
+
+                Edge newEdge = new Edge(pair.get(0), pair.get(1), false);
+                pair.get(0).addEdge(newEdge);
+                pair.get(1).addEdge(newEdge);
+                edges.add(newEdge);
+            }
+        }
+
+        if (e1 == null) {
+            pair.get(0).addEdge(edge);
+            pair.get(1).addEdge(edge);
+            edges.add(edge);
+        }
     }
 
     public void remove(Node node) {
