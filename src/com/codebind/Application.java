@@ -1,6 +1,6 @@
 package com.codebind;
 
-import com.codebind.algorithmComponents.DFSAlgorithm;
+//import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 
@@ -13,7 +13,7 @@ class Application implements ActionListener {
     private static GraphicsPanel graphicsPanel;
     private JMenuBar menuBar;
     private JPanel statusBar;
-    JPanel instrumentPanel;
+    JPanel toolBar;
 
     public Application() {
         Image iconOfApp = new ImageIcon("img/Иконка приложения.png").getImage();
@@ -47,37 +47,45 @@ class Application implements ActionListener {
         menuFile.add(itemSaveGraph);
 
         ImageIcon iconPlus = new ImageIcon("img/Плюс.png");
-        ImageIcon iconArrow = new ImageIcon("img/Стрелка.png");
+        ImageIcon iconDirectedEdge = new ImageIcon("img/Направленное ребро(1).png");
+        ImageIcon iconUndirectedEdge = new ImageIcon("img/Ненаправленное ребро(1).png");
         ImageIcon iconCross = new ImageIcon("img/Крестик.png");
         ImageIcon iconGear = new ImageIcon("img/Шестерёнка.png");
         ImageIcon iconBroom = new ImageIcon("img/Метла.png");
+        ImageIcon iconTransfer = new ImageIcon("img/Перемещение(1).png");
+        ImageIcon iconConnectAllNodes = new ImageIcon("img/Соединить всё.png");
 
         JMenuItem itemAddVertices = new JMenuItem("Добавить вершины", iconPlus);
-        JMenuItem itemConnectVertices = new JMenuItem("Соединить вершины", iconArrow);
-        JMenuItem itemDelete = new JMenuItem("Удалить", iconCross);
-        JMenu subMenuAlgorithm = new JMenu("Алгоритм");
+        JMenuItem itemAddDirectedEdge = new JMenuItem("Добавить ориентированное ребро", iconDirectedEdge);
+        JMenuItem itemAddUndirectedEdge = new JMenuItem("Добавить неориентированное ребро", iconUndirectedEdge);
+        JMenuItem itemDelete = new JMenuItem("Удалить вершины и рёбра", iconCross);
+        JMenu itemSubMenuAlgorithm = new JMenu("Алгоритм");
         JMenuItem itemClearScene = new JMenuItem("Очистить полотно", iconBroom);
-        JMenuItem itemTransfer = new JMenuItem("Перемещение", iconArrow);
-        JMenuItem itemNothing = new JMenuItem("Перемещение", iconArrow);
-        JMenuItem itemConnectAllNodes = new JMenuItem("Соеденить всё", iconArrow);
+        JMenuItem itemTransfer = new JMenuItem("Перемещение", iconTransfer);
+        JMenuItem itemConnectAllNodes = new JMenuItem("Соеденить все вершины", iconConnectAllNodes);
 
-        subMenuAlgorithm.setIcon(iconGear);
-        JMenuItem itemAlgorithm = new JMenuItem("<Конкретный алгоритм>");
+        itemSubMenuAlgorithm.setIcon(iconGear);
+        JMenuItem itemKosaraju = new JMenuItem("Косарайю");
+        JMenuItem itemDFS = new JMenuItem("Поиск в глубину");
 
-        subMenuAlgorithm.add(itemAlgorithm);
+        itemSubMenuAlgorithm.add(itemKosaraju);
+        itemSubMenuAlgorithm.add(itemDFS);
 
         itemAddVertices.addActionListener(this);
-        itemConnectVertices.addActionListener(this);
+        itemAddDirectedEdge.addActionListener(this);
+        itemAddUndirectedEdge.addActionListener(this);
         itemTransfer.addActionListener(this);
         itemClearScene.addActionListener(this);
         itemDelete.addActionListener(this);
-        itemNothing.addActionListener(this);
         itemConnectAllNodes.addActionListener(this);
+        itemDFS.addActionListener(this);
+        itemKosaraju.addActionListener(this);
 
         menuAction.add(itemAddVertices);
-        menuAction.add(itemConnectVertices);
+        menuAction.add(itemAddUndirectedEdge);
+        menuAction.add(itemAddDirectedEdge);
         menuAction.add(itemDelete);
-        menuAction.add(subMenuAlgorithm);
+        menuAction.add(itemSubMenuAlgorithm);
         menuAction.add(itemClearScene);
         menuAction.add(itemTransfer);
         menuAction.add(itemConnectAllNodes);
@@ -112,10 +120,10 @@ class Application implements ActionListener {
         statusBar.add(panelNodesEdges);
         statusBar.add(slider);
 
-        instrumentPanel = createInstrumentPanel();
+        toolBar = createToolBar();
 
         frame.add(graphicsPanel);
-        frame.add(instrumentPanel, BorderLayout.NORTH);
+        frame.add(toolBar, BorderLayout.NORTH);
         frame.add(statusBar, BorderLayout.SOUTH);
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
@@ -133,60 +141,92 @@ class Application implements ActionListener {
 
         JLabel labelAction = (JLabel)statusBar.getComponents()[0];
 
-        if (command.equals("Добавить вершины")) {
-            labelAction.setText("Добавление вершин");
-            graphicsPanel.setGraphState(GraphStates.CREATE_NODE);
-        } else if (command.equals("Соединить вершины")) {
-            labelAction.setText("Соединение вершин");
-            graphicsPanel.setGraphState(GraphStates.CONNECT_NODE);
-            GraphEventManager.getInstance().setNodeConnectionType(true);
-        } else if (command.equals("Перемещение")) {
-            labelAction.setText("Перемещение");
-            graphicsPanel.setGraphState(GraphStates.MOVE_NODE);
-        } else if (command.equals("Очистить полотно")) {
-            labelAction.setText("Очищение полотна");
-            GraphEventManager.getInstance().removeGraph();
-        } else if (command.equals("Удалить")) {
-            labelAction.setText("Удаление вершин и рёбер");
-            graphicsPanel.setGraphState(GraphStates.DELETE_NODE);
-        } else if (command.equals("Соеденить всё")) {
-            labelAction.setText("Соединение всех вершин");
-            GraphEventManager.getInstance().connectAllVertices();
-        } else if (command.equals("Алгоритм")) {
-            labelAction.setText("Алгоритм");
-            GraphEventManager.getInstance().setAlgorithm(Algorithms.getAlgorithmByName("DFS"));
-            graphicsPanel.setGraphState(GraphStates.ALGORITHM);
-        }else if (command.equals("Ориентированное ребро")) {
-            GraphEventManager.getInstance().setNodeConnectionType(true);
-        }else if (command.equals("Неориентированное ребро")) {
-            GraphEventManager.getInstance().setNodeConnectionType(false);
-        }else if(command.equals("Ничего не делать")){
-            labelAction.setText("");
-            graphicsPanel.setGraphState(GraphStates.NOTHING);
-            Component[] instrumentPanelComponents = instrumentPanel.getComponents();
+        switch(command) {
+            case "Добавить вершины":
+                labelAction.setText("Добавление вершин");
+                graphicsPanel.setGraphState(GraphStates.CREATE_NODE);
+                break;
+            case "Добавить ориентированное ребро":
+                labelAction.setText("Добавление ориентированных рёбер");
+                graphicsPanel.setGraphState(GraphStates.CONNECT_NODE);
+                GraphEventManager.getInstance().setNodeConnectionType(true);
+                break;
+            case "Добавить неориентированное ребро":
+                labelAction.setText("Добавление неориентированных рёбер");
+                graphicsPanel.setGraphState(GraphStates.CONNECT_NODE);
+                GraphEventManager.getInstance().setNodeConnectionType(false);
+                break;
+            case "Перемещение":
+                labelAction.setText("Перемещение");
+                graphicsPanel.setGraphState(GraphStates.MOVE_NODE);
+                break;
+            case "Очистить полотно":
+                labelAction.setText("Очищение полотна");
+                GraphEventManager.getInstance().removeGraph();
+                break;
+            case "Удалить вершины и рёбра":
+                labelAction.setText("Удалиение вершин и рёбер");
+                graphicsPanel.setGraphState(GraphStates.DELETE_NODE);
+                break;
+            case "Соеденить все вершины":
+                labelAction.setText("Соединение всех вершин");
+                GraphEventManager.getInstance().connectAllVertices();
+                break;
+            case "Поиск в глубину":
+                labelAction.setText("DFS");
+                Algorithms.selectAlgorithmByName("DFS");
+                Algorithms.currentAlgorithm.reset();
+                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
+                Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+                graphicsPanel.setGraphState(GraphStates.ALGORITHM);
+                break;
+            case "Косарайю":
+                labelAction.setText("Kosaraju");
+                Algorithms.selectAlgorithmByName("Kosaraju");
+                Algorithms.currentAlgorithm.reset();
+                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
+                Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+                graphicsPanel.setGraphState(GraphStates.ALGORITHM);
+                break;
+            default:
+                labelAction.setText("");
+                graphicsPanel.setGraphState(GraphStates.NOTHING);
+                Component[] toolBarComponents = toolBar.getComponents();
 
-            for(Component instrumentPanelComponent: instrumentPanelComponents){
-                Button button = (Button) instrumentPanelComponent;
-                if(button.getState() == ButtonState.ACTIVE){
-                    button.setState(ButtonState.INACTIVE);
-                    button.changeState();
+                for(Component toolBarComponent: toolBarComponents){
+                    Button button = (Button) toolBarComponent;
+                    if(button.getState() == ButtonState.ACTIVE){
+                        button.setState(ButtonState.INACTIVE);
+                        button.changeState();
+                    }
                 }
-            }
-
         }
 
         graphicsPanel.updatePanelNodesEdges();
         graphicsPanel.updateUI();
     }
 
-    public JPanel createInstrumentPanel(){
+    public JPanel createToolBar(){
 
-        String[] icons = {"img/mouse.png","img/add.png","img/path.png","img/delete.png","img/alg.png","img/clean.png", "img/Перемещение.png",
-                "img/Направленное ребро.png", "img/Ненаправленное ребро.png"};
-        String[] commands = {"Ничего не делать","Добавить вершины","Соединить вершины",
-                "Удалить","Алгоритм","Очистить полотно", "Перемещение", "Ориентированное ребро", "Неориентированное ребро"};
+        String[] icons = {  "img/add.png",
+                "img/Направленное ребро.png",
+                "img/Ненаправленное ребро.png",
+                "img/delete.png",
+                "img/alg.png",
+                "img/clean.png",
+                "img/Перемещение.png"
+        };
 
-        JPanel instrumentPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        String[] commands = {   "Добавить вершины",
+                "Добавить ориентированное ребро",
+                "Добавить неориентированное ребро",
+                "Удалить вершины и рёбра",
+                "Алгоритм",
+                "Очистить полотно",
+                "Перемещение"
+        };
+
+        JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         for(int i =0; i < icons.length; i++ ){
             Button button = new Button();
@@ -194,9 +234,9 @@ class Application implements ActionListener {
             button.setActionCommand(commands[i]);
             button.setPreferredSize(new Dimension(32, 32));
             button.addActionListener(this);
-            instrumentPanel.add(button);
+            toolBar.add(button);
         }
 
-        return instrumentPanel;
+        return toolBar;
     }
 }

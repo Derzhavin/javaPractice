@@ -155,6 +155,7 @@ public class DFSAlgorithm implements Algorithm {
 
         currentStep = 0;
         initialized = false;
+        stack.clear();
         timer.stop();
     }
 
