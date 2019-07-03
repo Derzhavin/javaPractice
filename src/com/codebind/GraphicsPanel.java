@@ -24,6 +24,10 @@ public class GraphicsPanel extends JPanel {
                 super.mouseDragged(mouseEvent);
                 GraphEventManager.getInstance().mouseDragged(mouseEvent);
 
+                if (SwingUtilities.isMiddleMouseButton(mouseEvent)) {
+                    setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+                }
+
                 repaint();
             }
         });
