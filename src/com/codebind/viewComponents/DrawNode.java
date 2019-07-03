@@ -60,7 +60,7 @@ public class DrawNode implements Drawable, Movable {
     }
 
     @Override
-    public Rectangle2D getBoundingRect() {
+    public Rectangle2D.Double getBoundingRect() {
         return new Rectangle2D.Double(position.x - radius*scale, position.y - radius*scale, 2 * radius*scale, 2 * radius*scale);
     }
 }
