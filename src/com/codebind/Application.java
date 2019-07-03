@@ -3,6 +3,7 @@ package com.codebind;
 import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
+import com.codebind.viewComponents.DrawGraph;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -73,6 +74,7 @@ class Application implements ActionListener {
         itemDelete.addActionListener(this);
         itemNothing.addActionListener(this);
         itemConnectAllNodes.addActionListener(this);
+        itemOpenFile.addActionListener(this);
 
         menuAction.add(itemAddVertices);
         menuAction.add(itemConnectVertices);
@@ -152,6 +154,10 @@ class Application implements ActionListener {
         } else if (command.equals("Соеденить всё")) {
             labelAction.setText("Соединение всех вершин");
             GraphEventManager.getInstance().connectAllVertices();
+        } else if(command.equals("Открыть")){
+            labelAction.setText("Открыть");
+            InputReader newOne = new InputReader();
+            if(newOne.FileOpen){ graphicsPanel.setGraph(new DrawGraph(newOne.initFromData())); }
         } else if (command.equals("Алгоритм")) {
             labelAction.setText("Алгоритм");
             GraphEventManager.getInstance().setAlgorithm(Algorithms.getAlgorithmByName("DFS"));
