@@ -79,16 +79,26 @@ class InputReader {
             graph.add(new Node(new DrawNode(point,name.toString())));
         }
         for (int i = 1- indent; i< lines.size(); i++){
-            String[] neighbours = lines.get(i).split(" ");
+            String line = lines.get(i);
+            int ind = 0;
+            if(mode == DataMode.COORDS){
+                line = line.substring(line.indexOf(')') + 1);
+                ind = 1;
+            }
+            line = line.trim();
+            String[] neighbours = line.split("\\s+");
             Node SourceNode = graph.getNodes().get(i-(1-indent));
             Node DestNode = SourceNode;
-            for(int j = 1; j < neighbours.length; j++){
+            for(int j = 1 - ind; j < neighbours.length; j++){
                 for (Node node :graph.getNodes()){
                     if(node.getView().getName().equals(neighbours[j])){
                         DestNode = node; break;
                     }
                 }
-                graph.add(new Edge(SourceNode,DestNode,true));
+                Edge edge = new Edge(SourceNode,DestNode,true);
+                graph.add(edge);
+                SourceNode.addEdge(edge);
+                DestNode.addEdge(edge);
             }
         }
 
