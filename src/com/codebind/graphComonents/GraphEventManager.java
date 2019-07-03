@@ -50,6 +50,18 @@ public class GraphEventManager {
     }
 
     public void setState(GraphStates state) {
+        switch (state) {
+            case CREATE_NODE:
+            case MOVE_NODE:
+            case NOTHING:
+            case DELETE_NODE:
+            case ALGORITHM:
+                connectData.clear();
+                break;
+            case CONNECT_NODE:
+                break;
+        }
+
         graphState = state;
     }
 
@@ -253,23 +265,24 @@ public class GraphEventManager {
 
             oldDragPoint = mouseEvent.getPoint();
         }
+        else {
+            switch (graphState) {
+                case CREATE_NODE:
+                    break;
+                case CONNECT_NODE:
+                    break;
+                case MOVE_NODE:
+                    if (draggData.getIsDragg()) {
+                        draggData.moveNodeIfGrabed(mouseEvent.getPoint());
+                    }
 
-        switch (graphState) {
-            case CREATE_NODE:
-                break;
-            case CONNECT_NODE:
-                break;
-            case MOVE_NODE:
-                if (draggData.getIsDragg()) {
-                    draggData.moveNodeIfGrabed(mouseEvent.getPoint());
-                }
-
-                break;
-            case NOTHING:
-                break;
-            case DELETE_NODE:
-                deleteData.secondPoint = mouseEvent.getPoint();
-                break;
+                    break;
+                case NOTHING:
+                    break;
+                case DELETE_NODE:
+                    deleteData.secondPoint = mouseEvent.getPoint();
+                    break;
+            }
         }
     }
 
