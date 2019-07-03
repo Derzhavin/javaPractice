@@ -80,6 +80,7 @@ class Application implements ActionListener {
         itemConnectAllNodes.addActionListener(this);
         itemDFS.addActionListener(this);
         itemKosaraju.addActionListener(this);
+        itemOpenFile.addActionListener(this);
 
         menuAction.add(itemAddVertices);
         menuAction.add(itemAddUndirectedEdge);
