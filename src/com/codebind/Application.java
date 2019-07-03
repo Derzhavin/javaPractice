@@ -174,12 +174,18 @@ class Application implements ActionListener {
                 break;
             case "Поиск в глубину":
                 labelAction.setText("DFS");
-                GraphEventManager.getInstance().setAlgorithm(Algorithms.getAlgorithmByName("DFS"));
+                Algorithms.selectAlgorithmByName("DFS");
+                Algorithms.currentAlgorithm.reset();
+                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
+                Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
                 graphicsPanel.setGraphState(GraphStates.ALGORITHM);
                 break;
             case "Косарайю":
                 labelAction.setText("Kosaraju");
-                GraphEventManager.getInstance().setAlgorithm(Algorithms.getAlgorithmByName("Kosaraju"));
+                Algorithms.selectAlgorithmByName("Kosaraju");
+                Algorithms.currentAlgorithm.reset();
+                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
+                Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
                 graphicsPanel.setGraphState(GraphStates.ALGORITHM);
                 break;
             default:
@@ -203,12 +209,12 @@ class Application implements ActionListener {
     public JPanel createToolBar(){
 
         String[] icons = {  "img/add.png",
-                            "img/Направленное ребро.png",
-                            "img/Ненаправленное ребро.png",
-                            "img/delete.png",
-                            "img/alg.png",
-                            "img/clean.png",
-                            "img/Перемещение.png"
+                "img/Направленное ребро.png",
+                "img/Ненаправленное ребро.png",
+                "img/delete.png",
+                "img/alg.png",
+                "img/clean.png",
+                "img/Перемещение.png"
         };
 
         String[] commands = {   "Добавить вершины",
