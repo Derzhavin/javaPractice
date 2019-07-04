@@ -150,6 +150,10 @@ class Application implements ActionListener {
 
         JLabel labelAction = (JLabel)statusBar.getComponents()[0];
 
+        if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
+            Algorithms.currentAlgorithm.reset();
+        }
+
         switch(command) {
             case "Открыть":
                 labelAction.setText("Открыть");
@@ -190,13 +194,16 @@ class Application implements ActionListener {
                 labelAction.setText("Соединение всех вершин");
                 GraphEventManager.getInstance().connectAllVertices();
                 break;
+            case "Алгоритм":
+                GraphEventManager.getInstance().setState(GraphStates.ALGORITHM);
+                Algorithms.currentAlgorithm.sayHello();
+                break;
             case "Поиск в глубину":
                 labelAction.setText("DFS");
                 Algorithms.selectAlgorithmByName("DFS");
                 Algorithms.currentAlgorithm.reset();
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
-                graphicsPanel.setGraphState(GraphStates.ALGORITHM);
                 break;
             case "Косарайю":
                 labelAction.setText("Kosaraju");
@@ -204,7 +211,6 @@ class Application implements ActionListener {
                 Algorithms.currentAlgorithm.reset();
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
-                graphicsPanel.setGraphState(GraphStates.ALGORITHM);
                 break;
             case "О программе":
                 labelAction.setText("О программе");
