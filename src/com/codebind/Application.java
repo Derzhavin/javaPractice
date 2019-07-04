@@ -108,7 +108,7 @@ class Application implements ActionListener {
         BoundedRangeModel model = new DefaultBoundedRangeModel(500, 0, 0, 2000);
 
         JSlider slider = new JSlider(model);
-        slider.addChangeListener(e -> Algorithms.currentAlgorithm.setDelay(slider.getValue()));
+        slider.addChangeListener(e -> Algorithms.setDelay(slider.getValue()));
 
         JLabel labelAction = new JLabel();
 
