@@ -1,6 +1,5 @@
 package com.codebind;
 
-import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 import com.codebind.viewComponents.DrawGraph;
@@ -10,8 +9,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+
 
 class Application implements ActionListener {
     public JFrame frame;
@@ -133,12 +131,15 @@ class Application implements ActionListener {
             Algorithms.currentAlgorithm.reset();
         }
 
-
         switch(command) {
             case "Открыть":
                 labelAction.setText("Открыть");
                 InputReader newOne = new InputReader();
-                if(newOne.FileOpen){ graphicsPanel.setGraph(new DrawGraph(newOne.initFromData()));}
+
+                if(newOne.FileOpen) {
+                    graphicsPanel.setGraph(new DrawGraph(newOne.initFromData()));
+                }
+
                 break;
             case "Сохранить граф":
                 OutputWriter saveOne = new OutputWriter();
@@ -177,6 +178,9 @@ class Application implements ActionListener {
             case "Алгоритм":
                 GraphEventManager.getInstance().setState(GraphStates.ALGORITHM);
                 Algorithms.currentAlgorithm.sayHello();
+                Algorithms.currentAlgorithm.reset();
+                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
+                Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
                 break;
             case "Поиск в глубину":
                 labelAction.setText("DFS");
@@ -208,23 +212,34 @@ class Application implements ActionListener {
     }
 
     public void ButtonClicked(String command){
-        if(command.equals("Очистить полотно") || command.equals("Соединить все вершины")) return;
+        if(command.equals("Очистить полотно") ||
+                command.equals("Соединить все вершины") ||
+                command.equals("Поиск в глубину") ||
+                command.equals("Косарайю") ||
+                command.equals("Открыть") ||
+                command.equals("Сохранить граф")){
+            return;
+        }
 
         Component[] mas = frame.getContentPane().getComponents();
         JPanel panel = (JPanel)mas[1];
         mas = panel.getComponents();
+
         for(int i = 0; i < mas.length; i++){
             Button but = (Button)mas[i];
+
             if (but.getActionCommand().equals(command)){
                 but.setState(ButtonState.ACTIVE);
             }
-            else but.setState(ButtonState.INACTIVE);
+            else {
+                but.setState(ButtonState.INACTIVE);
+            }
+
             but.changeState();
         }
     }
 
     public JPanel createToolBar(){
-
         String[] icons = {"img/Перемещение.png",
                 "img/Добавить.png",
                 "img/Направленное ребро.png",
@@ -244,10 +259,9 @@ class Application implements ActionListener {
         };
 
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
         toolBar.setBackground(new Color(219, 232, 254));
 
-        for(int i =0; i < icons.length; i++ ){
+        for(int i = 0; i < icons.length; i++ ){
             Button button = new Button();
             button.setIcon(new ImageIcon(icons[i]));
             button.setActionCommand(commands[i]);
@@ -258,7 +272,9 @@ class Application implements ActionListener {
             button.setFocusPainted(false);
             toolBar.add(button);
         }
+
         toolBar.setBorder(BorderFactory.createRaisedBevelBorder());
+
         return toolBar;
     }
 
