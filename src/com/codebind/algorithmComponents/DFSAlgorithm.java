@@ -5,6 +5,7 @@ import com.codebind.graphComonents.Edge;
 import com.codebind.graphComonents.Graph;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.Node;
+import com.codebind.viewComponents.DrawEdge;
 import com.codebind.viewComponents.DrawNode;
 
 import javax.swing.*;
@@ -27,6 +28,7 @@ public class DFSAlgorithm implements Algorithm {
 
     private Stack<Node> stack = new Stack<>();
     private HashMap<Node, AlgorithmNodeStructure> nodes = new HashMap<>();
+    private ArrayList<Edge> edges = new ArrayList<>();
     private Timer timer;
 
     public DFSAlgorithm() {
@@ -82,7 +84,7 @@ public class DFSAlgorithm implements Algorithm {
         currentNode = startNode;
         nodes.get(currentNode).setVisited(true);
         stack.push(startNode);
-
+        updatePictures();
         graphicsPanel.repaint();
 
         timer.start();
@@ -103,7 +105,7 @@ public class DFSAlgorithm implements Algorithm {
 
         for (Node neighbour : neighbours) {
             if (!nodes.get(neighbour).isVisited) {
-                currentNode.getEdge(neighbour).getView().setColor(Color.MAGENTA);
+                edges.add(currentNode.getEdge(neighbour));
                 stack.push(neighbour);
                 updatePictures();
                 graphicsPanel.repaint();
@@ -123,7 +125,13 @@ public class DFSAlgorithm implements Algorithm {
             }
         }
 
-        currentNode.getView().setColor(Color.GREEN);
+        for (Edge edge : edges) {
+            edge.getView().setColor(Color.red);
+        }
+
+        if (!stack.isEmpty()) {
+            stack.peek().getView().setColor(Color.GREEN);
+        }
     }
 
     @Override
@@ -148,6 +156,10 @@ public class DFSAlgorithm implements Algorithm {
                 node.getView().setColor(DrawNode.BASIC_COLOR);
             }
 
+            for (Edge edge : edges) {
+                edge.getView().setColor(DrawEdge.BASIC_COLOR);
+            }
+
             if (graphicsPanel != null) {
                 graphicsPanel.repaint();
             }
@@ -156,6 +168,8 @@ public class DFSAlgorithm implements Algorithm {
         currentStep = 0;
         initialized = false;
         stack.clear();
+        nodes.clear();
+        edges.clear();
         timer.stop();
     }
 
@@ -163,6 +177,18 @@ public class DFSAlgorithm implements Algorithm {
         private boolean isVisited;
 
         public AlgorithmNodeStructure() {
+            this.isVisited = false;
+        }
+
+        public void setVisited(boolean isVisited) {
+            this.isVisited = isVisited;
+        }
+    }
+
+    private class AlgorithmEdgeStructure {
+        private boolean isVisited;
+
+        public AlgorithmEdgeStructure() {
             this.isVisited = false;
         }
 

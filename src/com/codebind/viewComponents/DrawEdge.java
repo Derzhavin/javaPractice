@@ -12,7 +12,7 @@ public class DrawEdge implements Drawable {
     protected Point2D.Double sourcePosition;
     protected Point2D.Double destPosition;
 
-    public static final Color BASIC_COLOR = Color.blue;
+    public static final Color BASIC_COLOR = Color.darkGray;
 
     public DrawEdge(DrawNode sourceNode, DrawNode destNode, Color color) {
         this.sourceNode = sourceNode;
@@ -53,7 +53,7 @@ public class DrawEdge implements Drawable {
     @Override
     public void draw(Graphics2D g) {
         updateOffsetVector();
-        g.setColor(Color.BLUE);
+        g.setColor(color);
         g.drawLine((int)sourcePosition.x, (int)sourcePosition.y, (int)destPosition.x, (int)destPosition.y);
     }
 }
