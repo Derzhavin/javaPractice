@@ -90,6 +90,7 @@ public class GraphicsPanel extends JPanel {
         g2.setFont(new Font("Times New Roman", Font.BOLD + Font.ITALIC, 15));
 
         graph.draw(g2);
+        graph.print(g2);
 
         if (GraphEventManager.getInstance().isCutting()) {
             ArrayList<Point> pair = GraphEventManager.getInstance().getScissors();

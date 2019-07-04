@@ -31,4 +31,10 @@ public class DrawGraph implements Drawable {
             edge.getView().draw(g);
         }
     }
+
+    public void print(Graphics2D g) {
+        for (Node node : graph.getNodes()) {
+            node.getView().print(g);
+        }
+    }
 }
