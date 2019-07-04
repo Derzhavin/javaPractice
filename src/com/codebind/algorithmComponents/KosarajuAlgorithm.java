@@ -1,8 +1,6 @@
 package com.codebind.algorithmComponents;
 
-import com.codebind.GraphicsPanel;
 import com.codebind.graphComonents.Edge;
-import com.codebind.graphComonents.Graph;
 import com.codebind.graphComonents.Node;
 import com.codebind.viewComponents.DrawNode;
 import com.codebind.viewComponents.DrawEdge;
@@ -10,39 +8,29 @@ import com.codebind.viewComponents.DrawEdge;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.awt.Color;
-import javax.swing.Timer;
 
-public class KosarajuAlgorithm implements Algorithm {
+public class KosarajuAlgorithm extends Algorithm {
     private static final int INIT_STEPS_COUNT = 1;
-    private static final int TIMER_BASIC_DELAY = 500;
-    private static final int DELTA_COLOR = 80;
-    private boolean initialized = false;
-    private int currentStep = 0;
-    private Graph graph;
+
     private Node startNode;
     private Node currentNode;
+
     private Color colorOfComponent;
-    private GraphicsPanel graphicsPanel;
     private int componentCounter;
     private String stageOfAlgorithm = "doDFSstep";
     private Random random;
 
     private HashMap<Node, NodeWrapper> nodes = new HashMap<>();
     private ArrayList<Edge> edges = new ArrayList<>();
-    //private HashSet<Node> components[] = null;
 
     private Stack<Node> stack = new Stack<>();
     private Stack<Node> timeOutList = new Stack<>();
-    private Timer timer;
 
     public KosarajuAlgorithm() {
-        this.graphicsPanel = null;
-        this.graph = null;
         this.startNode = null;
         this.currentNode = null;
-        this.timer = new Timer(TIMER_BASIC_DELAY, e->doStep());
         this.componentCounter = 1;
-        this.colorOfComponent = new Color(componentCounter*DELTA_COLOR,componentCounter*DELTA_COLOR,componentCounter*DELTA_COLOR);
+        this.colorOfComponent = null;
         random = new Random(System.currentTimeMillis());
     }
 
@@ -50,11 +38,6 @@ public class KosarajuAlgorithm implements Algorithm {
         for (Node node : graph.getNodes()) {
             nodes.put(node, new NodeWrapper());
         }
-    }
-
-    @Override
-    public boolean isInitialized() {
-        return false;
     }
 
     @Override
@@ -245,23 +228,14 @@ public class KosarajuAlgorithm implements Algorithm {
     }
 
     @Override
-    public void setGraph(Graph graph) {
-        this.graph = graph;
-    }
+    public void sayHello() {
 
-    @Override
-    public void setGraphicsPanel(GraphicsPanel panel) {
-        this.graphicsPanel = panel;
     }
-
-    @Override
-    public void setDelay(int delay) {
-        this.timer.setDelay(delay);
-    }
-
 
     @Override
     public void reset() {
+        super.reset();
+
         if (graph != null) {
             for (Node node : graph.getNodes()) {
                 node.getView().setColor(DrawNode.BASIC_COLOR);
@@ -280,9 +254,6 @@ public class KosarajuAlgorithm implements Algorithm {
         edges.clear();
         nodes.clear();
         timeOutList.clear();
-        timer.stop();
-        currentStep = 0;
-        initialized = false;
         stageOfAlgorithm = "doDFSstep";
     }
 
