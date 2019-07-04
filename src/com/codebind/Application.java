@@ -202,10 +202,6 @@ class Application implements ActionListener {
                 labelAction.setText("О программе");
                 openHelp();
                 break;
-            case "О программе":
-                labelAction.setText("О программе");
-                openHelp();
-                break;
             default:
                 labelAction.setText("");
                 graphicsPanel.setGraphState(GraphStates.NOTHING);
@@ -285,7 +281,7 @@ class Application implements ActionListener {
     }
 
     public void openHelp() {
-        File htmlFile = new File("src\\com\\codebind\\Help.html");
+        File htmlFile = new File("html/Help.html");
         try {
             Desktop.getDesktop().browse(htmlFile.toURI());
         } catch(IOException exception) {
