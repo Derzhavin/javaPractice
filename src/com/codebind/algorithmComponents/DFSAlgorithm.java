@@ -72,7 +72,6 @@ public class DFSAlgorithm extends Algorithm {
     public void doStep() {
         if (stack.isEmpty()) {
             timer.stop();
-            reset();
             return;
         }
 

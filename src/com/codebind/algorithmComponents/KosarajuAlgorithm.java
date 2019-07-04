@@ -189,9 +189,8 @@ public class KosarajuAlgorithm extends Algorithm {
 
     private void doSearchComponentsStep() {
         if (timeOutList.isEmpty()) {
-            //doTransposeStep();
             System.out.println("FINISH!!!");
-            reset();
+            timer.stop();
             return;
         }
 
