@@ -129,7 +129,7 @@ public class GraphEventManager {
         }
 
         Arrays.sort(mas);
-        
+
         for (int i : mas){
             if(newNodeName != i) {
                 break;

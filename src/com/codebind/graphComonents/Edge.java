@@ -76,5 +76,7 @@ public class Edge {
         Node tmpNode = sourceNode;
         sourceNode = destNode;
         destNode = tmpNode;
+
+        edgeView.transpose();
     }
 }

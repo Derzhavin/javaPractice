@@ -1,6 +1,7 @@
 package com.codebind.viewComponents;
 
 import com.codebind.Shapes.Drawable;
+import com.codebind.graphComonents.Node;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -48,6 +49,12 @@ public class DrawEdge implements Drawable {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public void transpose() {
+        DrawNode tmpNode = sourceNode;
+        sourceNode = destNode;
+        destNode = tmpNode;
     }
 
     @Override

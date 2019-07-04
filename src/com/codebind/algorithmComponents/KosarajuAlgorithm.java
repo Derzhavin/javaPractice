@@ -15,6 +15,7 @@ public class KosarajuAlgorithm extends Algorithm {
     private Node startNode;
     private Node currentNode;
 
+    boolean edgesTransposed = false;
     private Color colorOfComponent;
     private int componentCounter;
     private String stageOfAlgorithm = "doDFSstep";
@@ -105,8 +106,8 @@ public class KosarajuAlgorithm extends Algorithm {
         nodes.get(currentNode).setVisited(true);
         stack.push(currentNode);
 
+        nodes.get(currentNode).color = colorOfComponent;
         updatePictures();
-        currentNode.getView().setColor(colorOfComponent);
         graphicsPanel.repaint();
 
         stageOfAlgorithm = "doSearchComponentsStep";
@@ -148,14 +149,22 @@ public class KosarajuAlgorithm extends Algorithm {
     }
 
     private void updatePictures() {
-        for (Node node : nodes.keySet()) {
-            if (nodes.get(node).isVisited) {
-                node.getView().setColor(Color.MAGENTA);
+        if (stageOfAlgorithm.equals("doSearchComponentsStep")) {
+            for (Node node : nodes.keySet()) {
+                NodeWrapper nodeWrapper = nodes.get(node);
+                node.getView().setColor(nodeWrapper.color);
             }
         }
+        else {
+            for (Node node : nodes.keySet()) {
+                if (nodes.get(node).isVisited) {
+                    node.getView().setColor(Color.MAGENTA);
+                }
+            }
 
-        for (Edge edge : edges) {
-            edge.getView().setColor(Color.red);
+            for (Edge edge : edges) {
+                edge.getView().setColor(Color.red);
+            }
         }
 
         if (!stack.isEmpty()) {
@@ -163,10 +172,16 @@ public class KosarajuAlgorithm extends Algorithm {
         }
     }
 
-    private void doTransposeStep() {
+    private void transpose() {
         for(Edge edge: graph.getEdges()) {
             edge.transpose();
         }
+
+        edgesTransposed = !edgesTransposed;
+    }
+
+    private void doTransposeStep() {
+        transpose();
 
         graphicsPanel.repaint();
         stageOfAlgorithm = "doInitializationSearchComponentsStep";
@@ -174,14 +189,13 @@ public class KosarajuAlgorithm extends Algorithm {
 
     private void doSearchComponentsStep() {
         if (timeOutList.isEmpty()) {
-            doTransposeStep();
+            //doTransposeStep();
             System.out.println("FINISH!!!");
             reset();
             return;
         }
 
         if (stack.empty()) {
-            System.out.println("KAVO");
             componentCounter++;
             colorOfComponent = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
 
@@ -197,10 +211,11 @@ public class KosarajuAlgorithm extends Algorithm {
                 currentNode = timeOutList.peek();
             }
 
-            currentNode.getView().setColor(colorOfComponent);
+            //currentNode.getView().setColor(colorOfComponent);
             nodes.get(currentNode).setVisited(true);
+            nodes.get(currentNode).color = colorOfComponent;
             stack.push(currentNode);
-            
+            updatePictures();
             graphicsPanel.repaint();
             return;
         }
@@ -210,16 +225,19 @@ public class KosarajuAlgorithm extends Algorithm {
         for (Node neighbour: currentNode.getSmartNeighbours()) {
             if (!nodes.get(neighbour).isVisited) {
                 currentNode = neighbour;
-                currentNode.getView().setColor(colorOfComponent);
+                //currentNode.getView().setColor(colorOfComponent);
                 nodes.get(currentNode).setVisited(true);
+                nodes.get(currentNode).color = colorOfComponent;
                 stack.push(currentNode);
-
+                updatePictures();
                 graphicsPanel.repaint();
                 return;
             }
         }
 
         stack.pop();
+        updatePictures();
+        graphicsPanel.repaint();
     }
 
     @Override
@@ -250,6 +268,10 @@ public class KosarajuAlgorithm extends Algorithm {
             }
         }
 
+        if (edgesTransposed) {
+            transpose();
+        }
+
         stack.clear();
         edges.clear();
         nodes.clear();
@@ -259,6 +281,7 @@ public class KosarajuAlgorithm extends Algorithm {
 
     private class NodeWrapper {
         private boolean isVisited;
+        public Color color = Color.MAGENTA;
 
         public NodeWrapper() {
             this.isVisited = false;
