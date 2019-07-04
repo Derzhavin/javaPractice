@@ -8,6 +8,8 @@ import com.codebind.viewComponents.DrawGraph;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 class Application implements ActionListener {
     public JFrame frame;
@@ -103,9 +105,10 @@ class Application implements ActionListener {
 
         statusBar = new JPanel(new GridLayout(1,3,0,0));
 
-        BoundedRangeModel model = new DefaultBoundedRangeModel(30, 0, 0, 200);
+        BoundedRangeModel model = new DefaultBoundedRangeModel(500, 0, 0, 2000);
 
         JSlider slider = new JSlider(model);
+        slider.addChangeListener(e -> Algorithms.currentAlgorithm.setDelay(slider.getValue()));
 
         JLabel labelAction = new JLabel();
 

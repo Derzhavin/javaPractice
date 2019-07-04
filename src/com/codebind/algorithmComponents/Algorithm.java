@@ -14,6 +14,7 @@ public interface Algorithm {
     void doRun();
     void doStep();
     void doWhile(Callable<?> func);
+    void setDelay(int delay);
     void setGraph(Graph graph);
     void setGraphicsPanel(GraphicsPanel panel);
 
