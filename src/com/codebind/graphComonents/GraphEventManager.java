@@ -15,7 +15,9 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GraphEventManager {
     private Graph graph;
@@ -126,7 +128,19 @@ public class GraphEventManager {
         switch (graphState) {
             case CREATE_NODE:
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                    DrawNode nodeView = new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()));
+                    int name = 0;
+                    ArrayList<Node> nodes = graph.getNodes();
+                    Integer[] mas = new Integer[nodes.size()];
+                    for(int i = 0; i< nodes.size(); i++ ){
+                        mas[i] = Integer.parseInt(nodes.get(i).getView().getName());
+                    }
+                    Arrays.sort(mas);
+                    for (int i : mas){
+                        if(name != i) break;
+                            name++;
+                    }
+                    DrawNode nodeView = new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()),
+                            String.valueOf(name));
                     graph.add(new Node(nodeView));
                 }
 
