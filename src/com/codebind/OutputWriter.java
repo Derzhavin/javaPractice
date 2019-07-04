@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class OutputWriter {
-    
+
     public void saveGraph(Graph graph){
         ArrayList<Node> nodes = graph.getNodes();
         StringBuilder[] res = new StringBuilder[nodes.size()+1];
