@@ -152,7 +152,7 @@ class Application implements ActionListener {
                 break;
             case "Сохранить граф":
                 OutputWriter saveOne = new OutputWriter();
-                saveOne.saveGraph(graphicsPanel.getGraph().getGraph());
+                saveOne.saveGraph(GraphEventManager.getInstance().getGraph());
                 break;
             case "Добавить вершины":
                 labelAction.setText("Добавление вершин");

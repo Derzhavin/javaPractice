@@ -75,10 +75,6 @@ public class GraphicsPanel extends JPanel {
         GraphEventManager.getInstance().setState(state);
     }
 
-    public DrawGraph getGraph(){
-        return graph;
-    }
-
     public void setGraph(DrawGraph graph){
         this.graph = graph;
         this.updatePanelNodesEdges();

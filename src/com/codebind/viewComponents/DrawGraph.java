@@ -21,10 +21,6 @@ public class DrawGraph implements Drawable {
         GraphEventManager.getInstance().setGraph(graph);
     }
 
-    public Graph getGraph(){
-        return graph;
-    }
-
     @Override
     public void draw(Graphics2D g) {
         for (Node node : graph.getNodes()) {
