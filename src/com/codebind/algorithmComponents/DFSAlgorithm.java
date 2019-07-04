@@ -39,8 +39,9 @@ public class DFSAlgorithm implements Algorithm {
         this.timer = new Timer(TIMER_BASIC_DELAY, e->doStep());
     }
 
-    public void setDealy(int dealy) {
-        this.timer.setDelay(dealy);
+    @Override
+    public void setDelay(int delay) {
+        this.timer.setDelay(delay);
     }
 
     private void checkInitialization() {

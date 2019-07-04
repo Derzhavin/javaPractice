@@ -254,6 +254,7 @@ public class KosarajuAlgorithm implements Algorithm {
         this.graphicsPanel = panel;
     }
 
+    @Override
     public void setDelay(int delay) {
         this.timer.setDelay(delay);
     }
