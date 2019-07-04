@@ -118,6 +118,29 @@ public class GraphEventManager {
         graphicsPanel = null;
     }
 
+    private int getNewNodeName() {
+        int newNodeName = 0;
+
+        ArrayList<Node> nodes = graph.getNodes();
+        Integer[] mas = new Integer[nodes.size()];
+
+        for(int i = 0; i< nodes.size(); i++ ){
+            mas[i] = Integer.parseInt(nodes.get(i).getView().getName());
+        }
+
+        Arrays.sort(mas);
+        
+        for (int i : mas){
+            if(newNodeName != i) {
+                break;
+            }
+
+            newNodeName++;
+        }
+
+        return newNodeName;
+    }
+
     public void mousePressed(MouseEvent mouseEvent) {
         oldDragPoint = mouseEvent.getPoint();
 
@@ -128,20 +151,8 @@ public class GraphEventManager {
         switch (graphState) {
             case CREATE_NODE:
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                    int name = 0;
-                    ArrayList<Node> nodes = graph.getNodes();
-                    Integer[] mas = new Integer[nodes.size()];
-                    for(int i = 0; i< nodes.size(); i++ ){
-                        mas[i] = Integer.parseInt(nodes.get(i).getView().getName());
-                    }
-                    Arrays.sort(mas);
-                    for (int i : mas){
-                        if(name != i) break;
-                            name++;
-                    }
-                    DrawNode nodeView = new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()),
-                            String.valueOf(name));
-                    graph.add(new Node(nodeView));
+                    graph.add(new Node(new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()),
+                            String.valueOf(getNewNodeName()))));
                 }
 
                 break;
