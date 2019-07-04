@@ -70,7 +70,7 @@ public class DrawNode implements Drawable, Movable {
     }
 
     public void print(Graphics2D g) {
-        g.setFont(new Font("Trebuchet MS", Font.BOLD, (int)(14*scale)));
+        g.setFont(new Font("Trebuchet MS", Font.BOLD, (int)(16*scale)));
         g.setColor(Color.black);
         g.drawString(name,(int)(position.x - radius*scale),(int)(position.y - radius*scale));
     }

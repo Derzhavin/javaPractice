@@ -14,9 +14,9 @@ class Button extends JButton{
 
     void changeState() {
         if (state == ButtonState.ACTIVE) {
-            this.setBackground(new Color(165, 165, 197));
+            this.setBackground(new Color(170, 170, 199));
         } else {
-            this.setBackground(new Color(205, 210, 255));
+            this.setBackground(new Color(219, 232, 254));
         }
     }
 
