@@ -98,16 +98,16 @@ public class DFSAlgorithm extends Algorithm {
     private void updatePictures() {
         for (Node node : nodes.keySet()) {
             if (nodes.get(node).isVisited) {
-                node.getView().setColor(Color.MAGENTA);
+                node.getView().setColor(DrawNode.VISITED_COLOR);
             }
         }
 
         for (Edge edge : edges) {
-            edge.getView().setColor(Color.red);
+            edge.getView().setColor(DrawEdge.VISITED_COLOR);
         }
 
         if (!stack.isEmpty()) {
-            stack.peek().getView().setColor(Color.GREEN);
+            stack.peek().getView().setColor(DrawNode.SELECTED_COLOR);
         }
     }
 

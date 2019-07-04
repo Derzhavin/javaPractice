@@ -20,7 +20,7 @@ public class RandomGraphCreator {
             Point2D.Double position = isCircular ? new Point2D.Double(center.x + radius * Math.cos(angle * i), center.y + radius * Math.sin(angle * i)) :
                     new Point2D.Double(Math.random() * width, Math.random() * height);
 
-            graph.add(new Node(new DrawNode(position)));
+            graph.add(new Node(new DrawNode(position, String.valueOf(i))));
         }
 
         ArrayList<Node> graphNodes = graph.getNodes();

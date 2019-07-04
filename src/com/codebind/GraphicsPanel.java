@@ -95,7 +95,7 @@ public class GraphicsPanel extends JPanel {
         if (GraphEventManager.getInstance().isCutting()) {
             ArrayList<Point> pair = GraphEventManager.getInstance().getScissors();
 
-            g.setColor(Color.yellow);
+            g.setColor(Color.red);
             g.drawLine(pair.get(0).x, pair.get(0).y, pair.get(1).x, pair.get(1).y);
         }
     }

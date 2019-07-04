@@ -11,8 +11,9 @@ public class DrawNode implements Drawable, Movable {
     private int radius;
     private String name;
     public static double scale = 1D;
-    public static final Color BASIC_COLOR = Color.red;
+    public static final Color BASIC_COLOR = Color.white;
     public static final Color SELECTED_COLOR = Color.green;
+    public static final Color VISITED_COLOR = Color.magenta;
     public static final int BASIC_RADIUS = 15;
     public static final String DEFAULT_NAME = "";
 
@@ -70,9 +71,9 @@ public class DrawNode implements Drawable, Movable {
     }
 
     public void print(Graphics2D g) {
-        g.setFont(new Font("Trebuchet MS", Font.BOLD, (int)(16*scale)));
+        g.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
         g.setColor(Color.black);
-        g.drawString(name,(int)(position.x - radius*scale),(int)(position.y - radius*scale));
+        g.drawString(name,(int)(position.x - radius * scale),(int)(position.y - radius * scale));
     }
 
     @Override
