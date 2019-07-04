@@ -2,6 +2,7 @@ package com.codebind.graphComonents;
 
 import com.codebind.viewComponents.DrawDirectedEdge;
 import com.codebind.viewComponents.DrawEdge;
+import com.codebind.viewComponents.DrawNode;
 
 import java.util.ArrayList;
 
@@ -69,5 +70,11 @@ public class Edge {
 
     public DrawEdge getView() {
         return edgeView;
+    }
+
+    public void transpose() {
+        Node tmpNode = sourceNode;
+        sourceNode = destNode;
+        destNode = tmpNode;
     }
 }
