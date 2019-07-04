@@ -15,7 +15,7 @@ import javax.swing.Timer;
 public class KosarajuAlgorithm implements Algorithm {
     private static final int INIT_STEPS_COUNT = 1;
     private static final int TIMER_BASIC_DELAY = 500;
-    private static final int DELTA_COLOR = 40;
+    private static final int DELTA_COLOR = 10;
     private boolean initialized = false;
     private int currentStep = 0;
     private Graph graph;
@@ -27,6 +27,7 @@ public class KosarajuAlgorithm implements Algorithm {
     private String stageOfAlgorithm = "doDFSstep";
 
     private HashMap<Node, NodeWrapper> nodes = new HashMap<>();
+    private ArrayList<Edge> edges = new ArrayList<>();
     //private HashSet<Node> components[] = null;
 
     private Stack<Node> stack = new Stack<>();
@@ -131,6 +132,8 @@ public class KosarajuAlgorithm implements Algorithm {
             for(Node node: graph.getNodes()) {
                 if (!nodes.get(node).isVisited) {
                     currentNode = node;
+                    updatePictures();
+                    graphicsPanel.repaint();
                     stack.push(currentNode);
                     return;
                 }
@@ -144,7 +147,7 @@ public class KosarajuAlgorithm implements Algorithm {
 
         for (Node neighbour: currentNode.getSmartNeighbours()) {
             if (!nodes.get(neighbour).isVisited) {
-                currentNode.getEdge(neighbour).getView().setColor(Color.MAGENTA);
+                edges.add(currentNode.getEdge(neighbour));
                 stack.push(neighbour);
                 updatePictures();
                 graphicsPanel.repaint();
@@ -166,7 +169,13 @@ public class KosarajuAlgorithm implements Algorithm {
             }
         }
 
-        currentNode.getView().setColor(Color.GREEN);
+        for (Edge edge : edges) {
+            edge.getView().setColor(Color.red);
+        }
+
+        if (!stack.isEmpty()) {
+            stack.peek().getView().setColor(Color.GREEN);
+        }
     }
 
     private void doTransposeStep() {
@@ -180,7 +189,6 @@ public class KosarajuAlgorithm implements Algorithm {
 
     private void doSearchComponentsStep() {
         if (timeOutList.isEmpty()) {
-            timer.stop();
             doTransposeStep();
             System.out.println("FINISH!!!");
             reset();
@@ -255,13 +263,23 @@ public class KosarajuAlgorithm implements Algorithm {
                 node.getView().setColor(DrawNode.BASIC_COLOR);
             }
 
+            for (Edge edge : edges) {
+                edge.getView().setColor(DrawEdge.BASIC_COLOR);
+            }
+
             if (graphicsPanel != null) {
                 graphicsPanel.repaint();
             }
         }
 
+        stack.clear();
+        edges.clear();
+        nodes.clear();
+        timeOutList.clear();
+        timer.stop();
         currentStep = 0;
         initialized = false;
+        stageOfAlgorithm = "doDFSstep";
     }
 
     private class NodeWrapper {
