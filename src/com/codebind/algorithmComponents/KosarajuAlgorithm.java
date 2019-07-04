@@ -15,7 +15,7 @@ import javax.swing.Timer;
 public class KosarajuAlgorithm implements Algorithm {
     private static final int INIT_STEPS_COUNT = 1;
     private static final int TIMER_BASIC_DELAY = 500;
-    private static final int DELTA_COLOR = 10;
+    private static final int DELTA_COLOR = 80;
     private boolean initialized = false;
     private int currentStep = 0;
     private Graph graph;
@@ -25,6 +25,7 @@ public class KosarajuAlgorithm implements Algorithm {
     private GraphicsPanel graphicsPanel;
     private int componentCounter;
     private String stageOfAlgorithm = "doDFSstep";
+    private Random random;
 
     private HashMap<Node, NodeWrapper> nodes = new HashMap<>();
     private ArrayList<Edge> edges = new ArrayList<>();
@@ -42,6 +43,7 @@ public class KosarajuAlgorithm implements Algorithm {
         this.timer = new Timer(TIMER_BASIC_DELAY, e->doStep());
         this.componentCounter = 1;
         this.colorOfComponent = new Color(componentCounter*DELTA_COLOR,componentCounter*DELTA_COLOR,componentCounter*DELTA_COLOR);
+        random = new Random(System.currentTimeMillis());
     }
 
     private void wrappNodes() {
@@ -85,6 +87,7 @@ public class KosarajuAlgorithm implements Algorithm {
         currentNode = startNode;
         nodes.get(currentNode).setVisited(true);
         stack.push(startNode);
+        updatePictures();
         graphicsPanel.repaint();
         timer.start();
     }
@@ -132,9 +135,9 @@ public class KosarajuAlgorithm implements Algorithm {
             for(Node node: graph.getNodes()) {
                 if (!nodes.get(node).isVisited) {
                     currentNode = node;
+                    stack.push(currentNode);
                     updatePictures();
                     graphicsPanel.repaint();
-                    stack.push(currentNode);
                     return;
                 }
             }
@@ -197,7 +200,7 @@ public class KosarajuAlgorithm implements Algorithm {
 
         if (stack.empty()) {
             componentCounter++;
-            colorOfComponent = new Color(componentCounter*DELTA_COLOR, componentCounter*DELTA_COLOR, componentCounter*DELTA_COLOR);
+            colorOfComponent = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
 
             currentNode = timeOutList.peek();
 
