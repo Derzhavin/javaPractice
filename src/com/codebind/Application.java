@@ -1,6 +1,6 @@
 package com.codebind;
 
-//import com.codebind.algorithmComponents.DFSAlgorithm;
+import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 import com.codebind.viewComponents.DrawGraph;
@@ -53,54 +53,36 @@ class Application implements ActionListener {
         menuFile.add(itemOpenFile);
         menuFile.add(itemSaveGraph);
 
-        ImageIcon iconPlus = new ImageIcon("img/Плюс.png");
-        ImageIcon iconDirectedEdge = new ImageIcon("img/Направленное ребро(1).png");
-        ImageIcon iconUndirectedEdge = new ImageIcon("img/Ненаправленное ребро(1).png");
-        ImageIcon iconCross = new ImageIcon("img/Крестик.png");
-        ImageIcon iconGear = new ImageIcon("img/Шестерёнка.png");
-        ImageIcon iconBroom = new ImageIcon("img/Метла.png");
-        ImageIcon iconTransfer = new ImageIcon("img/Перемещение(1).png");
-        ImageIcon iconConnectAllNodes = new ImageIcon("img/Соединить всё.png");
 
-        JMenuItem itemAddVertices = new JMenuItem("Добавить вершины", iconPlus);
-        JMenuItem itemAddDirectedEdge = new JMenuItem("Добавить ориентированное ребро", iconDirectedEdge);
-        JMenuItem itemAddUndirectedEdge = new JMenuItem("Добавить неориентированное ребро", iconUndirectedEdge);
-        JMenuItem itemDelete = new JMenuItem("Удалить вершины и рёбра", iconCross);
+        String[] actioncommands = {"Добавить вершины","Добавить ориентированное ребро","Добавить неориентированное ребро",
+                "Удалить вершины и рёбра","Очистить полотно","Перемещение","Соединить все вершины"};
+
+        String[] actionIcons = {"img/Добавить(small).png","img/Направленное ребро(small).png","img/Ненаправленное ребро(small).png",
+                "img/Удалить(small).png","img/Очистить(small).png","img/Перемещение(small).png","img/Cоединить все(small).png"};
+
+        for(int i= 0; i< actioncommands.length; i++){
+            JMenuItem action = new JMenuItem(actioncommands[i],new ImageIcon(actionIcons[i]));
+            action.addActionListener(this);
+            menuAction.add(action);
+        }
+
         JMenu itemSubMenuAlgorithm = new JMenu("Алгоритм");
-        JMenuItem itemClearScene = new JMenuItem("Очистить полотно", iconBroom);
-        JMenuItem itemTransfer = new JMenuItem("Перемещение", iconTransfer);
-        JMenuItem itemConnectAllNodes = new JMenuItem("Соеденить все вершины", iconConnectAllNodes);
+        itemSubMenuAlgorithm.setIcon(new ImageIcon("img/Алгоритм(small).png"));
 
-        itemSubMenuAlgorithm.setIcon(iconGear);
         JMenuItem itemKosaraju = new JMenuItem("Косарайю");
         JMenuItem itemDFS = new JMenuItem("Поиск в глубину");
 
         itemSubMenuAlgorithm.add(itemKosaraju);
         itemSubMenuAlgorithm.add(itemDFS);
 
-        itemAddVertices.addActionListener(this);
-        itemAddDirectedEdge.addActionListener(this);
-        itemAddUndirectedEdge.addActionListener(this);
-        itemTransfer.addActionListener(this);
-        itemClearScene.addActionListener(this);
-        itemDelete.addActionListener(this);
-        itemConnectAllNodes.addActionListener(this);
         itemDFS.addActionListener(this);
         itemKosaraju.addActionListener(this);
         itemOpenFile.addActionListener(this);
         itemSaveGraph.addActionListener(this);
 
-        menuAction.add(itemAddVertices);
-        menuAction.add(itemAddUndirectedEdge);
-        menuAction.add(itemAddDirectedEdge);
-        menuAction.add(itemDelete);
         menuAction.add(itemSubMenuAlgorithm);
-        menuAction.add(itemClearScene);
-        menuAction.add(itemTransfer);
-        menuAction.add(itemConnectAllNodes);
 
         ImageIcon iconQuestion = new ImageIcon("img/Вопрос.png");
-
         JMenuItem itemAboutProgram = new JMenuItem("О программе", iconQuestion);
 
         menuHelp.add(itemAboutProgram);
@@ -143,9 +125,6 @@ class Application implements ActionListener {
         Algorithms.init();
     }
 
-    public static GraphicsPanel getPanel() {
-        return graphicsPanel;
-    }
 
     public void actionPerformed(ActionEvent ae) {
         String command = ae.getActionCommand();
@@ -155,6 +134,7 @@ class Application implements ActionListener {
         if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
             Algorithms.currentAlgorithm.reset();
         }
+
 
         switch(command) {
             case "Открыть":
@@ -189,10 +169,10 @@ class Application implements ActionListener {
                 GraphEventManager.getInstance().removeGraph();
                 break;
             case "Удалить вершины и рёбра":
-                labelAction.setText("Удалиение вершин и рёбер");
+                labelAction.setText("Удаление вершин и рёбер");
                 graphicsPanel.setGraphState(GraphStates.DELETE_NODE);
                 break;
-            case "Соеденить все вершины":
+            case "Соединить все вершины":
                 labelAction.setText("Соединение всех вершин");
                 GraphEventManager.getInstance().connectAllVertices();
                 break;
@@ -225,43 +205,53 @@ class Application implements ActionListener {
             default:
                 labelAction.setText("");
                 graphicsPanel.setGraphState(GraphStates.NOTHING);
-                Component[] toolBarComponents = toolBar.getComponents();
-
-                for(Component toolBarComponent: toolBarComponents){
-                    Button button = (Button) toolBarComponent;
-                    if(button.getState() == ButtonState.ACTIVE){
-                        button.setState(ButtonState.INACTIVE);
-                        button.changeState();
-                    }
-                }
         }
+
+        ButtonClicked(command);
 
         graphicsPanel.updatePanelNodesEdges();
         graphicsPanel.updateUI();
     }
 
+    public void ButtonClicked(String command){
+        if(command.equals("Очистить полотно") || command.equals("Соединить все вершины")) return;
+
+        Component[] mas = frame.getContentPane().getComponents();
+        JPanel panel = (JPanel)mas[1];
+        mas = panel.getComponents();
+        for(int i = 0; i < mas.length; i++){
+            Button but = (Button)mas[i];
+            if (but.getActionCommand().equals(command)){
+                but.setState(ButtonState.ACTIVE);
+            }
+            else but.setState(ButtonState.INACTIVE);
+            but.changeState();
+        }
+    }
+
     public JPanel createToolBar(){
 
-        String[] icons = {  "img/add.png",
+        String[] icons = {"img/Перемещение.png",
+                "img/Добавить.png",
                 "img/Направленное ребро.png",
                 "img/Ненаправленное ребро.png",
-                "img/delete.png",
-                "img/alg.png",
-                "img/clean.png",
-                "img/Перемещение.png"
+                "img/Удалить.png",
+                "img/Алгоритм.png",
+                "img/Очистить.png"
         };
 
-        String[] commands = {   "Добавить вершины",
+        String[] commands = {"Перемещение",
+                "Добавить вершины",
                 "Добавить ориентированное ребро",
                 "Добавить неориентированное ребро",
                 "Удалить вершины и рёбра",
                 "Алгоритм",
-                "Очистить полотно",
-                "Перемещение",
-                "О программе"
+                "Очистить полотно"
         };
 
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        toolBar.setBackground(new Color(219, 232, 254));
 
         for(int i =0; i < icons.length; i++ ){
             Button button = new Button();
@@ -269,9 +259,12 @@ class Application implements ActionListener {
             button.setActionCommand(commands[i]);
             button.setPreferredSize(new Dimension(32, 32));
             button.addActionListener(this);
+
+            button.setBackground(new Color(219, 232, 254));
+            button.setFocusPainted(false);
             toolBar.add(button);
         }
-
+        toolBar.setBorder(BorderFactory.createRaisedBevelBorder());
         return toolBar;
     }
 
