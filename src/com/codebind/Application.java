@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -150,10 +152,6 @@ class Application implements ActionListener {
 
         JLabel labelAction = (JLabel)statusBar.getComponents()[0];
 
-        if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
-            Algorithms.currentAlgorithm.reset();
-        }
-
         switch(command) {
             case "Открыть":
                 labelAction.setText("Открыть");
@@ -194,16 +192,13 @@ class Application implements ActionListener {
                 labelAction.setText("Соединение всех вершин");
                 GraphEventManager.getInstance().connectAllVertices();
                 break;
-            case "Алгоритм":
-                GraphEventManager.getInstance().setState(GraphStates.ALGORITHM);
-                Algorithms.currentAlgorithm.sayHello();
-                break;
             case "Поиск в глубину":
                 labelAction.setText("DFS");
                 Algorithms.selectAlgorithmByName("DFS");
                 Algorithms.currentAlgorithm.reset();
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+                graphicsPanel.setGraphState(GraphStates.ALGORITHM);
                 break;
             case "Косарайю":
                 labelAction.setText("Kosaraju");
@@ -211,6 +206,11 @@ class Application implements ActionListener {
                 Algorithms.currentAlgorithm.reset();
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+                graphicsPanel.setGraphState(GraphStates.ALGORITHM);
+                break;
+            case "О программе":
+                labelAction.setText("О программе");
+                openHelp();
                 break;
             case "О программе":
                 labelAction.setText("О программе");
@@ -251,7 +251,8 @@ class Application implements ActionListener {
                 "Удалить вершины и рёбра",
                 "Алгоритм",
                 "Очистить полотно",
-                "Перемещение"
+                "Перемещение",
+                "О программе"
         };
 
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
