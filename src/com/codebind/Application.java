@@ -5,6 +5,8 @@ import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 import com.codebind.viewComponents.DrawGraph;
 
+import java.io.File;
+import java.io.IOException;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -100,6 +102,7 @@ class Application implements ActionListener {
         JMenuItem itemAboutProgram = new JMenuItem("О программе", iconQuestion);
 
         menuHelp.add(itemAboutProgram);
+        itemAboutProgram.addActionListener(this);
 
         graphicsPanel = new GraphicsPanel();
 
@@ -209,6 +212,10 @@ class Application implements ActionListener {
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
                 break;
+            case "О программе":
+                labelAction.setText("О программе");
+                openHelp();
+                break;
             default:
                 labelAction.setText("");
                 graphicsPanel.setGraphState(GraphStates.NOTHING);
@@ -259,5 +266,14 @@ class Application implements ActionListener {
         }
 
         return toolBar;
+    }
+
+    public void openHelp() {
+        File htmlFile = new File("src\\com\\codebind\\Help.html");
+        try {
+            Desktop.getDesktop().browse(htmlFile.toURI());
+        } catch(IOException exception) {
+            System.out.println("IO");
+        }
     }
 }
