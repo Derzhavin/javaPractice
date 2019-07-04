@@ -2,6 +2,7 @@ package com.codebind;
 
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
+import com.codebind.graphComonents.RandomGraphCreator;
 import com.codebind.viewComponents.DrawGraph;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import javax.swing.*;
 
 
@@ -53,13 +55,13 @@ class Application implements ActionListener {
 
 
         String[] actioncommands = {"Добавить вершины","Добавить ориентированное ребро","Добавить неориентированное ребро",
-                "Удалить вершины и рёбра","Очистить полотно","Перемещение","Соединить все вершины"};
+                "Удалить вершины и рёбра","Очистить полотно","Перемещение","Соединить все вершины","Создать случайный граф"};
 
         String[] actionIcons = {"img/Добавить(small).png","img/Направленное ребро(small).png","img/Ненаправленное ребро(small).png",
-                "img/Удалить(small).png","img/Очистить(small).png","img/Перемещение(small).png","img/Cоединить все(small).png"};
+                "img/Удалить(small).png","img/Очистить(small).png","img/Перемещение(small).png","img/Cоединить все(small).png", "img/Cоединить все(small).png"};
 
-        for(int i= 0; i< actioncommands.length; i++){
-            JMenuItem action = new JMenuItem(actioncommands[i],new ImageIcon(actionIcons[i]));
+        for(int i = 0; i < actioncommands.length; i++){
+            JMenuItem action = new JMenuItem(actioncommands[i], new ImageIcon(actionIcons[i]));
             action.addActionListener(this);
             menuAction.add(action);
         }
@@ -177,6 +179,14 @@ class Application implements ActionListener {
                 labelAction.setText("Соединение всех вершин");
                 GraphEventManager.getInstance().connectAllVertices();
                 break;
+            case "Создать случайный граф":
+                graphicsPanel.setGraph(RandomGraphCreator.create(
+                        1 + new Random(System.currentTimeMillis()).nextInt(16),
+                        0.25D, graphicsPanel.getWidth(),
+                        graphicsPanel.getHeight(),
+                        true));
+                Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
+                break;
             case "Алгоритм":
                 GraphEventManager.getInstance().setState(GraphStates.ALGORITHM);
                 Algorithms.currentAlgorithm.sayHello();
@@ -219,7 +229,8 @@ class Application implements ActionListener {
                 command.equals("Поиск в глубину") ||
                 command.equals("Косарайю") ||
                 command.equals("Открыть") ||
-                command.equals("Сохранить граф")){
+                command.equals("Сохранить граф") ||
+                command.equals("Создать случайный граф")) {
             return;
         }
 
@@ -244,20 +255,24 @@ class Application implements ActionListener {
     public JPanel createToolBar(){
         String[] icons = {"img/Перемещение.png",
                 "img/Добавить.png",
+                "img/Cоединить все.png",
                 "img/Направленное ребро.png",
                 "img/Ненаправленное ребро.png",
                 "img/Удалить.png",
                 "img/Алгоритм.png",
-                "img/Очистить.png"
+                "img/Очистить.png",
+                "img/Cоединить все.png"
         };
 
         String[] commands = {"Перемещение",
                 "Добавить вершины",
+                "Соединить все вершины",
                 "Добавить ориентированное ребро",
                 "Добавить неориентированное ребро",
                 "Удалить вершины и рёбра",
                 "Алгоритм",
-                "Очистить полотно"
+                "Очистить полотно",
+                "Создать случайный граф"
         };
 
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
