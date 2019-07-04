@@ -14,6 +14,7 @@ public class DrawEdge implements Drawable {
     protected Point2D.Double destPosition;
 
     public static final Color BASIC_COLOR = Color.darkGray;
+    public static final Color VISITED_COLOR = Color.magenta;
 
     public DrawEdge(DrawNode sourceNode, DrawNode destNode, Color color) {
         this.sourceNode = sourceNode;
