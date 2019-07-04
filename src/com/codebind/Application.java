@@ -4,6 +4,8 @@ import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 import com.codebind.viewComponents.DrawGraph;
 
+import java.io.File;
+import java.io.IOException;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -279,7 +281,7 @@ class Application implements ActionListener {
     }
 
     public void openHelp() {
-        File htmlFile = new File("src\\com\\codebind\\Help.html");
+        File htmlFile = new File("html/Help.html");
         try {
             Desktop.getDesktop().browse(htmlFile.toURI());
         } catch(IOException exception) {
