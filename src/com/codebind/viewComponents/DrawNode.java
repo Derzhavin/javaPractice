@@ -51,13 +51,26 @@ public class DrawNode implements Drawable, Movable {
 
     @Override
     public void draw(Graphics2D g) {
-        g.setColor(color);
+        g.setColor(new Color(73, 73, 73));
+        g.fillOval((int)(position.x - radius*scale + 2*scale), (int)(position.y - radius*scale + 2*scale), (int)(2 * radius*scale ), (int)(2 * radius*scale));
+
+        Point2D center = new Point2D.Float((int)(position.x -4*scale ) , (int)(position.y -4*scale ));
+        float[] dist = {0.3f, 0.9f};
+        Color[] colors = {color.brighter(), color.darker()};
+        RadialGradientPaint p =
+                new RadialGradientPaint(center, (int)(radius*scale),
+                        dist, colors,
+                        MultipleGradientPaint.CycleMethod.NO_CYCLE);
+        g.setPaint(p);
+
         g.fillOval((int)(position.x - radius*scale), (int)(position.y - radius*scale), (int)(2 * radius*scale), (int)(2 * radius*scale));
+
         g.setColor(Color.darkGray);
         g.drawOval((int)(position.x - radius*scale), (int)(position.y - radius*scale), (int)(2 * radius*scale), (int)(2 * radius*scale));
     }
 
     public void print(Graphics2D g) {
+        g.setFont(new Font("Trebuchet MS", Font.BOLD, (int)(14*scale)));
         g.setColor(Color.black);
         g.drawString(name,(int)(position.x - radius*scale),(int)(position.y - radius*scale));
     }
