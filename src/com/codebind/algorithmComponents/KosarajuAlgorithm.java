@@ -18,7 +18,7 @@ public class KosarajuAlgorithm extends Algorithm {
     private Color colorOfComponent;
     private int componentCounter;
     private String stageOfAlgorithm = "doDFSstep";
-    private Random random;
+    private Random random = new Random(System.currentTimeMillis());
 
     private HashMap<Node, NodeWrapper> nodes = new HashMap<>();
     private ArrayList<Edge> edges = new ArrayList<>();
@@ -30,8 +30,7 @@ public class KosarajuAlgorithm extends Algorithm {
         this.startNode = null;
         this.currentNode = null;
         this.componentCounter = 1;
-        this.colorOfComponent = null;
-        random = new Random(System.currentTimeMillis());
+        this.colorOfComponent = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
     }
 
     private void wrappNodes() {
@@ -182,6 +181,7 @@ public class KosarajuAlgorithm extends Algorithm {
         }
 
         if (stack.empty()) {
+            System.out.println("KAVO");
             componentCounter++;
             colorOfComponent = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
 
@@ -200,7 +200,7 @@ public class KosarajuAlgorithm extends Algorithm {
             currentNode.getView().setColor(colorOfComponent);
             nodes.get(currentNode).setVisited(true);
             stack.push(currentNode);
-
+            
             graphicsPanel.repaint();
             return;
         }
