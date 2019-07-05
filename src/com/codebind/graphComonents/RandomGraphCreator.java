@@ -28,7 +28,8 @@ public class RandomGraphCreator {
         for (int i = 0; i < nodesCount - 1; i++) {
             for (int j = i + 1; j < nodesCount; j++) {
                 if (Math.random() <= edgeFrequency) {
-                    graph.add(new Edge(graphNodes.get(i), graphNodes.get(j), random.nextBoolean()));
+                    Edge newEdge = new Edge(graphNodes.get(i), graphNodes.get(j), random.nextBoolean());
+                    graph.add(newEdge);
                 }
             }
         }

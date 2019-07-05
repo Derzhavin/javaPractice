@@ -3,6 +3,7 @@ package com.codebind;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 import com.codebind.graphComonents.RandomGraphCreator;
+import com.codebind.graphComonents.Triangulator;
 import com.codebind.viewComponents.DrawGraph;
 
 import java.io.File;
@@ -194,6 +195,9 @@ class Application implements ActionListener {
                         true));
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 break;
+            case "Триангулировать":
+                Triangulator.triangulate(GraphEventManager.getInstance().getGraph());
+                break;
             case "Алгоритм":
                 GraphEventManager.getInstance().setState(GraphStates.ALGORITHM);
                 Algorithms.currentAlgorithm.reset();
@@ -291,6 +295,7 @@ class Application implements ActionListener {
                 "img/Алгоритм.png",
                 "img/Очистить.png",
                 "img/Cоединить все.png",
+                "img/Cоединить все.png",
                 "img/Алгоритм.png",
                 "img/Алгоритм.png",
                 "img/Алгоритм.png"
@@ -306,6 +311,7 @@ class Application implements ActionListener {
                 "Алгоритм",
                 "Очистить полотно",
                 "Создать случайный граф",
+                "Триангулировать",
                 "Запустить алгоритм",
                 "Остановить алгоритм",
                 "Сделать шаг алгоритма"
