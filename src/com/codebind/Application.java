@@ -282,21 +282,19 @@ class Application implements ActionListener {
 
 
     public JPanel createToolBar(){
-        String[] icons = {
-                "img/Перемещение.png",
+        String[] icons = {"img/Перемещение.png",
                 "img/Добавить.png",
                 "img/Cоединить все.png",
                 "img/Направленное ребро.png",
                 "img/Ненаправленное ребро.png",
                 "img/Удалить.png",
-                "img/Очистить.png",
-                "img/Создать случайный граф.png",
-                "img/Триангуляция.png",
                 "img/Алгоритм.png",
-                "img/Запустить алгоритм.png",
-                "img/Остановить алгоритм.png",
-                "img/Сделать шаг вперед.png",
-                "img/Сделать шаг назад.png"
+                "img/Очистить.png",
+                "img/Cоединить все.png",
+                "img/Cоединить все.png",
+                "img/Алгоритм.png",
+                "img/Алгоритм.png",
+                "img/Алгоритм.png"
         };
 
         String[] commands = {
@@ -306,14 +304,13 @@ class Application implements ActionListener {
                 "Добавить ориентированное ребро",
                 "Добавить неориентированное ребро",
                 "Удалить вершины и рёбра",
+                "Алгоритм",
                 "Очистить полотно",
                 "Создать случайный граф",
-                "Триангуляция",
-                "Алгоритм",
+                "Триангулировать",
                 "Запустить алгоритм",
                 "Остановить алгоритм",
-                "Сделать шаг вперед",
-                "Сделать шаг назад"
+                "Сделать шаг алгоритма"
         };
 
         ArrayList<String> singleActiveCommands = new ArrayList<>();
