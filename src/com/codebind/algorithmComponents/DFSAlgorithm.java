@@ -65,7 +65,7 @@ public class DFSAlgorithm extends Algorithm {
         updatePictures();
         graphicsPanel.repaint();
 
-        timer.start();
+        //timer.start();
     }
 
     @Override

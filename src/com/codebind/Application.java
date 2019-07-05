@@ -9,8 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.Random;
 import javax.swing.*;
 
@@ -21,6 +20,7 @@ class Application implements ActionListener {
     private JMenuBar menuBar;
     private JPanel statusBar;
     JPanel toolBar;
+    private HashMap<String, Button> buttonHashMap = new HashMap<>();
 
     public Application() {
         Image iconOfApp = new ImageIcon("img/Иконка приложения.png").getImage();
@@ -132,7 +132,9 @@ class Application implements ActionListener {
         JLabel labelAction = (JLabel)statusBar.getComponents()[0];
 
         if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
-            Algorithms.currentAlgorithm.reset();
+            if (!command.equals("Запустить алгоритм") && !command.equals("Остановить алгоритм")) {
+                Algorithms.currentAlgorithm.reset();
+            }
         }
 
         switch(command) {
@@ -142,6 +144,7 @@ class Application implements ActionListener {
 
                 if(newOne.FileOpen) {
                     graphicsPanel.setGraph(new DrawGraph(newOne.initFromData()));
+                    Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 }
 
                 break;
@@ -189,10 +192,18 @@ class Application implements ActionListener {
                 break;
             case "Алгоритм":
                 GraphEventManager.getInstance().setState(GraphStates.ALGORITHM);
-                Algorithms.currentAlgorithm.sayHello();
                 Algorithms.currentAlgorithm.reset();
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+                break;
+            case "Запустить алгоритм":
+                Algorithms.currentAlgorithm.continueIfStoped();
+                break;
+            case "Остановить алгоритм":
+                if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM &&
+                        Algorithms.currentAlgorithm.isInitialized()) {
+                    Algorithms.currentAlgorithm.stop();
+                }
                 break;
             case "Поиск в глубину":
                 labelAction.setText("DFS");
@@ -223,7 +234,16 @@ class Application implements ActionListener {
         graphicsPanel.updateUI();
     }
 
-    public void ButtonClicked(String command){
+    public void ButtonClicked(String command) {
+        if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
+            buttonHashMap.get("Запустить алгоритм").setEnabled(true);
+            buttonHashMap.get("Остановить алгоритм").setEnabled(true);
+        }
+        else {
+            buttonHashMap.get("Запустить алгоритм").setEnabled(false);
+            buttonHashMap.get("Остановить алгоритм").setEnabled(false);
+        }
+
         if(command.equals("Очистить полотно") ||
                 command.equals("Соединить все вершины") ||
                 command.equals("Поиск в глубину") ||
@@ -241,11 +261,21 @@ class Application implements ActionListener {
         for(int i = 0; i < mas.length; i++){
             Button but = (Button)mas[i];
 
-            if (but.getActionCommand().equals(command)){
-                but.setState(ButtonState.ACTIVE);
+            if (command.equals("Остановить алгоритм")) {
+                if (but.getActionCommand().equals("Запустить алгоритм")) {
+                    but.setState(ButtonState.INACTIVE);
+                }
             }
             else {
-                but.setState(ButtonState.INACTIVE);
+                if (but.getActionCommand().equals(command)) {
+                    but.setState(ButtonState.ACTIVE);
+                } else {
+                    but.setState(ButtonState.INACTIVE);
+                }
+            }
+
+            if (command.equals("Запустить алгоритм") && !Algorithms.currentAlgorithm.isInitialized()) {
+                buttonHashMap.get("Запустить алгоритм").setState(ButtonState.INACTIVE);
             }
 
             but.changeState();
@@ -261,7 +291,9 @@ class Application implements ActionListener {
                 "img/Удалить.png",
                 "img/Алгоритм.png",
                 "img/Очистить.png",
-                "img/Cоединить все.png"
+                "img/Cоединить все.png",
+                "img/Алгоритм.png",
+                "img/Алгоритм.png"
         };
 
         String[] commands = {"Перемещение",
@@ -272,7 +304,9 @@ class Application implements ActionListener {
                 "Удалить вершины и рёбра",
                 "Алгоритм",
                 "Очистить полотно",
-                "Создать случайный граф"
+                "Создать случайный граф",
+                "Запустить алгоритм",
+                "Остановить алгоритм"
         };
 
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -287,7 +321,13 @@ class Application implements ActionListener {
 
             button.setBackground(new Color(219, 232, 254));
             button.setFocusPainted(false);
+
+            if (commands[i].equals("Запустить алгоритм") || commands[i].equals("Остановить алгоритм")) {
+                button.setEnabled(false);
+            }
+
             toolBar.add(button);
+            buttonHashMap.put(commands[i], button);
         }
 
         toolBar.setBorder(BorderFactory.createRaisedBevelBorder());
