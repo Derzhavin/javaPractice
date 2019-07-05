@@ -132,8 +132,9 @@ class Application implements ActionListener {
         JLabel labelAction = (JLabel)statusBar.getComponents()[0];
 
         if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
-            if (!command.equals("Запустить алгоритм") && !command.equals("Остановить алгоритм"))
-            Algorithms.currentAlgorithm.reset();
+            if (!command.equals("Запустить алгоритм") && !command.equals("Остановить алгоритм")) {
+                Algorithms.currentAlgorithm.reset();
+            }
         }
 
         switch(command) {
@@ -143,6 +144,7 @@ class Application implements ActionListener {
 
                 if(newOne.FileOpen) {
                     graphicsPanel.setGraph(new DrawGraph(newOne.initFromData()));
+                    Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 }
 
                 break;
@@ -319,6 +321,11 @@ class Application implements ActionListener {
 
             button.setBackground(new Color(219, 232, 254));
             button.setFocusPainted(false);
+
+            if (commands[i].equals("Запустить алгоритм") || commands[i].equals("Остановить алгоритм")) {
+                button.setEnabled(false);
+            }
+
             toolBar.add(button);
             buttonHashMap.put(commands[i], button);
         }
