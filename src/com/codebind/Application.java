@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import javax.swing.*;
@@ -21,6 +22,7 @@ class Application implements ActionListener {
     private JPanel statusBar;
     JPanel toolBar;
     private HashMap<String, Button> buttonHashMap = new HashMap<>();
+    private HashMap<String, Button> singleActiveButtonHashMap = new HashMap<>();
 
     public Application() {
         Image iconOfApp = new ImageIcon("img/Иконка приложения.png").getImage();
@@ -132,7 +134,9 @@ class Application implements ActionListener {
         JLabel labelAction = (JLabel)statusBar.getComponents()[0];
 
         if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
-            if (!command.equals("Запустить алгоритм") && !command.equals("Остановить алгоритм")) {
+            if (!command.equals("Запустить алгоритм") &&
+                    !command.equals("Остановить алгоритм") &&
+                    !command.equals("Сделать шаг алгоритма")) {
                 Algorithms.currentAlgorithm.reset();
             }
         }
@@ -199,6 +203,12 @@ class Application implements ActionListener {
             case "Запустить алгоритм":
                 Algorithms.currentAlgorithm.continueIfStoped();
                 break;
+            case "Сделать шаг алгоритма":
+                if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM &&
+                        Algorithms.currentAlgorithm.isInitialized()) {
+                    Algorithms.currentAlgorithm.doStep();
+                }
+                break;
             case "Остановить алгоритм":
                 if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM &&
                         Algorithms.currentAlgorithm.isInitialized()) {
@@ -238,49 +248,38 @@ class Application implements ActionListener {
         if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
             buttonHashMap.get("Запустить алгоритм").setEnabled(true);
             buttonHashMap.get("Остановить алгоритм").setEnabled(true);
+            buttonHashMap.get("Сделать шаг алгоритма").setEnabled(true);
         }
         else {
             buttonHashMap.get("Запустить алгоритм").setEnabled(false);
             buttonHashMap.get("Остановить алгоритм").setEnabled(false);
+            buttonHashMap.get("Сделать шаг алгоритма").setEnabled(false);
         }
 
-        if(command.equals("Очистить полотно") ||
-                command.equals("Соединить все вершины") ||
-                command.equals("Поиск в глубину") ||
-                command.equals("Косарайю") ||
-                command.equals("Открыть") ||
-                command.equals("Сохранить граф") ||
-                command.equals("Создать случайный граф")) {
-            return;
+        if (singleActiveButtonHashMap.containsKey(command)) {
+            for (Button button : singleActiveButtonHashMap.values()) {
+                button.setState(ButtonState.INACTIVE);
+                button.changeState();
+            }
+
+            singleActiveButtonHashMap.get(command).setState(ButtonState.ACTIVE);
+            singleActiveButtonHashMap.get(command).changeState();
         }
 
-        Component[] mas = frame.getContentPane().getComponents();
-        JPanel panel = (JPanel)mas[1];
-        mas = panel.getComponents();
-
-        for(int i = 0; i < mas.length; i++){
-            Button but = (Button)mas[i];
-
-            if (command.equals("Остановить алгоритм")) {
-                if (but.getActionCommand().equals("Запустить алгоритм")) {
-                    but.setState(ButtonState.INACTIVE);
-                }
-            }
-            else {
-                if (but.getActionCommand().equals(command)) {
-                    but.setState(ButtonState.ACTIVE);
-                } else {
-                    but.setState(ButtonState.INACTIVE);
-                }
-            }
-
-            if (command.equals("Запустить алгоритм") && !Algorithms.currentAlgorithm.isInitialized()) {
-                buttonHashMap.get("Запустить алгоритм").setState(ButtonState.INACTIVE);
-            }
-
-            but.changeState();
+        if (command.equals("Запустить алгоритм") && !Algorithms.currentAlgorithm.isInitialized()) {
+            buttonHashMap.get("Запустить алгоритм").setState(ButtonState.INACTIVE);
+        }
+        else if (command.equals("Запустить алгоритм")) {
+            buttonHashMap.get("Запустить алгоритм").setState(ButtonState.ACTIVE);
+            buttonHashMap.get("Запустить алгоритм").changeState();
+        }
+        else {
+            buttonHashMap.get("Запустить алгоритм").setState(ButtonState.INACTIVE);
+            buttonHashMap.get("Запустить алгоритм").changeState();
         }
     }
+
+
 
     public JPanel createToolBar(){
         String[] icons = {"img/Перемещение.png",
@@ -293,10 +292,12 @@ class Application implements ActionListener {
                 "img/Очистить.png",
                 "img/Cоединить все.png",
                 "img/Алгоритм.png",
+                "img/Алгоритм.png",
                 "img/Алгоритм.png"
         };
 
-        String[] commands = {"Перемещение",
+        String[] commands = {
+                "Перемещение",
                 "Добавить вершины",
                 "Соединить все вершины",
                 "Добавить ориентированное ребро",
@@ -306,8 +307,18 @@ class Application implements ActionListener {
                 "Очистить полотно",
                 "Создать случайный граф",
                 "Запустить алгоритм",
-                "Остановить алгоритм"
+                "Остановить алгоритм",
+                "Сделать шаг алгоритма"
         };
+
+        ArrayList<String> singleActiveCommands = new ArrayList<>();
+        singleActiveCommands.add("Перемещение");
+        singleActiveCommands.add("Добавить вершины");
+        singleActiveCommands.add("Добавить ориентированное ребро");
+        singleActiveCommands.add("Добавить неориентированное ребро");
+        singleActiveCommands.add("Удалить вершины и рёбра");
+        singleActiveCommands.add("Алгоритм");
+
 
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         toolBar.setBackground(new Color(219, 232, 254));
@@ -322,12 +333,20 @@ class Application implements ActionListener {
             button.setBackground(new Color(219, 232, 254));
             button.setFocusPainted(false);
 
-            if (commands[i].equals("Запустить алгоритм") || commands[i].equals("Остановить алгоритм")) {
+            if (commands[i].equals("Запустить алгоритм") ||
+                    commands[i].equals("Остановить алгоритм") ||
+                    commands[i].equals("Сделать шаг алгоритма")) {
                 button.setEnabled(false);
             }
 
             toolBar.add(button);
             buttonHashMap.put(commands[i], button);
+        }
+
+        for (String buttonCommand : buttonHashMap.keySet()) {
+            if (singleActiveCommands.contains(buttonCommand)) {
+                singleActiveButtonHashMap.put(buttonCommand, buttonHashMap.get(buttonCommand));
+            }
         }
 
         toolBar.setBorder(BorderFactory.createRaisedBevelBorder());

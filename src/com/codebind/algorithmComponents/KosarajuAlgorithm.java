@@ -97,6 +97,8 @@ public class KosarajuAlgorithm extends Algorithm {
         }
 
         System.out.println(stageOfAlgorithm);
+        updatePictures();
+        graphicsPanel.repaint();
     }
 
     private void doInitializationSearchComponentsStep() {
@@ -107,9 +109,6 @@ public class KosarajuAlgorithm extends Algorithm {
         stack.push(currentNode);
 
         nodes.get(currentNode).color = colorOfComponent;
-        updatePictures();
-        graphicsPanel.repaint();
-
         stageOfAlgorithm = "doSearchComponentsStep";
     }
 
@@ -119,8 +118,6 @@ public class KosarajuAlgorithm extends Algorithm {
                 if (!nodes.get(node).isVisited) {
                     currentNode = node;
                     stack.push(currentNode);
-                    updatePictures();
-                    graphicsPanel.repaint();
                     return;
                 }
             }
@@ -135,17 +132,12 @@ public class KosarajuAlgorithm extends Algorithm {
             if (!nodes.get(neighbour).isVisited) {
                 edges.add(currentNode.getEdge(neighbour));
                 stack.push(neighbour);
-                updatePictures();
-                graphicsPanel.repaint();
                 return;
             }
         }
 
         timeOutList.push(currentNode);
         stack.pop();
-
-        updatePictures();
-        graphicsPanel.repaint();
     }
 
     private void updatePictures() {
@@ -210,12 +202,9 @@ public class KosarajuAlgorithm extends Algorithm {
                 currentNode = timeOutList.peek();
             }
 
-            //currentNode.getView().setColor(colorOfComponent);
             nodes.get(currentNode).setVisited(true);
             nodes.get(currentNode).color = colorOfComponent;
             stack.push(currentNode);
-            updatePictures();
-            graphicsPanel.repaint();
             return;
         }
 
@@ -224,12 +213,9 @@ public class KosarajuAlgorithm extends Algorithm {
         for (Node neighbour: currentNode.getSmartNeighbours()) {
             if (!nodes.get(neighbour).isVisited) {
                 currentNode = neighbour;
-                //currentNode.getView().setColor(colorOfComponent);
                 nodes.get(currentNode).setVisited(true);
                 nodes.get(currentNode).color = colorOfComponent;
                 stack.push(currentNode);
-                updatePictures();
-                graphicsPanel.repaint();
                 return;
             }
         }
