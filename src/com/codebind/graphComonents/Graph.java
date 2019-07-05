@@ -49,6 +49,10 @@ public class Graph {
         this.edges.removeAll(edges);
     }
 
+    public void removeAllEdges() {
+        edges.clear();
+    }
+
     public void clear() {
         nodes.clear();
         edges.clear();
