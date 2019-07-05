@@ -61,7 +61,7 @@ class Application implements ActionListener {
                 "Удалить вершины и рёбра","Очистить полотно","Перемещение","Соединить все вершины","Создать случайный граф"};
 
         String[] actionIcons = {"img/Добавить(small).png","img/Направленное ребро(small).png","img/Ненаправленное ребро(small).png",
-                "img/Удалить(small).png","img/Очистить(small).png","img/Перемещение(small).png","img/Cоединить все(small).png", "img/Cоединить все(small).png"};
+                "img/Удалить(small).png","img/Очистить(small).png","img/Перемещение(small).png","img/Cоединить все(small).png", "img/Создать случайный граф(small).png"};
 
         for(int i = 0; i < actioncommands.length; i++){
             JMenuItem action = new JMenuItem(actioncommands[i], new ImageIcon(actionIcons[i]));
