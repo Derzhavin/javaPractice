@@ -72,7 +72,7 @@ public class KosarajuAlgorithm extends Algorithm {
         stack.push(startNode);
         updatePictures();
         graphicsPanel.repaint();
-        timer.start();
+        //timer.start();
     }
 
     @Override

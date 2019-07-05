@@ -43,6 +43,16 @@ public abstract class Algorithm {
 
     public abstract void sayHello();
 
+    public void stop() {
+        timer.stop();
+    }
+
+    public void continueIfStoped() {
+        if (initialized) {
+            timer.restart();
+        }
+    }
+
     public void reset() {
         timer.stop();
         initialized = false;
