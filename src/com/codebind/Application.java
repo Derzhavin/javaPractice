@@ -60,7 +60,7 @@ class Application implements ActionListener {
                 "Удалить вершины и рёбра","Очистить полотно","Перемещение","Соединить все вершины","Создать случайный граф"};
 
         String[] actionIcons = {"img/Добавить(small).png","img/Направленное ребро(small).png","img/Ненаправленное ребро(small).png",
-                "img/Удалить(small).png","img/Очистить(small).png","img/Перемещение(small).png","img/Cоединить все(small).png", "img/Cоединить все(small).png"};
+                "img/Удалить(small).png","img/Очистить(small).png","img/Перемещение(small).png","img/Cоединить все(small).png", "img/Создать случайный граф(small).png"};
 
         for(int i = 0; i < actioncommands.length; i++){
             JMenuItem action = new JMenuItem(actioncommands[i], new ImageIcon(actionIcons[i]));
@@ -282,18 +282,21 @@ class Application implements ActionListener {
 
 
     public JPanel createToolBar(){
-        String[] icons = {"img/Перемещение.png",
+        String[] icons = {
+                "img/Перемещение.png",
                 "img/Добавить.png",
                 "img/Cоединить все.png",
                 "img/Направленное ребро.png",
                 "img/Ненаправленное ребро.png",
                 "img/Удалить.png",
-                "img/Алгоритм.png",
                 "img/Очистить.png",
-                "img/Cоединить все.png",
+                "img/Создать случайный граф.png",
+                "img/Триангуляция.png",
                 "img/Алгоритм.png",
-                "img/Алгоритм.png",
-                "img/Алгоритм.png"
+                "img/Запустить алгоритм.png",
+                "img/Остановить алгоритм.png",
+                "img/Сделать шаг вперед.png",
+                "img/Сделать шаг назад.png"
         };
 
         String[] commands = {
@@ -303,12 +306,14 @@ class Application implements ActionListener {
                 "Добавить ориентированное ребро",
                 "Добавить неориентированное ребро",
                 "Удалить вершины и рёбра",
-                "Алгоритм",
                 "Очистить полотно",
                 "Создать случайный граф",
+                "Триангуляция",
+                "Алгоритм",
                 "Запустить алгоритм",
                 "Остановить алгоритм",
-                "Сделать шаг алгоритма"
+                "Сделать шаг вперед",
+                "Сделать шаг назад"
         };
 
         ArrayList<String> singleActiveCommands = new ArrayList<>();
