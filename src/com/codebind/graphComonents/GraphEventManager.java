@@ -7,6 +7,7 @@ import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.viewComponents.DrawDirectedEdge;
 import com.codebind.viewComponents.DrawEdge;
 import com.codebind.viewComponents.DrawNode;
+import com.codebind.Сancellation.Buffer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +27,7 @@ public class GraphEventManager {
     private ConnectData connectData;
     private DeleteData deleteData;
     private Point oldDragPoint;
+    private Buffer buffer = new Buffer();
 
     private GraphicsPanel graphicsPanel;
 
@@ -37,6 +39,7 @@ public class GraphEventManager {
 
     public void setGraph(Graph graph) {
         this.graph = graph;
+        buffer.setGraph(graph);
     }
 
     public GraphStates getState() {
@@ -71,12 +74,15 @@ public class GraphEventManager {
         graphState = state;
     }
 
+    public Buffer getBuffer() {return  buffer;}
+
     public void removeGraph() {
+        buffer.updateBufferTopClearScene(graph);
         graph.clear();
     }
 
     public void connectAllVertices() {
-        graph.connectAllVertices();
+        buffer.updateBufferTopAddingAllNodes(graph.connectAllVertices());
     }
 
     public boolean isCutting() {
@@ -89,6 +95,7 @@ public class GraphEventManager {
 
     public void setGraphicsPanel(GraphicsPanel graphicsPanel) {
         this.graphicsPanel = graphicsPanel;
+        buffer.setGraphicsPanel(graphicsPanel);
     }
 
     public Node getNodeOnPos(Point position, ArrayList<Node> nodes) {
@@ -151,8 +158,11 @@ public class GraphEventManager {
         switch (graphState) {
             case CREATE_NODE:
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                    graph.add(new Node(new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()),
-                            String.valueOf(getNewNodeName()))));
+                    Node newNode = new Node(new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()),
+                            String.valueOf(getNewNodeName())));
+                    graph.add(newNode);
+
+                    buffer.updateBufferTopAdding(newNode);
                 }
 
                 break;
@@ -169,6 +179,7 @@ public class GraphEventManager {
 
                         if (newEdge != null) {
                             graph.add(newEdge);
+                            buffer.updateBufferTopAdding(newEdge);
                         }
                     }
                 }
@@ -178,16 +189,18 @@ public class GraphEventManager {
                 break;
             case NOTHING:
                 break;
-            case DELETE_NODE:
+            case DELETE_NODE: ;
                 deleteData.setFirstPoint(mouseEvent.getPoint());
                 deleteData.secondPoint = mouseEvent.getPoint();
 
                 for (Node node : graph.getNodes()) {
                     if (node.getView().getBoundingRect().contains(mouseEvent.getPoint())) {
+                        buffer.updateBufferTopRemoving(node);
+                        buffer.setGettingComand(true);
+
                         graph.remove(node);
                         graph.removeAll(node.getEdges());
                         node.destroy();
-
                         break;
                     }
                 }
@@ -274,6 +287,9 @@ public class GraphEventManager {
 
                 for (Edge edge : edgesToDelete) {
                     edge.destroy();
+                }
+                if (!buffer.isStillGettingCommand()) {
+                    buffer.updateBufferTopRemoving(edgesToDelete);
                 }
 
                 graph.removeAll(edgesToDelete);

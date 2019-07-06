@@ -8,10 +8,20 @@ import java.awt.geom.Point2D;
 
 public class DrawEdge implements Drawable {
     protected Color color;
-    private DrawNode sourceNode;
-    private DrawNode destNode;
+    protected DrawNode sourceNode;
+    protected DrawNode destNode;
     protected Point2D.Double sourcePosition;
     protected Point2D.Double destPosition;
+
+    public DrawEdge() {}
+
+    public DrawEdge(DrawEdge other) {
+        this.color = other.color;
+        this.sourceNode = new DrawNode(other.sourceNode);
+        this.destNode = new DrawNode(other.destNode);
+        this.sourcePosition = other.sourcePosition;
+        this.destPosition = other.destPosition;
+    }
 
     public static final Color BASIC_COLOR = Color.darkGray;
     public static final Color VISITED_COLOR = Color.magenta;

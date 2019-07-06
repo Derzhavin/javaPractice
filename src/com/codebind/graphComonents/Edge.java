@@ -12,6 +12,12 @@ public class Edge {
     private boolean isDirected = false;
     private DrawEdge edgeView;
 
+    public Edge(Edge other) {
+        this.sourceNode = new Node(other.sourceNode);
+        this.destNode = new Node(other.destNode);
+        this.isDirected = other.isDirected;
+        this.edgeView = new DrawEdge(other.edgeView);
+    }
 
     public Edge(Node sourceNode, Node destNode, DrawEdge edgeView) {
         this.sourceNode = sourceNode;

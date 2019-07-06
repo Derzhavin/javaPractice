@@ -7,6 +7,16 @@ public class DrawDirectedEdge extends DrawEdge {
     private static final double POLYGON_ANGLE = (Math.PI / 12);
     private static final double POLYGON_SIZE = 20D;
 
+    public DrawDirectedEdge() {super();}
+
+    public DrawDirectedEdge(DrawDirectedEdge other) {
+        this.color = other.color;
+        this.sourceNode = new DrawNode(other.sourceNode);
+        this.destNode = new DrawNode(other.destNode);
+        this.sourcePosition = other.sourcePosition;
+        this.destPosition = other.destPosition;
+    }
+
     public DrawDirectedEdge(DrawNode sourceNode, DrawNode destNode) {
         super(sourceNode, destNode);
     }

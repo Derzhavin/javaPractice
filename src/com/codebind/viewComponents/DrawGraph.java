@@ -20,7 +20,6 @@ public class DrawGraph implements Drawable {
         this.graph = graph;
         GraphEventManager.getInstance().setGraph(graph);
     }
-
     @Override
     public void draw(Graphics2D g) {
         for (Node node : graph.getNodes()) {
@@ -37,4 +36,9 @@ public class DrawGraph implements Drawable {
             node.getView().print(g);
         }
     }
+
+    public Graph getGraph() {
+        return graph;
+    }
 }
+

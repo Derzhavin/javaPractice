@@ -58,10 +58,10 @@ class Application implements ActionListener {
 
 
         String[] actioncommands = {"Добавить вершины","Добавить ориентированное ребро","Добавить неориентированное ребро",
-                "Удалить вершины и рёбра","Очистить полотно","Перемещение","Соединить все вершины","Создать случайный граф"};
+                "Удалить вершины и рёбра","Очистить полотно","Перемещение","Соединить все вершины","Создать случайный граф", "Отменить"};
 
         String[] actionIcons = {"img/Добавить(small).png","img/Направленное ребро(small).png","img/Ненаправленное ребро(small).png",
-                "img/Удалить(small).png","img/Очистить(small).png","img/Перемещение(small).png","img/Cоединить все(small).png", "img/Создать случайный граф(small).png"};
+                "img/Удалить(small).png","img/Очистить(small).png","img/Перемещение(small).png","img/Cоединить все(small).png", "img/Создать случайный граф(small).png", "а"};
 
         for(int i = 0; i < actioncommands.length; i++){
             JMenuItem action = new JMenuItem(actioncommands[i], new ImageIcon(actionIcons[i]));
@@ -243,6 +243,9 @@ class Application implements ActionListener {
             case "О программе":
                 labelAction.setText("О программе");
                 openHelp();
+                break;
+            case "Отменить":
+                GraphEventManager.getInstance().getBuffer().recover();
                 break;
             default:
                 labelAction.setText("");

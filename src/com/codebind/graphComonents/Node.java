@@ -8,6 +8,13 @@ public class Node {
     private ArrayList<Edge> edges = new ArrayList<>();
     private DrawNode nodeView;
 
+    public Node() {}
+
+    public Node(Node other) {
+        this.edges = new ArrayList<Edge>(other.edges);
+        this.nodeView = new DrawNode(other.nodeView);
+    }
+
     public Node(DrawNode nodeView) {
         this.nodeView = nodeView;
     }

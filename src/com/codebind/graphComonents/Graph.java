@@ -1,13 +1,21 @@
 package com.codebind.graphComonents;
 
+import com.codebind.Сancellation.Buffer;
+
 import java.util.ArrayList;
 
 
 public class Graph {
     private ArrayList<Edge> edges = new ArrayList<>();
     private ArrayList<Node> nodes = new ArrayList<>();
+    private Buffer buffer = new Buffer();
 
     public Graph() {}
+
+    public Graph(Graph other) {
+        this.edges = new ArrayList<Edge>(other.edges);
+        this.nodes = new ArrayList<Node>(other.nodes);
+    }
 
     public void add(Node node) {
         nodes.add(node);
@@ -58,7 +66,9 @@ public class Graph {
         edges.clear();
     }
 
-    public void connectAllVertices() {
+    public ArrayList<Edge> connectAllVertices() {
+        ArrayList<Edge> adddedEdges = new ArrayList<>();
+
         for (int i = 0; i < nodes.size() - 1; i++) {
             for (int j = i + 1; j < nodes.size(); j++) {
                 if (!nodes.get(i).getNeighbours().contains(nodes.get(j))) {
@@ -66,10 +76,14 @@ public class Graph {
 
                     nodes.get(i).addEdge(edge);
                     nodes.get(j).addEdge(edge);
+
+                    adddedEdges.add(edge);
                     edges.add(edge);
                 }
             }
         }
+
+        return  adddedEdges;
     }
 
     public ArrayList<Node> getNodes() {
