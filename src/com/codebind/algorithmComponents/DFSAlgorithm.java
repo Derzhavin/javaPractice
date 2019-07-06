@@ -64,12 +64,22 @@ public class DFSAlgorithm extends Algorithm {
         stack.push(startNode);
         updatePictures();
         graphicsPanel.repaint();
+        stepsColorDataBase.add(new StepsColorDataBase(graph));
 
         //timer.start();
     }
 
     @Override
     public void doStep() {
+        if (stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
+            stepsColorDataBaseIterator++;
+            stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
+
+            //updatePictures();
+            graphicsPanel.repaint();
+            return;
+        }
+
         if (stack.isEmpty()) {
             timer.stop();
             return;
@@ -86,6 +96,8 @@ public class DFSAlgorithm extends Algorithm {
                 stack.push(neighbour);
                 updatePictures();
                 graphicsPanel.repaint();
+                stepsColorDataBase.add(new StepsColorDataBase(graph));
+                stepsColorDataBaseIterator++;
                 return;
             }
         }
@@ -93,6 +105,21 @@ public class DFSAlgorithm extends Algorithm {
         stack.pop();
         updatePictures();
         graphicsPanel.repaint();
+
+        stepsColorDataBase.add(new StepsColorDataBase(graph));
+        stepsColorDataBaseIterator++;
+    }
+
+    @Override
+    public void doBackwardsStep() {
+        if (stepsColorDataBaseIterator != 0) {
+            System.out.println(stepsColorDataBaseIterator);
+            stepsColorDataBaseIterator--;
+            stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
+
+            //updatePictures();
+            graphicsPanel.repaint();
+        }
     }
 
     private void updatePictures() {

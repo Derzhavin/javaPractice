@@ -137,7 +137,8 @@ class Application implements ActionListener {
         if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
             if (!command.equals("Запустить алгоритм") &&
                     !command.equals("Остановить алгоритм") &&
-                    !command.equals("Сделать шаг алгоритма")) {
+                    !command.equals("Сделать шаг вперед") &&
+                    !command.equals("Сделать шаг назад")) {
                 Algorithms.currentAlgorithm.reset();
             }
         }
@@ -207,10 +208,16 @@ class Application implements ActionListener {
             case "Запустить алгоритм":
                 Algorithms.currentAlgorithm.continueIfStoped();
                 break;
-            case "Сделать шаг алгоритма":
+            case "Сделать шаг вперед":
                 if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM &&
                         Algorithms.currentAlgorithm.isInitialized()) {
                     Algorithms.currentAlgorithm.doStep();
+                }
+                break;
+            case "Сделать шаг назад":
+                if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM &&
+                        Algorithms.currentAlgorithm.isInitialized()) {
+                    Algorithms.currentAlgorithm.doBackwardsStep();
                 }
                 break;
             case "Остановить алгоритм":
@@ -252,12 +259,14 @@ class Application implements ActionListener {
         if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM) {
             buttonHashMap.get("Запустить алгоритм").setEnabled(true);
             buttonHashMap.get("Остановить алгоритм").setEnabled(true);
-            buttonHashMap.get("Сделать шаг алгоритма").setEnabled(true);
+            buttonHashMap.get("Сделать шаг вперед").setEnabled(true);
+            buttonHashMap.get("Сделать шаг назад").setEnabled(true);
         }
         else {
             buttonHashMap.get("Запустить алгоритм").setEnabled(false);
             buttonHashMap.get("Остановить алгоритм").setEnabled(false);
-            buttonHashMap.get("Сделать шаг алгоритма").setEnabled(false);
+            buttonHashMap.get("Сделать шаг вперед").setEnabled(false);
+            buttonHashMap.get("Сделать шаг назад").setEnabled(false);
         }
 
         if (singleActiveButtonHashMap.containsKey(command)) {
@@ -294,11 +303,12 @@ class Application implements ActionListener {
                 "img/Удалить.png",
                 "img/Алгоритм.png",
                 "img/Очистить.png",
-                "img/Cоединить все.png",
-                "img/Cоединить все.png",
-                "img/Алгоритм.png",
-                "img/Алгоритм.png",
-                "img/Алгоритм.png"
+                "img/Создать случайный граф.png",
+                "img/Триангуляция.png",
+                "img/Запустить алгоритм.png",
+                "img/Остановить алгоритм.png",
+                "img/Сделать шаг вперед.png",
+                "img/Сделать шаг назад.png"
         };
 
         String[] commands = {
@@ -314,7 +324,8 @@ class Application implements ActionListener {
                 "Триангулировать",
                 "Запустить алгоритм",
                 "Остановить алгоритм",
-                "Сделать шаг алгоритма"
+                "Сделать шаг вперед",
+                "Сделать шаг назад"
         };
 
         ArrayList<String> singleActiveCommands = new ArrayList<>();
@@ -341,7 +352,8 @@ class Application implements ActionListener {
 
             if (commands[i].equals("Запустить алгоритм") ||
                     commands[i].equals("Остановить алгоритм") ||
-                    commands[i].equals("Сделать шаг алгоритма")) {
+                    commands[i].equals("Сделать шаг вперед") ||
+                    commands[i].equals("Сделать шаг назад")) {
                 button.setEnabled(false);
             }
 

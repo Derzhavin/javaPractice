@@ -38,7 +38,7 @@ public class Triangulator {
             return 0;
         });
 
-        stack.push(new Edge(nodes.get(0), nodes.get(1), false));
+        stack.push(new Edge(nodes.get(0), nodes.get(1), true));
         graph.add(stack.peek());
 
         while (!stack.isEmpty()) {
@@ -105,8 +105,8 @@ public class Triangulator {
                 }
 
                 if (!spyDetected) {
-                    Edge firstEdge = new Edge(firstNode, bidder, false);
-                    Edge secondEdge = new Edge(secondNode, bidder, false);
+                    Edge firstEdge = new Edge(firstNode, bidder, true);
+                    Edge secondEdge = new Edge(secondNode, bidder, true);
                     graph.add(firstEdge);
                     graph.add(secondEdge);
                     stack.push(firstEdge);

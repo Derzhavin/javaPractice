@@ -6,6 +6,9 @@ import com.codebind.graphComonents.Graph;
 import com.codebind.graphComonents.Node;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 public abstract class Algorithm {
@@ -16,7 +19,8 @@ public abstract class Algorithm {
 
     protected Graph graph = null;
     protected GraphicsPanel graphicsPanel = null;
-
+    protected ArrayList<StepsColorDataBase> stepsColorDataBase = new ArrayList<>();
+    protected int stepsColorDataBaseIterator = 0;
 
     public abstract void initialize(Node node);
     public abstract void initialize(Edge edge);
@@ -27,6 +31,7 @@ public abstract class Algorithm {
 
     public abstract void doRun();
     public abstract void doStep();
+    public abstract void doBackwardsStep();
     public abstract void doWhile(Callable<?> func);
 
     public void setDelay(int delay) {
@@ -54,8 +59,36 @@ public abstract class Algorithm {
     }
 
     public void reset() {
+        stepsColorDataBaseIterator = 0;
+        stepsColorDataBase.clear();
+
         timer.stop();
         initialized = false;
         currentStep = 0;
+    }
+
+    protected class StepsColorDataBase {
+        protected HashMap<Node, Color> nodeColorHashMap = new HashMap<>();
+        protected HashMap<Edge, Color> edgeColorHashMap = new HashMap<>();
+
+        public StepsColorDataBase(Graph graph) {
+            for (Node node : graph.getNodes()) {
+                nodeColorHashMap.put(node, node.getView().getColor());
+            }
+
+            for (Edge edge : graph.getEdges()) {
+                edgeColorHashMap.put(edge, edge.getView().getColor());
+            }
+        }
+
+        public void resetColors() {
+            for (Node node : nodeColorHashMap.keySet()) {
+                node.getView().setColor(nodeColorHashMap.get(node));
+            }
+
+            for (Edge edge : edgeColorHashMap.keySet()) {
+                edge.getView().setColor(edgeColorHashMap.get(edge));
+            }
+        }
     }
 }
