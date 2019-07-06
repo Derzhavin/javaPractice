@@ -1,7 +1,9 @@
 package com.codebind;
+import com.codebind.graphComonents.Graph;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 import com.codebind.viewComponents.DrawGraph;
+import com.codebind.Сancellation.Buffer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +15,7 @@ public class GraphicsPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private DrawGraph graph;
     private JPanel panelNodesEdges;
+    private Buffer buffer = new Buffer();
 
     public GraphicsPanel() {
         graph = new DrawGraph();
@@ -77,13 +80,20 @@ public class GraphicsPanel extends JPanel {
 
     public void setGraph(DrawGraph graph){
         this.graph = graph;
-
-        GraphEventManager.getInstance().getBuffer().updateBufferTopClearScene(graph.getGraph());
-        GraphEventManager.getInstance().getBuffer().setGettingComand(false);
         this.updatePanelNodesEdges();
         repaint();
     }
 
+    public void recoverGraph() {
+        DrawGraph graph = buffer.recover();
+
+        if (graph != null) {
+            this.graph = graph;
+            GraphEventManager.getInstance().setGraph(graph.getGraph());
+            System.out.println("not null");
+            repaint();
+        }
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -101,6 +111,7 @@ public class GraphicsPanel extends JPanel {
             g.setColor(Color.red);
             g.drawLine(pair.get(0).x, pair.get(0).y, pair.get(1).x, pair.get(1).y);
         }
+        buffer.push(graph);
     }
 
     public void updatePanelNodesEdges() {

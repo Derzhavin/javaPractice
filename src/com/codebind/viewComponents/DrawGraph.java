@@ -12,6 +12,9 @@ import java.awt.*;
 public class DrawGraph implements Drawable {
     private Graph graph;
 
+    public DrawGraph(DrawGraph other) {
+        this.graph = new Graph(other.graph);
+    }
     public DrawGraph() {
         this.graph = new Graph();
         GraphEventManager.getInstance().setGraph(graph);

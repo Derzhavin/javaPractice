@@ -245,7 +245,7 @@ class Application implements ActionListener {
                 openHelp();
                 break;
             case "Отменить":
-                GraphEventManager.getInstance().getBuffer().recover();
+                graphicsPanel.recoverGraph();
                 break;
             default:
                 labelAction.setText("");
