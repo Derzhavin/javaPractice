@@ -1,6 +1,7 @@
 package com.codebind.algorithmComponents;
 
 import com.codebind.graphComonents.Edge;
+import com.codebind.graphComonents.Graph;
 import com.codebind.graphComonents.Node;
 import com.codebind.viewComponents.DrawNode;
 import com.codebind.viewComponents.DrawEdge;
@@ -72,24 +73,35 @@ public class KosarajuAlgorithm extends Algorithm {
         stack.push(startNode);
         updatePictures();
         graphicsPanel.repaint();
+        stepsColorDataBase.add(new KosarajuStepsColorDataBase(graph));
         //timer.start();
     }
 
     @Override
     public void doStep() {
+        if (stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
+            stepsColorDataBaseIterator++;
+            stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
+
+            if (((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).transposed) {
+                transpose();
+            }
+
+            graphicsPanel.repaint();
+            return;
+        }
+
+        String currentStageOfAlgorithm = stageOfAlgorithm;
+
         switch (stageOfAlgorithm) {
             case "doDFSstep":
                 doDFSstep();
                 break;
             case "doTransposeStep":
-                for(Node node:timeOutList) {
-                    System.out.print(node.getView().getName() + " ");
-                    System.out.println();
-                }
                 doTransposeStep();
+                doInitializationSearchComponentsStep();
                 break;
             case "doInitializationSearchComponentsStep":
-                doInitializationSearchComponentsStep();
                 break;
             case "doSearchComponentsStep":
                 doSearchComponentsStep();
@@ -99,6 +111,24 @@ public class KosarajuAlgorithm extends Algorithm {
         System.out.println(stageOfAlgorithm);
         updatePictures();
         graphicsPanel.repaint();
+
+        stepsColorDataBase.add(new KosarajuStepsColorDataBase(graph, currentStageOfAlgorithm.equals("doTransposeStep")));
+        stepsColorDataBaseIterator++;
+    }
+
+    @Override
+    public void doBackwardsStep() {
+        if (stepsColorDataBaseIterator != 0) {
+            System.out.println(stepsColorDataBaseIterator);
+            stepsColorDataBaseIterator--;
+            stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
+
+            if (((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).transposed) {
+                transpose();
+            }
+
+            graphicsPanel.repaint();
+        }
     }
 
     private void doInitializationSearchComponentsStep() {
@@ -110,6 +140,9 @@ public class KosarajuAlgorithm extends Algorithm {
 
         nodes.get(currentNode).color = colorOfComponent;
         stageOfAlgorithm = "doSearchComponentsStep";
+
+        updatePictures();
+        graphicsPanel.repaint();
     }
 
     private void doDFSstep() {
@@ -121,6 +154,7 @@ public class KosarajuAlgorithm extends Algorithm {
                     return;
                 }
             }
+
             stageOfAlgorithm = "doTransposeStep";
             return;
         }
@@ -175,6 +209,7 @@ public class KosarajuAlgorithm extends Algorithm {
     private void doTransposeStep() {
         transpose();
 
+        updatePictures();
         graphicsPanel.repaint();
         stageOfAlgorithm = "doInitializationSearchComponentsStep";
     }
@@ -274,6 +309,25 @@ public class KosarajuAlgorithm extends Algorithm {
 
         public void setVisited(boolean isVisited) {
             this.isVisited = isVisited;
+        }
+    }
+
+
+    private class KosarajuStepsColorDataBase extends StepsColorDataBase {
+        public boolean transposed = false;
+
+        public KosarajuStepsColorDataBase(Graph graph, boolean transposed) {
+            super(graph);
+            this.transposed = transposed;
+        }
+
+        public KosarajuStepsColorDataBase(Graph graph) {
+            this(graph, false);
+        }
+
+        @Override
+        public void resetColors() {
+            super.resetColors();
         }
     }
 }

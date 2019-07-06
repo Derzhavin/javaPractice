@@ -23,6 +23,10 @@ public class DrawEdge implements Drawable {
         updateOffsetVector();
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     public DrawEdge(DrawNode sourceNode, DrawNode destNode) {
         this(sourceNode, destNode, BASIC_COLOR);
     }

@@ -44,6 +44,10 @@ public class DrawNode implements Drawable, Movable {
         this.color = color;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     public Point2D.Double getPosition() {
         return position;
     }
