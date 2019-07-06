@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class RemoveNodes extends Command {
-    Stack<Quadruple<Node, ArrayList<Node>, ArrayList<Node>, ArrayList<Node>>> quadruples= new Stack<>();
+    ArrayList<Quadruple<Node, ArrayList<Node>, ArrayList<Node>, ArrayList<Node>>> quadruples= new ArrayList<>();
 
     public RemoveNodes() {super();}
 
@@ -34,13 +34,13 @@ public class RemoveNodes extends Command {
         }
 
         Quadruple<Node, ArrayList<Node>, ArrayList<Node>, ArrayList<Node>> quadruple = new Quadruple<>(node, smartNeigbours, peerNeighbours, ownerNeighbours);
-        quadruples.push(quadruple);
+        quadruples.add(quadruple);
     }
 
     @Override
     void recover(Graph graph) {
 
-        Quadruple<Node, ArrayList<Node>, ArrayList<Node>, ArrayList<Node>> quadruple = quadruples.pop();
+        Quadruple<Node, ArrayList<Node>, ArrayList<Node>, ArrayList<Node>> quadruple = quadruples.remove(quadruples.size()-1);
 
         Node node = quadruple.first;
         ArrayList<Node> smartNeighbours = quadruple.second;
@@ -64,8 +64,19 @@ public class RemoveNodes extends Command {
 
         graph.add(node);
 
-        if (quadruples.empty()) {
+        if (quadruples.size() == 0) {
             setFinished(true);
+        }
+    }
+
+    @Override
+    public void free() {
+        for(int i = quadruples.size()-1; i > -1; i--) {
+            Quadruple<Node, ArrayList<Node>, ArrayList<Node>, ArrayList<Node>> quadruple = quadruples.remove(i);
+            quadruple.first.destroy();
+            quadruple.second.clear();
+            quadruple.third.clear();
+            quadruple.fourth.clear();
         }
     }
 }

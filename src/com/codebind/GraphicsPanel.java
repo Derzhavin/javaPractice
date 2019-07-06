@@ -78,8 +78,8 @@ public class GraphicsPanel extends JPanel {
     public void setGraph(DrawGraph graph){
         this.graph = graph;
 
-        GraphEventManager.getInstance().getBuffer().updateBufferTopCreateRandomGraph();
-
+        GraphEventManager.getInstance().getBuffer().updateBufferTopClearScene(graph.getGraph());
+        GraphEventManager.getInstance().getBuffer().setGettingComand(false);
         this.updatePanelNodesEdges();
         repaint();
     }

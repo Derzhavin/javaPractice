@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Buffer {
-    private Stack<Command> commands = new Stack<>();
+    private ArrayList<Command> commands = new ArrayList<>();
     private GraphicsPanel graphicsPanel;
     private Graph graph;
     private boolean gettingComand = false;
+    private final int LIMIT_OF_ACTIONS = 5;
 
     public boolean isStillGettingCommand() {return gettingComand;}
 
@@ -25,9 +26,11 @@ public class Buffer {
 
     public void setGraph(Graph graph) {this.graph = graph;}
 
+    private void free() {commands.remove(0).free();}
+
     public void recover() {
-        if (!commands.empty()) {
-            Command command = commands.peek();
+        if (commands.size() != 0) {
+            Command command = commands.get(commands.size()-1);
 
             command.recover(graph);
 
@@ -37,7 +40,7 @@ public class Buffer {
             }
 
             if (command.isWholeCommandFinished()) {
-                commands.pop();
+                commands.remove(commands.size()-1);
             }
 
             graphicsPanel.updatePanelNodesEdges();
@@ -46,14 +49,18 @@ public class Buffer {
     }
 
     public void updateBufferTopAdding(Node node) {
-        if (!commands.empty()) {
+        if (commands.size() > LIMIT_OF_ACTIONS) {
+            free();
+        }
 
-            Command command = commands.peek();
+        if (commands.size() != 0) {
+
+            Command command = commands.get(commands.size()-1);
 
             if (command instanceof AddNodes) {
-                AddNodes addNodes = (AddNodes) commands.pop();
+                AddNodes addNodes = (AddNodes) commands.remove(commands.size()-1);
                 addNodes.addNode(node);
-                commands.push(addNodes);
+                commands.add(addNodes);
                 return;
             }
         }
@@ -61,20 +68,24 @@ public class Buffer {
         AddNodes addNodes = new AddNodes();
         addNodes.addNode(node);
 
-        commands.push(addNodes);
+        commands.add(addNodes);
 
         gettingComand = false;
     }
 
     public void updateBufferTopAdding(Edge edge) {
-        if (!commands.empty()) {
+        if (commands.size() > LIMIT_OF_ACTIONS) {
+            free();
+        }
 
-            Command command = commands.peek();
+        if (commands.size() != 0) {
+
+            Command command = commands.get(commands.size()-1);
 
             if (command instanceof AddEdges) {
-                AddEdges addEdges = (AddEdges) commands.pop();
+                AddEdges addEdges = (AddEdges) commands.remove(commands.size()-1);
                 addEdges.addEdge(edge);
-                commands.push(addEdges);
+                commands.add(addEdges);
                 return;
             }
         }
@@ -82,20 +93,24 @@ public class Buffer {
         AddEdges addEdges = new AddEdges();
         addEdges.addEdge(edge);
 
-        commands.push(addEdges);
+        commands.add(addEdges);
 
         gettingComand = false;
     }
 
     public void updateBufferTopRemoving(Node node) {
-        if (!commands.empty()) {
+        if (commands.size() > LIMIT_OF_ACTIONS) {
+            free();
+        }
 
-            Command command = commands.peek();
+        if (commands.size() != 0) {
+
+            Command command = commands.get(commands.size()-1);
 
             if (command instanceof RemoveNodes) {
-                RemoveNodes removeNodes = (RemoveNodes) commands.pop();
+                RemoveNodes removeNodes = (RemoveNodes) commands.remove(commands.size()-1);
                 removeNodes.addNode(node);
-                commands.push(removeNodes);
+                commands.add(removeNodes);
                 return;
             }
         }
@@ -103,20 +118,24 @@ public class Buffer {
         RemoveNodes removeNodes = new RemoveNodes();
         removeNodes.addNode(node);
 
-        commands.push(removeNodes);
+        commands.add(removeNodes);
 
         gettingComand = false;
     }
 
     public void updateBufferTopRemoving(ArrayList<Edge> edges) {
-        if (!commands.empty()) {
+        if (commands.size() > LIMIT_OF_ACTIONS) {
+            free();
+        }
 
-            Command command = commands.peek();
+        if (commands.size() != 0) {
+
+            Command command = commands.get(commands.size()-1);
 
             if (command instanceof RemoveEdges) {
-                RemoveEdges removeEdges = (RemoveEdges) commands.pop();
+                RemoveEdges removeEdges = (RemoveEdges) commands.remove(commands.size()-1);
                 removeEdges.addEdge(edges);
-                commands.push(removeEdges);
+                commands.add(removeEdges);
                 return;
             }
         }
@@ -124,20 +143,24 @@ public class Buffer {
         RemoveEdges removeEdges = new RemoveEdges();
         removeEdges.addEdge(edges);
 
-        commands.push(removeEdges);
+        commands.add(removeEdges);
 
         gettingComand = false;
     }
 
     public void updateBufferTopAddingAllNodes(ArrayList<Edge> edges) {
-        if (!commands.empty()) {
+        if (commands.size() > LIMIT_OF_ACTIONS) {
+            free();
+        }
 
-            Command command = commands.peek();
+        if (commands.size() != 0) {
+
+            Command command = commands.get(commands.size()-1);
 
             if (command instanceof ConnectAllNodes) {
-                ConnectAllNodes connectAllNodes = (ConnectAllNodes) commands.pop();
+                ConnectAllNodes connectAllNodes = (ConnectAllNodes) commands.remove(commands.size()-1);
                 connectAllNodes.addEdges(edges);
-                commands.push(connectAllNodes);
+                commands.add(connectAllNodes);
                 return;
             }
         }
@@ -145,12 +168,16 @@ public class Buffer {
         ConnectAllNodes connectAllNodes = new ConnectAllNodes();
         connectAllNodes.addEdges(edges);
 
-        commands.push(connectAllNodes);
+        commands.add(connectAllNodes);
 
         gettingComand = false;
     }
 
-    public  void updateBufferTopCreateRandomGraph() {commands.push(new CreateRandomGraph());gettingComand = false;}
-
-    public void updateBufferTopClearScene(Graph graph) {commands.push(new ClearScene(new Graph(graph)));gettingComand = false;}
+    public void updateBufferTopClearScene(Graph graph) {
+        if (commands.size() > LIMIT_OF_ACTIONS) {
+            free();
+        }
+        commands.add(new ClearScene(new Graph(graph)));
+        gettingComand = false;
+    }
   }

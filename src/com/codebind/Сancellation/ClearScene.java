@@ -13,5 +13,8 @@ public class ClearScene extends Command {
     @Override
     public void recover(Graph graph) {}
 
+    @Override
+    public void free() {graph = null;}
+
     public Graph recover() {return this.graph;}
 }

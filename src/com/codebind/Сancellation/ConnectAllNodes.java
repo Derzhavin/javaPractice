@@ -20,4 +20,11 @@ public class ConnectAllNodes extends Command {
 
         setFinished(true);
     }
+
+    @Override
+    public void free() {
+        for(int i = edges.size()-1; i > -1; i--) {
+            edges.remove(i).destroy();
+        }
+    }
 }

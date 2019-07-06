@@ -14,8 +14,8 @@ import java.util.Stack;
 //edge уже появляется во 2-ом). It's a kind of magic.
 
 public class RemoveEdges extends Command {
-    Stack<Triplet<Edge, Node, Node>> triplets = new Stack<>();
-    Stack<Integer> countsEdgesToRecover = new Stack<>();
+    ArrayList<Triplet<Edge, Node, Node>> triplets = new ArrayList<>();
+    ArrayList<Integer> countsEdgesToRecover = new ArrayList<>();
 
     public RemoveEdges() {super();}
 
@@ -34,20 +34,20 @@ public class RemoveEdges extends Command {
                 }
             }
 
-            triplets.push(triplet);
+            triplets.add(triplet);
         }
 
-        countsEdgesToRecover.push(edges.size());
+        countsEdgesToRecover.add(edges.size());
     }
 
     @Override
     void recover(Graph graph) {
         //System.out.println("RemoveEdges_recover");
 
-        Integer countEdgesToRecover = countsEdgesToRecover.pop();
+        Integer countEdgesToRecover = countsEdgesToRecover.remove(countsEdgesToRecover.size()-1);
 
         for(int i = countEdgesToRecover; i > 0; i--) {
-            Triplet<Edge, Node, Node> triplet = triplets.pop();
+            Triplet<Edge, Node, Node> triplet = triplets.remove(triplets.size()-1);
 
             Edge edge = triplet.first;
             Node sourseNode = triplet.second;
@@ -59,9 +59,22 @@ public class RemoveEdges extends Command {
 
             graph.add(edge);
 
-            if (triplets.empty()) {
+            if (triplets.size()== 0) {
                 setFinished(true);
             }
+        }
+    }
+
+    @Override
+    public void free() {
+        Integer countEdgesToRecover = countsEdgesToRecover.remove(countsEdgesToRecover.size()-1);
+
+        for(int i = triplets.size()-1; countEdgesToRecover > 0; i--, countEdgesToRecover--) {
+            Triplet<Edge, Node, Node> triplet = triplets.remove(i);
+
+            triplet.first.destroy();
+            triplet.second.destroy();
+            triplet.third.destroy();
         }
     }
 }
