@@ -11,6 +11,10 @@ public class DrawDirectedEdge extends DrawEdge {
         super(sourceNode, destNode);
     }
 
+    public DrawDirectedEdge(DrawEdge other, DrawNode sourceNode, DrawNode destNode) {
+        super(other, sourceNode, destNode);
+    }
+
     @Override
     public void draw(Graphics2D g) {
         super.draw(g);

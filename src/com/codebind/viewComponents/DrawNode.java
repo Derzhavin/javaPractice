@@ -24,6 +24,13 @@ public class DrawNode implements Drawable, Movable {
         this.name = name;
     }
 
+    public DrawNode(DrawNode other) {
+        this.position = new Point2D.Double(other.getPosition().x, other.getPosition().y);
+        this.color = other.color;
+        this.radius = other.radius;
+        this.name = other.name;
+    }
+
     public DrawNode(Point2D.Double position, Color color) {
         this(position, color, BASIC_RADIUS, DEFAULT_NAME);
     }

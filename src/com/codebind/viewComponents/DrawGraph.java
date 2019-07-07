@@ -1,6 +1,7 @@
 package com.codebind.viewComponents;
 
 import com.codebind.Shapes.Drawable;
+import com.codebind.Snapshots.Snapshot;
 import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.Edge;
 import com.codebind.graphComonents.Graph;

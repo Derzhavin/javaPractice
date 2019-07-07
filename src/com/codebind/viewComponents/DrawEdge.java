@@ -23,6 +23,13 @@ public class DrawEdge implements Drawable {
         updateOffsetVector();
     }
 
+    public DrawEdge(DrawEdge other, DrawNode sourceNode, DrawNode destNode) {
+        this.color = other.color;
+        this.sourceNode = sourceNode;
+        this.destNode = destNode;
+        updateOffsetVector();
+    }
+
     public Color getColor() {
         return color;
     }

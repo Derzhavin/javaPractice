@@ -2,6 +2,7 @@ package com.codebind.graphComonents;
 
 import com.codebind.Algorithms;
 import com.codebind.GraphicsPanel;
+import com.codebind.Snapshots.GraphCaretaker;
 import com.codebind.algorithmComponents.Algorithm;
 import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.viewComponents.DrawDirectedEdge;
@@ -151,6 +152,8 @@ public class GraphEventManager {
         switch (graphState) {
             case CREATE_NODE:
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+                    GraphCaretaker.push(graph.save());
+
                     graph.add(new Node(new DrawNode(new Point2D.Double(mouseEvent.getX(), mouseEvent.getY()),
                             String.valueOf(getNewNodeName()))));
                 }
@@ -168,6 +171,7 @@ public class GraphEventManager {
                         Edge newEdge = connectData.getEdgeIfNotExists();
 
                         if (newEdge != null) {
+                            GraphCaretaker.push(graph.save());
                             graph.add(newEdge);
                         }
                     }
@@ -184,6 +188,7 @@ public class GraphEventManager {
 
                 for (Node node : graph.getNodes()) {
                     if (node.getView().getBoundingRect().contains(mouseEvent.getPoint())) {
+                        GraphCaretaker.push(graph.save());
                         graph.remove(node);
                         graph.removeAll(node.getEdges());
                         node.destroy();
@@ -270,6 +275,10 @@ public class GraphEventManager {
                             deleteData.secondPoint.x, deleteData.secondPoint.y)) {
                         edgesToDelete.add(edge);
                     }
+                }
+
+                if (!edgesToDelete.isEmpty()) {
+                    GraphCaretaker.push(graph.save());
                 }
 
                 for (Edge edge : edgesToDelete) {
