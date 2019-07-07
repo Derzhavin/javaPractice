@@ -88,13 +88,18 @@ class Application implements ActionListener {
         StepBack.setIcon(new ImageIcon("img/Отмена(small).png"));
         StepBack.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
 
+        JMenuItem StepUp = new JMenuItem("Отмена отмены",KeyEvent.VK_Y);
+        StepUp.setIcon(new ImageIcon("img/Up(small).png"));
+        StepUp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK));
+
         itemSubMenuAlgorithm.add(itemKosaraju);
         itemSubMenuAlgorithm.add(itemDFS);
 
         menuAction.add(StepBack);
-
+        menuAction.add(StepUp);
 
         StepBack.addActionListener(this);
+        StepUp.addActionListener(this);
         itemDFS.addActionListener(this);
         itemKosaraju.addActionListener(this);
         itemOpenFile.addActionListener(this);
@@ -350,7 +355,7 @@ class Application implements ActionListener {
                 "img/Создать случайный граф.png",
                 "img/Триангуляция.png",
                 "img/Отмена.png",
-                "img/Отмена.png",
+                "img/Up.png",
                 "img/Алгоритм.png",
                 "img/Запустить алгоритм.png",
                 "img/Остановить алгоритм.png",
