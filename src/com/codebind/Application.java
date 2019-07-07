@@ -250,7 +250,9 @@ class Application implements ActionListener {
                 openHelp();
                 break;
             case "Отмена":
-                GraphEventManager.getInstance().getGraph().restore(GraphCaretaker.pop());
+                if (!Algorithms.currentAlgorithm.isInitialized()) {
+                    GraphEventManager.getInstance().getGraph().restore(GraphCaretaker.pop());
+                }
                 break;
             default:
                 labelAction.setText("");
