@@ -270,6 +270,11 @@ class Application implements ActionListener {
                     GraphEventManager.getInstance().getGraph().restore(GraphCaretaker.pop());
                 }
                 break;
+            case "Отмена отмены":
+                if (!Algorithms.currentAlgorithm.isInitialized()) {
+                    GraphEventManager.getInstance().getGraph().restore(GraphCaretaker.poll());
+                }
+                break;
             default:
                 labelAction.setText("");
                 graphicsPanel.setGraphState(GraphStates.NOTHING);
@@ -288,6 +293,7 @@ class Application implements ActionListener {
             buttonHashMap.get("Сделать шаг вперед").setEnabled(true);
             buttonHashMap.get("Сделать шаг назад").setEnabled(true);
             buttonHashMap.get("Отмена").setEnabled(false);
+            buttonHashMap.get("Отмена отмены").setEnabled(false);
         }
         else {
             buttonHashMap.get("Запустить алгоритм").setEnabled(false);
@@ -297,6 +303,10 @@ class Application implements ActionListener {
 
             if (!GraphCaretaker.isEmpty()) {
                 buttonHashMap.get("Отмена").setEnabled(true);
+            }
+
+            if (!GraphCaretaker.isFull()) {
+                buttonHashMap.get("Отмена отмены").setEnabled(true);
             }
         }
 
@@ -335,6 +345,7 @@ class Application implements ActionListener {
                 "img/Создать случайный граф.png",
                 "img/Триангуляция.png",
                 "img/Отмена.png",
+                "img/Отмена.png",
                 "img/Алгоритм.png",
                 "img/Запустить алгоритм.png",
                 "img/Остановить алгоритм.png",
@@ -353,12 +364,12 @@ class Application implements ActionListener {
                 "Создать случайный граф",
                 "Триангулировать",
                 "Отмена",
+                "Отмена отмены",
                 "Алгоритм",
                 "Запустить алгоритм",
                 "Остановить алгоритм",
                 "Сделать шаг вперед",
                 "Сделать шаг назад",
-
         };
 
         ArrayList<String> singleActiveCommands = new ArrayList<>();
@@ -396,7 +407,8 @@ class Application implements ActionListener {
                     commands[i].equals("Остановить алгоритм") ||
                     commands[i].equals("Сделать шаг вперед") ||
                     commands[i].equals("Сделать шаг назад") ||
-                    commands[i].equals("Отмена")) {
+                    commands[i].equals("Отмена") ||
+                    commands[i].equals("Отмена отмены")) {
                 button.setEnabled(false);
             }
 
@@ -410,7 +422,8 @@ class Application implements ActionListener {
             }
         }
 
-        GraphCaretaker.button = buttonHashMap.get("Отмена");
+        GraphCaretaker.button1 = buttonHashMap.get("Отмена");
+        GraphCaretaker.button2 = buttonHashMap.get("Отмена отмены");
 
         toolBar.setBorder(BorderFactory.createRaisedBevelBorder());
 
