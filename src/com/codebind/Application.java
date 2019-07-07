@@ -192,6 +192,7 @@ class Application implements ActionListener {
                 GraphEventManager.getInstance().connectAllVertices();
                 break;
             case "Создать случайный граф":
+                GraphCaretaker.push(GraphEventManager.getInstance().getGraph().save());
                 graphicsPanel.setGraph(RandomGraphCreator.create(
                         1 + new Random(System.currentTimeMillis()).nextInt(16),
                         0.25D, graphicsPanel.getWidth(),
