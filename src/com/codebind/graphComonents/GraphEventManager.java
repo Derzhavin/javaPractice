@@ -110,6 +110,10 @@ public class GraphEventManager {
         return pair;
     }
 
+    public void resetConnectData() {
+        connectData.clear();
+    }
+
     private GraphEventManager() {
         graph = null;
         graphState = GraphStates.NOTHING;
