@@ -9,11 +9,14 @@ import com.codebind.graphComonents.Node;
 
 import java.awt.*;
 
-public class DrawGraph implements Drawable {
+public class DrawGraph implements Drawable, Cloneable {
     private Graph graph;
 
-    public DrawGraph(DrawGraph other) {
-        this.graph = new Graph(other.graph);
+    @Override
+    public DrawGraph clone() throws CloneNotSupportedException {
+        DrawGraph other = (DrawGraph) super.clone();
+        other.graph = (Graph)this.graph.clone();
+        return  other;
     }
     public DrawGraph() {
         this.graph = new Graph();

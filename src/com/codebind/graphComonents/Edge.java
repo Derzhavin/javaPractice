@@ -6,17 +6,22 @@ import com.codebind.viewComponents.DrawNode;
 
 import java.util.ArrayList;
 
-public class Edge {
+public class Edge implements  Cloneable{
     private Node sourceNode;
     private Node destNode;
     private boolean isDirected = false;
     private DrawEdge edgeView;
 
-    public Edge(Edge other) {
-        this.sourceNode = new Node(other.sourceNode);
-        this.destNode = new Node(other.destNode);
-        this.isDirected = other.isDirected;
-        this.edgeView = new DrawEdge(other.edgeView);
+    @Override
+    public Edge clone() throws CloneNotSupportedException {
+        Edge other = (Edge)super.clone();
+
+        other.sourceNode = (Node)this.sourceNode.clone();
+        other.destNode = (Node)this.destNode.clone();
+        other.isDirected = this.isDirected;
+        other.edgeView = (DrawEdge)this.edgeView.clone();
+
+        return other;
     }
 
     public Edge(Node sourceNode, Node destNode, DrawEdge edgeView) {

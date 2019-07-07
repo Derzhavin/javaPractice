@@ -6,7 +6,7 @@ import com.codebind.graphComonents.Node;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-public class DrawEdge implements Drawable {
+public class DrawEdge implements Drawable, Cloneable {
     protected Color color;
     protected DrawNode sourceNode;
     protected DrawNode destNode;
@@ -15,14 +15,17 @@ public class DrawEdge implements Drawable {
 
     public DrawEdge() {}
 
-    public DrawEdge(DrawEdge other) {
-        this.color = other.color;
-        this.sourceNode = new DrawNode(other.sourceNode);
-        this.destNode = new DrawNode(other.destNode);
-        this.sourcePosition = other.sourcePosition;
-        this.destPosition = other.destPosition;
-    }
+    @Override
+    public DrawEdge clone() throws CloneNotSupportedException {
+        DrawEdge other = (DrawEdge)super.clone();
+        other.color = this.color;
+        other.sourceNode = (DrawNode)this.sourceNode.clone();
+        other.destNode = (DrawNode)this.destNode.clone();
+        other.sourcePosition = (Point2D.Double)this.sourcePosition.clone();
+        other.destPosition = (Point2D.Double)this.destPosition.clone();
 
+        return other;
+    }
     public static final Color BASIC_COLOR = Color.darkGray;
     public static final Color VISITED_COLOR = Color.magenta;
 

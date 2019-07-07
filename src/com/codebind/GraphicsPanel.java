@@ -111,7 +111,18 @@ public class GraphicsPanel extends JPanel {
             g.setColor(Color.red);
             g.drawLine(pair.get(0).x, pair.get(0).y, pair.get(1).x, pair.get(1).y);
         }
-        buffer.push(graph);
+
+        if (GraphStates.MOVE_NODE != GraphEventManager.getInstance().getState() &&
+                GraphStates.ALGORITHM != GraphEventManager.getInstance().getState() &&
+                GraphStates.NOTHING != GraphEventManager.getInstance().getState()) {
+            try {
+                if (graph != null) {
+                    buffer.push(graph.clone());
+                }
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void updatePanelNodesEdges() {

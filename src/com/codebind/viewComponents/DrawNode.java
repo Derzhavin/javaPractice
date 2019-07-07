@@ -5,7 +5,7 @@ import com.codebind.Shapes.Movable;
 import java.awt.*;
 import java.awt.geom.*;
 
-public class DrawNode implements Drawable, Movable {
+public class DrawNode implements Drawable, Movable, Cloneable {
     private Point2D.Double position;
     private Color color;
     private int radius;
@@ -17,12 +17,17 @@ public class DrawNode implements Drawable, Movable {
     public static final int BASIC_RADIUS = 15;
     public static final String DEFAULT_NAME = "";
 
-    public DrawNode(DrawNode other) {
-        this.position = other.position;
-        this.color = other.color;
-        this.radius = other.radius;
-        this.name = new StringBuilder(other.name).toString();
+    @Override
+    public DrawNode clone() throws CloneNotSupportedException {
+        DrawNode other = (DrawNode)super.clone();
+
+        other.position = (Point2D.Double)other.position.clone();
+        other.color = other.color;
+        other.radius = other.radius;
+        other.name = new StringBuilder(other.name).toString();
+        return other;
     }
+
 
     public DrawNode(Point2D.Double position, Color color, int radius, String name) {
         this.position = position;

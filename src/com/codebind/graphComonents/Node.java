@@ -4,15 +4,18 @@ import com.codebind.viewComponents.DrawNode;
 
 import java.util.ArrayList;
 
-public class Node {
+public class Node implements Cloneable{
     private ArrayList<Edge> edges = new ArrayList<>();
     private DrawNode nodeView;
 
     public Node() {}
 
-    public Node(Node other) {
-        this.edges = new ArrayList<Edge>(other.edges);
-        this.nodeView = new DrawNode(other.nodeView);
+    @Override
+    public Node clone() throws CloneNotSupportedException {
+        Node other = (Node) super.clone();
+        other.nodeView = (DrawNode)this.nodeView.clone();
+        other.edges = (ArrayList<Edge>)this.edges.clone();
+        return  other;
     }
 
     public Node(DrawNode nodeView) {

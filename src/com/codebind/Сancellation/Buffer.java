@@ -20,6 +20,6 @@ public class Buffer {
         if (graphs.size() > LIMIT_OF_GRAPHS) {
             graphs.remove(0);
         }
-        graphs.add(new DrawGraph(graph));
+        graphs.add(graph);
     }
   }
