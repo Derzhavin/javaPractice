@@ -44,12 +44,18 @@ class Application implements ActionListener {
 
         menuFile.setMnemonic(KeyEvent.VK_F);
 
+
         menuBar.add(menuFile);
         menuBar.add(menuAction);
         menuBar.add(menuHelp);
 
+
+
+
         JMenuItem itemOpenFile = new JMenuItem("Открыть", KeyEvent.VK_O);
         JMenuItem itemSaveGraph = new JMenuItem("Сохранить граф", KeyEvent.VK_S);
+
+
 
         itemOpenFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
         itemSaveGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
@@ -76,9 +82,17 @@ class Application implements ActionListener {
         JMenuItem itemKosaraju = new JMenuItem("Косарайю");
         JMenuItem itemDFS = new JMenuItem("Поиск в глубину");
 
+        JMenuItem StepBack = new JMenuItem("Отмена",KeyEvent.VK_Z);
+        StepBack.setIcon(new ImageIcon("img/Отмена(small).png"));
+        StepBack.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+
         itemSubMenuAlgorithm.add(itemKosaraju);
         itemSubMenuAlgorithm.add(itemDFS);
 
+        menuAction.add(StepBack);
+
+
+        StepBack.addActionListener(this);
         itemDFS.addActionListener(this);
         itemKosaraju.addActionListener(this);
         itemOpenFile.addActionListener(this);
@@ -311,15 +325,15 @@ class Application implements ActionListener {
                 "img/Направленное ребро.png",
                 "img/Ненаправленное ребро.png",
                 "img/Удалить.png",
-                "img/Алгоритм.png",
                 "img/Очистить.png",
                 "img/Создать случайный граф.png",
                 "img/Триангуляция.png",
+                "img/Отмена.png",
+                "img/Алгоритм.png",
                 "img/Запустить алгоритм.png",
                 "img/Остановить алгоритм.png",
                 "img/Сделать шаг вперед.png",
                 "img/Сделать шаг назад.png",
-                "img/Отмена.png"
         };
 
         String[] commands = {
@@ -329,16 +343,19 @@ class Application implements ActionListener {
                 "Добавить ориентированное ребро",
                 "Добавить неориентированное ребро",
                 "Удалить вершины и рёбра",
-                "Алгоритм",
                 "Очистить полотно",
                 "Создать случайный граф",
                 "Триангулировать",
+                "Отмена",
+                "Алгоритм",
                 "Запустить алгоритм",
                 "Остановить алгоритм",
                 "Сделать шаг вперед",
                 "Сделать шаг назад",
-                "Отмена"
+
         };
+
+
 
         ArrayList<String> singleActiveCommands = new ArrayList<>();
         singleActiveCommands.add("Перемещение");
@@ -352,6 +369,7 @@ class Application implements ActionListener {
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         toolBar.setBackground(new Color(219, 232, 254));
 
+
         for(int i = 0; i < icons.length; i++ ){
             Button button = new Button();
             button.setIcon(new ImageIcon(icons[i]));
@@ -361,6 +379,13 @@ class Application implements ActionListener {
 
             button.setBackground(new Color(219, 232, 254));
             button.setFocusPainted(false);
+
+            if(commands[i].equals("Запустить алгоритм")){
+                toolBar.add(new JSeparator(SwingConstants.VERTICAL));
+            }
+            button.setToolTipText(commands[i]);
+            //button.
+
 
             if (commands[i].equals("Запустить алгоритм") ||
                     commands[i].equals("Остановить алгоритм") ||
