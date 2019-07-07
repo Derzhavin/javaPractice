@@ -178,7 +178,13 @@ public class GraphEventManager {
                 }
                 break;
             case MOVE_NODE:
-                draggData.grabNodeOnMousePos(mouseEvent.getPoint(), graph.getNodes());
+                if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+                    draggData.grabNodeOnMousePos(mouseEvent.getPoint(), graph.getNodes());
+
+                    if (draggData.isDragg) {
+                        GraphCaretaker.push(graph.save());
+                    }
+                }
                 break;
             case NOTHING:
                 break;

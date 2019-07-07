@@ -9,7 +9,7 @@ enum ButtonState {
     INACTIVE
 }
 
-class Button extends JButton{
+public class Button extends JButton{
     private ButtonState state;
 
     void changeState() {

@@ -287,12 +287,17 @@ class Application implements ActionListener {
             buttonHashMap.get("Остановить алгоритм").setEnabled(true);
             buttonHashMap.get("Сделать шаг вперед").setEnabled(true);
             buttonHashMap.get("Сделать шаг назад").setEnabled(true);
+            buttonHashMap.get("Отмена").setEnabled(false);
         }
         else {
             buttonHashMap.get("Запустить алгоритм").setEnabled(false);
             buttonHashMap.get("Остановить алгоритм").setEnabled(false);
             buttonHashMap.get("Сделать шаг вперед").setEnabled(false);
             buttonHashMap.get("Сделать шаг назад").setEnabled(false);
+
+            if (!GraphCaretaker.isEmpty()) {
+                buttonHashMap.get("Отмена").setEnabled(true);
+            }
         }
 
         if (singleActiveButtonHashMap.containsKey(command)) {
@@ -317,7 +322,6 @@ class Application implements ActionListener {
             buttonHashMap.get("Запустить алгоритм").changeState();
         }
     }
-
 
 
     public JPanel createToolBar(){
@@ -357,8 +361,6 @@ class Application implements ActionListener {
 
         };
 
-
-
         ArrayList<String> singleActiveCommands = new ArrayList<>();
         singleActiveCommands.add("Перемещение");
         singleActiveCommands.add("Добавить вершины");
@@ -367,10 +369,8 @@ class Application implements ActionListener {
         singleActiveCommands.add("Удалить вершины и рёбра");
         singleActiveCommands.add("Алгоритм");
 
-
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         toolBar.setBackground(new Color(219, 232, 254));
-
 
         for(int i = 0; i < icons.length; i++ ){
             Button button = new Button();
@@ -387,13 +387,12 @@ class Application implements ActionListener {
             }
             button.setToolTipText(commands[i]);
             button.setCursor(getPredefinedCursor(Cursor.HAND_CURSOR));
-            //button.
-
 
             if (commands[i].equals("Запустить алгоритм") ||
                     commands[i].equals("Остановить алгоритм") ||
                     commands[i].equals("Сделать шаг вперед") ||
-                    commands[i].equals("Сделать шаг назад")) {
+                    commands[i].equals("Сделать шаг назад") ||
+                    commands[i].equals("Отмена")) {
                 button.setEnabled(false);
             }
 
@@ -406,6 +405,8 @@ class Application implements ActionListener {
                 singleActiveButtonHashMap.put(buttonCommand, buttonHashMap.get(buttonCommand));
             }
         }
+
+        GraphCaretaker.button = buttonHashMap.get("Отмена");
 
         toolBar.setBorder(BorderFactory.createRaisedBevelBorder());
 
