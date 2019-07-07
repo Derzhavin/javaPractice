@@ -1,10 +1,13 @@
 package com.codebind.Snapshots;
 
+import com.codebind.Button;
+
 import java.util.ArrayDeque;
 
 public class GraphCaretaker {
     private static ArrayDeque<Snapshot> deque = new ArrayDeque<>();
     public static final int STACK_MAX_DEPTH = 50;
+    public static Button button;
 
     public static void push(Snapshot snapshot) {
         deque.add(snapshot);
@@ -12,9 +15,19 @@ public class GraphCaretaker {
         if (deque.size() == STACK_MAX_DEPTH) {
             deque.removeFirst();
         }
+
+        button.setEnabled(true);
+    }
+
+    public static boolean isEmpty() {
+        return deque.isEmpty();
     }
 
     public static Snapshot pop() {
+        if (deque.size() == 1) {
+            button.setEnabled(false);
+        }
+
         return deque.isEmpty() ? null : deque.removeLast();
     }
 }
