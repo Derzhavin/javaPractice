@@ -95,6 +95,9 @@ public class Graph {
             if (!nodes.contains(pair.get(1))) {
                 nodes.add(pair.get(1));
             }
+
+            pair.get(0).addEdge(edge);
+            pair.get(1).addEdge(edge);
         }
     }
 
