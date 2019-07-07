@@ -12,6 +12,10 @@ public class Node {
         this.nodeView = nodeView;
     }
 
+    public Node(Node other) {
+        this.nodeView = new DrawNode(other.getView());
+    }
+
     public DrawNode getView() {
         return nodeView;
     }

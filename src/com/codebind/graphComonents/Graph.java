@@ -1,5 +1,7 @@
 package com.codebind.graphComonents;
 
+import com.codebind.Snapshots.Snapshot;
+
 import java.util.ArrayList;
 
 
@@ -69,6 +71,37 @@ public class Graph {
                     edges.add(edge);
                 }
             }
+        }
+    }
+
+    public Snapshot save() {
+        return new Snapshot(nodes, edges);
+    }
+
+    public void restore(Snapshot snapshot) {
+        if (snapshot == null) {
+            return;
+        }
+
+        nodes.clear();
+        edges.clear();
+
+        nodes.addAll(snapshot.getSingleNodes());
+        edges.addAll(snapshot.getEdges());
+
+        for (Edge edge : edges) {
+            ArrayList<Node> pair = edge.getNodes();
+
+            if (!nodes.contains(pair.get(0))) {
+                nodes.add(pair.get(0));
+            }
+
+            if (!nodes.contains(pair.get(1))) {
+                nodes.add(pair.get(1));
+            }
+
+            pair.get(0).addEdge(edge);
+            pair.get(1).addEdge(edge);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.codebind;
 
+import com.codebind.Snapshots.GraphCaretaker;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 import com.codebind.graphComonents.RandomGraphCreator;
@@ -178,6 +179,7 @@ class Application implements ActionListener {
                 break;
             case "Очистить полотно":
                 labelAction.setText("Очищение полотна");
+                GraphCaretaker.push(GraphEventManager.getInstance().getGraph().save());
                 GraphEventManager.getInstance().removeGraph();
                 break;
             case "Удалить вершины и рёбра":
@@ -186,9 +188,11 @@ class Application implements ActionListener {
                 break;
             case "Соединить все вершины":
                 labelAction.setText("Соединение всех вершин");
+                GraphCaretaker.push(GraphEventManager.getInstance().getGraph().save());
                 GraphEventManager.getInstance().connectAllVertices();
                 break;
             case "Создать случайный граф":
+                GraphCaretaker.push(GraphEventManager.getInstance().getGraph().save());
                 graphicsPanel.setGraph(RandomGraphCreator.create(
                         1 + new Random(System.currentTimeMillis()).nextInt(16),
                         0.25D, graphicsPanel.getWidth(),
@@ -197,6 +201,7 @@ class Application implements ActionListener {
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 break;
             case "Триангулировать":
+                GraphCaretaker.push(GraphEventManager.getInstance().getGraph().save());
                 Triangulator.triangulate(GraphEventManager.getInstance().getGraph());
                 break;
             case "Алгоритм":
@@ -243,6 +248,9 @@ class Application implements ActionListener {
             case "О программе":
                 labelAction.setText("О программе");
                 openHelp();
+                break;
+            case "Отмена":
+                GraphEventManager.getInstance().getGraph().restore(GraphCaretaker.pop());
                 break;
             default:
                 labelAction.setText("");
@@ -308,7 +316,8 @@ class Application implements ActionListener {
                 "img/Запустить алгоритм.png",
                 "img/Остановить алгоритм.png",
                 "img/Сделать шаг вперед.png",
-                "img/Сделать шаг назад.png"
+                "img/Сделать шаг назад.png",
+                "img/Отмена.png"
         };
 
         String[] commands = {
@@ -325,7 +334,8 @@ class Application implements ActionListener {
                 "Запустить алгоритм",
                 "Остановить алгоритм",
                 "Сделать шаг вперед",
-                "Сделать шаг назад"
+                "Сделать шаг назад",
+                "Отмена"
         };
 
         ArrayList<String> singleActiveCommands = new ArrayList<>();

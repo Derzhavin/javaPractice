@@ -5,6 +5,8 @@ import com.codebind.viewComponents.DrawEdge;
 import com.codebind.viewComponents.DrawNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class Edge {
     private Node sourceNode;
@@ -17,6 +19,26 @@ public class Edge {
         this.sourceNode = sourceNode;
         this.destNode = destNode;
         this.edgeView = edgeView;
+    }
+
+    public Edge(Edge other, HashMap<Node, Node> checkedNodes) {
+        if (!checkedNodes.keySet().contains(other.sourceNode)) {
+            this.sourceNode = new Node(other.sourceNode);
+        }
+        else {
+            this.sourceNode = checkedNodes.get(other.sourceNode);
+        }
+
+        if (!checkedNodes.keySet().contains(other.destNode)) {
+            this.destNode = new Node(other.destNode);
+        }
+        else {
+            this.destNode = checkedNodes.get(other.destNode);
+        }
+
+        this.isDirected = other.isDirected;
+        this.edgeView = this.isDirected ? new DrawDirectedEdge(other.edgeView, this.sourceNode.getView(), this.destNode.getView()) :
+                new DrawEdge(other.edgeView, this.sourceNode.getView(), this.destNode.getView());
     }
 
     public Edge(Node sourceNode, Node destNode) {
