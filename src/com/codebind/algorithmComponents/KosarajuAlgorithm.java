@@ -99,7 +99,6 @@ public class KosarajuAlgorithm extends Algorithm {
         switch (stageOfAlgorithm) {
             case "doDFSstep":
                 doDFSstep();
-                UnVisitedCounter--;
                 break;
             case "doTransposeStep":
                 doTransposeStep();
@@ -174,6 +173,7 @@ public class KosarajuAlgorithm extends Algorithm {
 
         for (Node neighbour: currentNode.getSmartNeighbours()) {
             if (!nodes.get(neighbour).isVisited) {
+                UnVisitedCounter--;
                 edges.add(currentNode.getEdge(neighbour));
                 stack.push(neighbour);
                 return;
