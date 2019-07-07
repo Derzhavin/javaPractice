@@ -160,6 +160,11 @@ class Application implements ActionListener {
             }
         }
 
+        if (!command.equals("Добавить ориентированное ребро") &&
+                !command.equals("Добавить неориентированное ребро")) {
+            GraphEventManager.getInstance().resetConnectData();
+        }
+
         switch(command) {
             case "Открыть":
                 labelAction.setText("Открыть");
