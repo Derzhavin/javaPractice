@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.Random;
 import javax.swing.*;
 
+import static java.awt.Cursor.getPredefinedCursor;
+
 
 class Application implements ActionListener {
     public JFrame frame;
@@ -384,6 +386,7 @@ class Application implements ActionListener {
                 toolBar.add(new JSeparator(SwingConstants.VERTICAL));
             }
             button.setToolTipText(commands[i]);
+            button.setCursor(getPredefinedCursor(Cursor.HAND_CURSOR));
             //button.
 
 
