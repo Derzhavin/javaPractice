@@ -254,6 +254,7 @@ class Application implements ActionListener {
 
         ButtonClicked(command);
 
+        graphicsPanel.setCurrentCommand(command);
         graphicsPanel.updatePanelNodesEdges();
         graphicsPanel.updateUI();
     }

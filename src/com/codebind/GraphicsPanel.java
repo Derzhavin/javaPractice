@@ -16,6 +16,9 @@ public class GraphicsPanel extends JPanel {
     private DrawGraph graph;
     private JPanel panelNodesEdges;
     private Buffer buffer = new Buffer();
+    private String currentCommand = "";
+
+    public void setCurrentCommand(String currentCommand) {this.currentCommand = currentCommand;}
 
     public GraphicsPanel() {
         graph = new DrawGraph();
@@ -90,7 +93,6 @@ public class GraphicsPanel extends JPanel {
         if (graph != null) {
             this.graph = graph;
             GraphEventManager.getInstance().setGraph(graph.getGraph());
-            System.out.println("not null");
             repaint();
         }
     }
@@ -112,17 +114,7 @@ public class GraphicsPanel extends JPanel {
             g.drawLine(pair.get(0).x, pair.get(0).y, pair.get(1).x, pair.get(1).y);
         }
 
-        if (GraphStates.MOVE_NODE != GraphEventManager.getInstance().getState() &&
-                GraphStates.ALGORITHM != GraphEventManager.getInstance().getState() &&
-                GraphStates.NOTHING != GraphEventManager.getInstance().getState()) {
-            try {
-                if (graph != null) {
-                    buffer.push(graph.clone());
-                }
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-        }
+        pushInBufferIf();
     }
 
     public void updatePanelNodesEdges() {
@@ -135,6 +127,24 @@ public class GraphicsPanel extends JPanel {
 
     public void setPanelNodesEdges(JPanel panelNodesEdges) {
         this.panelNodesEdges = panelNodesEdges;
+    }
+
+    private void pushInBufferIf() {
+        if (currentCommand.equals("Добавить вершины")||
+                currentCommand.equals("Добавить ориентированное ребро")||
+                currentCommand.equals("Добавить неориентированное ребро")||
+                currentCommand.equals("Очищение полотна")||
+                currentCommand.equals("Удалить вершины и рёбра")||
+                currentCommand.equals("Соединить все вершины")||
+                currentCommand.equals("Создать случайный граф")) {
+            try {
+                if (graph != null) {
+                    buffer.push(graph.clone());
+                }
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 
