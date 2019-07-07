@@ -99,7 +99,7 @@ public class KosarajuAlgorithm extends Algorithm {
         switch (stageOfAlgorithm) {
             case "doDFSstep":
                 doDFSstep();
-                UnVisitedCounter++;
+                UnVisitedCounter--;
                 break;
             case "doTransposeStep":
                 doTransposeStep();
@@ -124,7 +124,7 @@ public class KosarajuAlgorithm extends Algorithm {
     public void doBackwardsStep() {
         if (stepsColorDataBaseIterator != 0) {
             if (stageOfAlgorithm.equals("doDFSstep")) {
-                UnVisitedCounter--;
+                UnVisitedCounter++;
             }
 
             System.out.println(stepsColorDataBaseIterator);
