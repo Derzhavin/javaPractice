@@ -16,6 +16,7 @@ public class KosarajuAlgorithm extends Algorithm {
     private Node startNode;
     private Node currentNode;
 
+    private int UnVisitedCounter;
     boolean edgesTransposed = false;
     private Color colorOfComponent;
     private int componentCounter;
@@ -57,6 +58,7 @@ public class KosarajuAlgorithm extends Algorithm {
         if (currentStep == INIT_STEPS_COUNT) {
             initialized = true;
             wrappNodes();
+            UnVisitedCounter = nodes.size();
             doRun();
         }
     }
@@ -74,6 +76,7 @@ public class KosarajuAlgorithm extends Algorithm {
         updatePictures();
         graphicsPanel.repaint();
         stepsColorDataBase.add(new KosarajuStepsColorDataBase(graph));
+        UnVisitedCounter--;
         //timer.start();
     }
 
@@ -96,6 +99,7 @@ public class KosarajuAlgorithm extends Algorithm {
         switch (stageOfAlgorithm) {
             case "doDFSstep":
                 doDFSstep();
+                UnVisitedCounter++;
                 break;
             case "doTransposeStep":
                 doTransposeStep();
@@ -119,6 +123,10 @@ public class KosarajuAlgorithm extends Algorithm {
     @Override
     public void doBackwardsStep() {
         if (stepsColorDataBaseIterator != 0) {
+            if (stageOfAlgorithm.equals("doDFSstep")) {
+                UnVisitedCounter--;
+            }
+
             System.out.println(stepsColorDataBaseIterator);
             stepsColorDataBaseIterator--;
             stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
@@ -147,11 +155,13 @@ public class KosarajuAlgorithm extends Algorithm {
 
     private void doDFSstep() {
         if (stack.isEmpty()) {
-            for(Node node: graph.getNodes()) {
-                if (!nodes.get(node).isVisited) {
-                    currentNode = node;
-                    stack.push(currentNode);
-                    return;
+            if (UnVisitedCounter > 0) {
+                for (Node node : graph.getNodes()) {
+                    if (!nodes.get(node).isVisited) {
+                        currentNode = node;
+                        stack.push(currentNode);
+                        return;
+                    }
                 }
             }
 
