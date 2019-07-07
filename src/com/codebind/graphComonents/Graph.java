@@ -79,6 +79,10 @@ public class Graph {
     }
 
     public void restore(Snapshot snapshot) {
+        if (snapshot == null) {
+            return;
+        }
+
         nodes.clear();
         edges.clear();
 

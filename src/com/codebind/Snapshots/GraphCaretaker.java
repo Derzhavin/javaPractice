@@ -1,16 +1,20 @@
 package com.codebind.Snapshots;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
 
 public class GraphCaretaker {
-    private static Stack<Snapshot> stack = new Stack<>();
+    private static ArrayDeque<Snapshot> deque = new ArrayDeque<>();
     public static final int STACK_MAX_DEPTH = 50;
 
     public static void push(Snapshot snapshot) {
-        stack.push(snapshot);
+        deque.add(snapshot);
+
+        if (deque.size() == STACK_MAX_DEPTH) {
+            deque.removeFirst();
+        }
     }
 
     public static Snapshot pop() {
-        return stack.pop();
+        return deque.isEmpty() ? null : deque.removeLast();
     }
 }
