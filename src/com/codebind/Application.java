@@ -383,10 +383,14 @@ class Application implements ActionListener {
             button.setFocusPainted(false);
 
             if(commands[i].equals("Запустить алгоритм")){
-                toolBar.add(new JSeparator(SwingConstants.VERTICAL));
+                for(int j = 0; j < 8; j++) {
+                    toolBar.add(new JSeparator(SwingConstants.VERTICAL));
+                }
             }
+
             button.setToolTipText(commands[i]);
             button.setCursor(getPredefinedCursor(Cursor.HAND_CURSOR));
+            button.setBorderPainted(false);
 
             if (commands[i].equals("Запустить алгоритм") ||
                     commands[i].equals("Остановить алгоритм") ||
