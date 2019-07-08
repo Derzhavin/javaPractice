@@ -17,7 +17,7 @@ public class KosarajuAlgorithm extends Algorithm {
     private Node currentNode;
 
     private int UnVisitedCounter;
-    boolean edgesTransposed = false;
+    private boolean edgesTransposed = false;
     private Color colorOfComponent;
     private String stageOfAlgorithm = "doDFSstep";
     private Random random = new Random(System.currentTimeMillis());
@@ -72,7 +72,7 @@ public class KosarajuAlgorithm extends Algorithm {
         nodes.get(currentNode).setVisited(true);
         stack.push(startNode);
         updatePictures();
-        stepsColorDataBase.add(new KosarajuStepsColorDataBase(graph));
+        stepsColorDataBase.add(new KosarajuStepsColorDataBase(graph, "first DFS step"));
         UnVisitedCounter--;
     }
 
@@ -112,7 +112,8 @@ public class KosarajuAlgorithm extends Algorithm {
 
         System.out.println(stageOfAlgorithm);
         updatePictures();
-        stepsColorDataBase.add(new KosarajuStepsColorDataBase(graph, currentStageOfAlgorithm.equals("doTransposeStep")));
+        stepsColorDataBase.add(new KosarajuStepsColorDataBase(graph,
+                currentStageOfAlgorithm.equals("doTransposeStep"), stepsColorDataBaseIterator + 1 + "th " + currentStageOfAlgorithm));
         stepsColorDataBaseIterator++;
     }
 
@@ -293,13 +294,13 @@ public class KosarajuAlgorithm extends Algorithm {
     public class KosarajuStepsColorDataBase extends StepsColorDataBase {
         public boolean transposed = false;
 
-        public KosarajuStepsColorDataBase(Graph graph, boolean transposed) {
-            super(graph);
+        public KosarajuStepsColorDataBase(Graph graph, boolean transposed, String stepNmae) {
+            super(graph, stepNmae);
             this.transposed = transposed;
         }
 
-        public KosarajuStepsColorDataBase(Graph graph) {
-            this(graph, false);
+        public KosarajuStepsColorDataBase(Graph graph, String stepName) {
+            this(graph, false, stepName);
         }
 
         @Override

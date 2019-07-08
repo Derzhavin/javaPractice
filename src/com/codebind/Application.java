@@ -152,11 +152,13 @@ class Application implements ActionListener {
         Algorithms.init();
         GraphEventManager.getInstance().setGraphicsPanel(graphicsPanel);
         AlgorithmEventManager.getInstance().setGraphicsPanel(graphicsPanel);
+        AlgorithmEventManager.getInstance().setDisplay(labelAction);
         AlgorithmEventManager.getInstance().setAlgorithmButtons(new AlgorithmButtons(buttonHashMap.get("Запустить алгоритм"),
                 buttonHashMap.get("Остановить алгоритм"),
                 buttonHashMap.get("Сделать шаг вперед"),
                 buttonHashMap.get("Сделать шаг назад"),
-                buttonHashMap.get("Результат")));
+                buttonHashMap.get("Результат"),
+                buttonHashMap.get("Начало")));
     }
 
 
@@ -170,7 +172,8 @@ class Application implements ActionListener {
                     !command.equals("Остановить алгоритм") &&
                     !command.equals("Сделать шаг вперед") &&
                     !command.equals("Сделать шаг назад") &&
-                    !command.equals("Результат")) {
+                    !command.equals("Результат") &&
+                    !command.equals("Начало")) {
                 AlgorithmEventManager.getInstance().reset();
             }
         }
@@ -244,7 +247,6 @@ class Application implements ActionListener {
                 GraphEventManager.getInstance().setState(GraphStates.ALGORITHM);
                 AlgorithmEventManager.getInstance().reset();
                 AlgorithmEventManager.getInstance().getAlgorithm().setGraph(GraphEventManager.getInstance().getGraph());
-                AlgorithmEventManager.getInstance().setGraphicsPanel(graphicsPanel);
                 break;
             case "Запустить алгоритм":
             case "Остановить алгоритм":
@@ -256,6 +258,7 @@ class Application implements ActionListener {
                 break;
             case "Сделать шаг вперед":
             case "Сделать шаг назад":
+            case "Начало":
                 if (GraphEventManager.getInstance().getState() == GraphStates.ALGORITHM &&
                         AlgorithmEventManager.getInstance().isInitialized()) {
                     AlgorithmEventManager.getInstance().sendCommand("Остановить алгоритм");
@@ -267,14 +270,12 @@ class Application implements ActionListener {
                 Algorithms.selectAlgorithmByName("DFS");
                 AlgorithmEventManager.getInstance().reset();
                 AlgorithmEventManager.getInstance().getAlgorithm().setGraph(GraphEventManager.getInstance().getGraph());
-                AlgorithmEventManager.getInstance().setGraphicsPanel(graphicsPanel);
                 break;
             case "Косарайю":
                 labelAction.setText("Kosaraju");
                 Algorithms.selectAlgorithmByName("Kosaraju");
                 AlgorithmEventManager.getInstance().reset();
                 AlgorithmEventManager.getInstance().getAlgorithm().setGraph(GraphEventManager.getInstance().getGraph());
-                AlgorithmEventManager.getInstance().setGraphicsPanel(graphicsPanel);
                 break;
             case "О программе":
                 labelAction.setText("О программе");
@@ -306,10 +307,11 @@ class Application implements ActionListener {
             buttonHashMap.get("Запустить алгоритм").setEnabled(true);
             buttonHashMap.get("Остановить алгоритм").setEnabled(true);
             buttonHashMap.get("Сделать шаг вперед").setEnabled(true);
-            buttonHashMap.get("Сделать шаг назад").setEnabled(true);
+            buttonHashMap.get("Сделать шаг назад").setEnabled(false);
             buttonHashMap.get("Отмена").setEnabled(false);
             buttonHashMap.get("Отмена отмены").setEnabled(false);
             buttonHashMap.get("Результат").setEnabled(true);
+            buttonHashMap.get("Начало").setEnabled(false);
         }
         else if (GraphEventManager.getInstance().getState() != GraphStates.ALGORITHM) {
             buttonHashMap.get("Запустить алгоритм").setEnabled(false);
@@ -317,6 +319,7 @@ class Application implements ActionListener {
             buttonHashMap.get("Сделать шаг вперед").setEnabled(false);
             buttonHashMap.get("Сделать шаг назад").setEnabled(false);
             buttonHashMap.get("Результат").setEnabled(false);
+            buttonHashMap.get("Начало").setEnabled(false);
 
             if (!GraphCaretaker.isEmpty()) {
                 buttonHashMap.get("Отмена").setEnabled(true);
@@ -368,7 +371,8 @@ class Application implements ActionListener {
                 "img/Остановить алгоритм.png",
                 "img/Сделать шаг вперед.png",
                 "img/Сделать шаг назад.png",
-                "img/Сделать шаг назад.png"
+                "img/Конец.png",
+                "img/Начало.png"
         };
 
         String[] commands = {
@@ -388,7 +392,8 @@ class Application implements ActionListener {
                 "Остановить алгоритм",
                 "Сделать шаг вперед",
                 "Сделать шаг назад",
-                "Результат"
+                "Результат",
+                "Начало"
         };
 
         ArrayList<String> singleActiveCommands = new ArrayList<>();
@@ -428,7 +433,8 @@ class Application implements ActionListener {
                     commands[i].equals("Сделать шаг назад") ||
                     commands[i].equals("Отмена") ||
                     commands[i].equals("Отмена отмены") ||
-                    commands[i].equals("Результат")) {
+                    commands[i].equals("Результат") ||
+                    commands[i].equals("Начало")) {
                 button.setEnabled(false);
             }
 

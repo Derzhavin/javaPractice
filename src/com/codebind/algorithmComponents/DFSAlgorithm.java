@@ -63,7 +63,7 @@ public class DFSAlgorithm extends Algorithm {
         nodes.get(currentNode).setVisited(true);
         stack.push(startNode);
         updatePictures();
-        stepsColorDataBase.add(new StepsColorDataBase(graph));
+        stepsColorDataBase.add(new StepsColorDataBase(graph, "first DFS step"));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class DFSAlgorithm extends Algorithm {
 
         doDFSStep();
         updatePictures();
-        stepsColorDataBase.add(new StepsColorDataBase(graph));
+        stepsColorDataBase.add(new StepsColorDataBase(graph,  stepsColorDataBaseIterator + 1 + "th DFS step"));
         stepsColorDataBaseIterator++;
     }
 

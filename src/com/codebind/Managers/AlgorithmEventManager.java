@@ -15,6 +15,7 @@ public class AlgorithmEventManager {
     private AlgorithmButtons algorithmButtons;
 
     private GraphicsPanel graphicsPanel;
+    private JLabel display;
     private Timer doStepTimer = new Timer(BASIC_DO_STEP_TIMER_DELAY, e->sendCommand("Сделать шаг вперед"));
 
     public static AlgorithmEventManager getInstance() {
@@ -44,11 +45,15 @@ public class AlgorithmEventManager {
             case "Результат":
                 algorithmState = jumpToFinal();
                 break;
+            case "Начало":
+                algorithmState = jumpToStart();
+                break;
         }
 
         if (algorithmState != null) {
             repaint(algorithmState.stepsColorDataBase);
             updateButtons(algorithmState.initialized, algorithmState.step);
+            sendMessage(algorithmState.stepsColorDataBase.stepName);
         }
     }
 
@@ -73,10 +78,21 @@ public class AlgorithmEventManager {
 
         if (step == 0) {
             algorithmButtons.buttons.get(3).setEnabled(false);
+            algorithmButtons.buttons.get(5).setEnabled(false);
         }
         else {
             algorithmButtons.buttons.get(3).setEnabled(true);
+            algorithmButtons.buttons.get(5).setEnabled(true);
         }
+
+        if (!initialized) {
+            algorithmButtons.buttons.get(3).setEnabled(false);
+            algorithmButtons.buttons.get(5).setEnabled(false);
+        }
+    }
+
+    private void sendMessage(String message) {
+        display.setText(message);
     }
 
     private Algorithm.AlgorithmState doForwardStep() {
@@ -100,9 +116,21 @@ public class AlgorithmEventManager {
         return algorithmState;
     }
 
+    private Algorithm.AlgorithmState jumpToStart() {
+        Algorithm.AlgorithmState algorithmState;
+
+        do {
+            currentAlgorithm.doBackwardStep();
+            algorithmState = currentAlgorithm.getState();
+        } while (algorithmState.step != 0);
+
+        return algorithmState;
+    }
+
     public void reset() {
         doStepTimer.stop();
         graphicsPanel.setGraphBasicColor();
+        updateButtons(false, 1);
         currentAlgorithm.reset();
     }
 
@@ -113,6 +141,10 @@ public class AlgorithmEventManager {
 
     public void setGraphicsPanel(GraphicsPanel graphicsPanel) {
         this.graphicsPanel = graphicsPanel;
+    }
+
+    public void setDisplay(JLabel display) {
+        this.display = display;
     }
 
     public void setAlgorithmButtons(AlgorithmButtons algorithmButtons) {

@@ -76,8 +76,9 @@ public abstract class Algorithm {
     public class StepsColorDataBase {
         protected HashMap<Node, Color> nodeColorHashMap = new HashMap<>();
         protected HashMap<Edge, Color> edgeColorHashMap = new HashMap<>();
+        public String stepName = "";
 
-        public StepsColorDataBase(Graph graph) {
+        public StepsColorDataBase(Graph graph, String stepName) {
             for (Node node : graph.getNodes()) {
                 nodeColorHashMap.put(node, node.getView().getColor());
             }
@@ -85,6 +86,8 @@ public abstract class Algorithm {
             for (Edge edge : graph.getEdges()) {
                 edgeColorHashMap.put(edge, edge.getView().getColor());
             }
+
+            this.stepName = stepName;
         }
 
         public void resetColors() {
