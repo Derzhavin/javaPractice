@@ -1,6 +1,7 @@
 package com.codebind;
 
 import com.codebind.Snapshots.GraphCaretaker;
+import com.codebind.algorithmComponents.Algorithm;
 import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.graphComonents.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
@@ -47,25 +48,18 @@ class Application implements ActionListener {
 
         menuFile.setMnemonic(KeyEvent.VK_F);
 
-
         menuBar.add(menuFile);
         menuBar.add(menuAction);
         menuBar.add(menuHelp);
 
-
-
-
         JMenuItem itemOpenFile = new JMenuItem("Открыть", KeyEvent.VK_O);
         JMenuItem itemSaveGraph = new JMenuItem("Сохранить граф", KeyEvent.VK_S);
-
-
 
         itemOpenFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
         itemSaveGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 
         menuFile.add(itemOpenFile);
         menuFile.add(itemSaveGraph);
-
 
         String[] actioncommands = {"Добавить вершины","Добавить ориентированное ребро","Добавить неориентированное ребро",
                 "Удалить вершины и рёбра","Очистить полотно","Перемещение","Соединить все вершины","Создать случайный граф"};
@@ -124,6 +118,8 @@ class Application implements ActionListener {
         slider.addChangeListener(e -> Algorithms.setDelay(slider.getValue()));
 
         JLabel labelAction = new JLabel();
+
+        Algorithms.display = labelAction;
 
         JLabel labelNodes = new JLabel("Nodes: " + 0);
         JLabel labelEdges = new JLabel("Edges: " + 0);

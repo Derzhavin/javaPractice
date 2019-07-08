@@ -10,6 +10,8 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.awt.Color;
 
+import static com.codebind.Algorithms.display;
+
 public class KosarajuAlgorithm extends Algorithm {
     private static final int INIT_STEPS_COUNT = 1;
 
@@ -59,6 +61,7 @@ public class KosarajuAlgorithm extends Algorithm {
             initialized = true;
             wrappNodes();
             UnVisitedCounter = nodes.size();
+            display.setText("");
             doRun();
         }
     }
@@ -86,11 +89,21 @@ public class KosarajuAlgorithm extends Algorithm {
             stepsColorDataBaseIterator++;
             stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
 
+            if (stepsColorDataBase.get(stepsColorDataBaseIterator).stageOfAlgorithm.equals("doSearchComponentsStep")) {
+                display.setText("Нахождение компонет связности: " + stepsColorDataBaseIterator);
+            }
+
             if (((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).transposed) {
+                display.setText("Транспонирование рёбер: " + stepsColorDataBaseIterator);
                 transpose();
             }
 
+            if (stepsColorDataBase.get(stepsColorDataBaseIterator).stageOfAlgorithm.equals("doDFSstep")) {
+                display.setText("Поиск в глубину: ");
+            }
+
             if (finished && stepsColorDataBaseIterator == stepsColorDataBase.size() - 1) {
+                display.setText("Нахождение компонет связности: " + stepsColorDataBaseIterator);
                 timer.stop();
             }
 
@@ -106,17 +119,22 @@ public class KosarajuAlgorithm extends Algorithm {
 
         String currentStageOfAlgorithm = stageOfAlgorithm;
 
+        setIteratorStage(stepsColorDataBaseIterator, stageOfAlgorithm);
+
         switch (stageOfAlgorithm) {
             case "doDFSstep":
+                display.setText("Поиск в глубину: " + stepsColorDataBaseIterator);
                 doDFSstep();
                 break;
             case "doTransposeStep":
+                display.setText("Транспонирование рёбер: " + stepsColorDataBaseIterator);
                 doTransposeStep();
                 doInitializationSearchComponentsStep();
                 break;
-            case "doInitializationSearchComponentsStep":
+            case "doInitializationSearchComponentsStep: ":
                 break;
             case "doSearchComponentsStep":
+                display.setText("Нахождение компонет связности: " + stepsColorDataBaseIterator);
                 doSearchComponentsStep();
                 break;
         }
@@ -134,11 +152,17 @@ public class KosarajuAlgorithm extends Algorithm {
     @Override
     public void doBackwardsStep() {
         if (stepsColorDataBaseIterator != 0) {
-            if (stageOfAlgorithm.equals("doDFSstep")) {
+            if (stepsColorDataBase.get(stepsColorDataBaseIterator).stageOfAlgorithm.equals("doDFSstep")) {
+                display.setText("Поиск в глубину: " + stepsColorDataBaseIterator);
                 UnVisitedCounter++;
             }
 
+            if (stepsColorDataBase.get(stepsColorDataBaseIterator).stageOfAlgorithm.equals("doSearchComponentsStep")) {
+                display.setText("Нахождение компонет связности: " + stepsColorDataBaseIterator);
+            }
+
             if (((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).transposed) {
+                display.setText("Tранспонирование рёбер: " + stepsColorDataBaseIterator);
                 transpose();
             }
 
@@ -297,6 +321,7 @@ public class KosarajuAlgorithm extends Algorithm {
 
     @Override
     public void goToEnd() {
+
         timer.stop();
 
         while (stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
@@ -307,13 +332,14 @@ public class KosarajuAlgorithm extends Algorithm {
                 transpose();
             }
         }
+        display.setText("Поиск компонент связности: " + stepsColorDataBaseIterator);
 
         while (!finished) {
             doStep();
         }
 
         updateButtons();
-
+        display.setText("Поиск компонент связности: " + stepsColorDataBaseIterator);
         updatePictures();
         graphicsPanel.repaint();
     }
@@ -344,6 +370,7 @@ public class KosarajuAlgorithm extends Algorithm {
         edges.clear();
         nodes.clear();
         timeOutList.clear();
+        display.setText("");
         stageOfAlgorithm = "doDFSstep";
     }
 

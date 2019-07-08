@@ -100,9 +100,15 @@ public abstract class Algorithm {
         }
     }
 
+    public void setIteratorStage(int iter, String stage) {
+        stepsColorDataBase.get(iter).stageOfAlgorithm = new String(stage);
+    }
+
     protected class StepsColorDataBase {
         protected HashMap<Node, Color> nodeColorHashMap = new HashMap<>();
         protected HashMap<Edge, Color> edgeColorHashMap = new HashMap<>();
+        public int step;
+        public String stageOfAlgorithm = "";
 
         public StepsColorDataBase(Graph graph) {
             for (Node node : graph.getNodes()) {

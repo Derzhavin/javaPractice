@@ -5,6 +5,7 @@ import com.codebind.algorithmComponents.AlgorithmButtons;
 import com.codebind.algorithmComponents.DFSAlgorithm;
 import com.codebind.algorithmComponents.KosarajuAlgorithm;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,6 +13,8 @@ public class Algorithms {
     private static HashMap<String, Algorithm> algorithmHashMap = new HashMap<>();
     public static Algorithm currentAlgorithm = null;
     public static AlgorithmButtons buttonPanel = new AlgorithmButtons();
+    public static JLabel display = null;
+
     private static int delay = 500;
 
     public Algorithms() {}
