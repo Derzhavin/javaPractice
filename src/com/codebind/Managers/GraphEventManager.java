@@ -1,22 +1,20 @@
-package com.codebind.graphComonents;
+package com.codebind.Managers;
 
-import com.codebind.Algorithms;
+import com.codebind.algorithmComponents.Algorithms;
 import com.codebind.GraphicsPanel;
 import com.codebind.Snapshots.GraphCaretaker;
-import com.codebind.algorithmComponents.Algorithm;
-import com.codebind.algorithmComponents.DFSAlgorithm;
-import com.codebind.viewComponents.DrawDirectedEdge;
-import com.codebind.viewComponents.DrawEdge;
+import com.codebind.graphComonents.Edge;
+import com.codebind.graphComonents.Graph;
+import com.codebind.graphComonents.GraphStates;
+import com.codebind.graphComonents.Node;
 import com.codebind.viewComponents.DrawNode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.dnd.MouseDragGestureRecognizer;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -208,11 +206,11 @@ public class GraphEventManager {
                 }
                 break;
             case ALGORITHM:
-                if (!Algorithms.currentAlgorithm.isInitialized()) {
+                if (!AlgorithmEventManager.getInstance().isInitialized()) {
                     Node selectedNode = getNodeOnPos(mouseEvent.getPoint(), graph.getNodes());
 
                     if (selectedNode != null) {
-                        Algorithms.currentAlgorithm.initialize(selectedNode);
+                        AlgorithmEventManager.getInstance().getAlgorithm().initialize(selectedNode);
                     }
                 }
                 break;

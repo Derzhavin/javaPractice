@@ -1,6 +1,5 @@
 package com.codebind.algorithmComponents;
 
-import com.codebind.Algorithms;
 import com.codebind.ButtonState;
 import com.codebind.GraphicsPanel;
 import com.codebind.graphComonents.Edge;
@@ -14,14 +13,11 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 public abstract class Algorithm {
-    protected static final int TIMER_BASIC_DELAY = 400;
     protected boolean initialized = false;
     protected boolean finished = false;
     protected int currentStep = 0;
-    protected Timer timer = new Timer(TIMER_BASIC_DELAY, e->doStep());
 
     protected Graph graph = null;
-    protected GraphicsPanel graphicsPanel = null;
     protected ArrayList<StepsColorDataBase> stepsColorDataBase = new ArrayList<>();
     protected int stepsColorDataBaseIterator = 0;
 
@@ -33,74 +29,51 @@ public abstract class Algorithm {
     }
 
     public abstract void doRun();
-    public abstract void doStep();
-    public abstract void doBackwardsStep();
-    public abstract void doWhile(Callable<?> func);
-
-    public void setDelay(int delay) {
-        timer.setDelay(delay);
-    }
+    public abstract void doForwardStep();
+    public abstract void doBackwardStep();
 
     public void setGraph(Graph graph) {
         this.graph = graph;
     }
 
-    public void setGraphicsPanel(GraphicsPanel panel) {
-        this.graphicsPanel = panel;
-    }
+    public AlgorithmState getState() {
+        int step = 0;
 
-    public abstract void sayHello();
-
-    public abstract void goToEnd();
-
-    public void stop() {
-        timer.stop();
-    }
-
-    public void continueIfStoped() {
-        if (initialized) {
-            timer.start();
+        if (stepsColorDataBaseIterator == 0) {
+            step = 0;
         }
+        else if (finished && (stepsColorDataBaseIterator == stepsColorDataBase.size() - 1)) {
+            step = 2;
+        }
+        else {
+            step = 1;
+        }
+
+        return new AlgorithmState(initialized, step, stepsColorDataBase.get(stepsColorDataBaseIterator));
     }
 
     public void reset() {
         stepsColorDataBaseIterator = 0;
         stepsColorDataBase.clear();
 
-        timer.stop();
         initialized = false;
         finished = false;
         currentStep = 0;
     }
 
-    protected void updateButtons() {
-        if (finished && (stepsColorDataBaseIterator == stepsColorDataBase.size() - 1)) {
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
-            Algorithms.buttonPanel.buttons.get(0).setState(ButtonState.INACTIVE);
-            Algorithms.buttonPanel.buttons.get(0).changeState();
-            Algorithms.buttonPanel.buttons.get(0).setEnabled(false);
-            Algorithms.buttonPanel.buttons.get(2).setEnabled(false);
-            Algorithms.buttonPanel.buttons.get(4).setEnabled(false);
-        }
-        else {
-            Algorithms.buttonPanel.buttons.get(0).setEnabled(true);
-            Algorithms.buttonPanel.buttons.get(2).setEnabled(true);
-            Algorithms.buttonPanel.buttons.get(4).setEnabled(true);
-        }
+    public class AlgorithmState {
+        public boolean initialized;
+        public int step; //0 - first; 1 - middle; 2 - last
+        public StepsColorDataBase stepsColorDataBase;
 
-        if (stepsColorDataBaseIterator == 0) {
-            Algorithms.buttonPanel.buttons.get(3).setEnabled(false);
-        }
-        else {
-            Algorithms.buttonPanel.buttons.get(3).setEnabled(true);
-        }
-
-        if (!finished || stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
-
+        public AlgorithmState(boolean initialized, int step, StepsColorDataBase stepsColorDataBase) {
+            this.initialized = initialized;
+            this.step = step;
+            this.stepsColorDataBase = stepsColorDataBase;
         }
     }
 
-    protected class StepsColorDataBase {
+    public class StepsColorDataBase {
         protected HashMap<Node, Color> nodeColorHashMap = new HashMap<>();
         protected HashMap<Edge, Color> edgeColorHashMap = new HashMap<>();
 
