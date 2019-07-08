@@ -27,14 +27,15 @@ class Application implements ActionListener {
     JPanel toolBar;
     private HashMap<String, Button> buttonHashMap = new HashMap<>();
     private HashMap<String, Button> singleActiveButtonHashMap = new HashMap<>();
-
+    //private JTextArea display = new JTextArea();
+    private  JLabel display = new JLabel();
     public Application() {
         Image iconOfApp = new ImageIcon("img/Иконка приложения.png").getImage();
 
         frame = new JFrame("Graph application");
         frame.setIconImage(iconOfApp);
 
-        frame.setMinimumSize(new Dimension(800, 600));
+        frame.setMinimumSize(new Dimension(900, 600));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
@@ -263,10 +264,12 @@ class Application implements ActionListener {
                 Algorithms.currentAlgorithm.reset();
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
+               // Algorithms.currentAlgorithm.setDisplay(display);
                 break;
             case "Косарайю":
                 labelAction.setText("Kosaraju");
                 Algorithms.selectAlgorithmByName("Kosaraju");
+              //  Algorithms.currentAlgorithm.setDisplay(display);
                 Algorithms.currentAlgorithm.reset();
                 Algorithms.currentAlgorithm.setGraph(GraphEventManager.getInstance().getGraph());
                 Algorithms.currentAlgorithm.setGraphicsPanel(graphicsPanel);
@@ -404,7 +407,7 @@ class Application implements ActionListener {
             button.setFocusPainted(false);
 
             if(commands[i].equals("Запустить алгоритм")){
-                for(int j = 0; j < 8; j++) {
+                for(int j = 0; j < 5; j++) {
                     toolBar.add(new JSeparator(SwingConstants.VERTICAL));
                 }
             }
@@ -435,6 +438,22 @@ class Application implements ActionListener {
         GraphCaretaker.button1 = buttonHashMap.get("Отмена");
         GraphCaretaker.button2 = buttonHashMap.get("Отмена отмены");
 
+        for(int j = 0; j < 5; j++) {
+            toolBar.add(new JSeparator(SwingConstants.VERTICAL));
+        }
+
+
+        display.setPreferredSize(new Dimension(200, 20));
+        display.setBackground(new Color(100, 0, 0));
+        display.setVisible(true);
+        display.setEnabled(true);
+        display.setText("srgdbsetjhn");
+//        display.setPreferredSize(new Dimension(200, 20));
+//        display.setBackground(new Color(255, 255, 255));
+//        display.setVisible(true);
+//        display.setEnabled(false);
+//        display.setFont(new Font("TimesRoman", Font.BOLD, 17));
+        toolBar.add(display);
         toolBar.setBorder(BorderFactory.createRaisedBevelBorder());
 
         return toolBar;

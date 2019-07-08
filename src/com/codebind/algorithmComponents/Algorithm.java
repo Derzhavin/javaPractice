@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 public abstract class Algorithm {
+    protected JTextArea display = null;
     protected static final int TIMER_BASIC_DELAY = 400;
     protected boolean initialized = false;
     protected int currentStep = 0;
@@ -29,6 +30,11 @@ public abstract class Algorithm {
         return initialized;
     }
 
+    public void setDisplay(JTextArea display) {
+        this.display = display;
+    }
+
+    public abstract void displayStep(String text);
     public abstract void doRun();
     public abstract void doStep();
     public abstract void doBackwardsStep();
@@ -67,9 +73,14 @@ public abstract class Algorithm {
         currentStep = 0;
     }
 
+    public void setIteratorStage(int iter, String stage) {
+        stepsColorDataBase.get(iter).stageOfAlgorithm = new String(stage);
+    }
+
     protected class StepsColorDataBase {
         protected HashMap<Node, Color> nodeColorHashMap = new HashMap<>();
         protected HashMap<Edge, Color> edgeColorHashMap = new HashMap<>();
+        public String stageOfAlgorithm = "doDFSstep";
 
         public StepsColorDataBase(Graph graph) {
             for (Node node : graph.getNodes()) {

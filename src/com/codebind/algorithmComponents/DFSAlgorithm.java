@@ -20,6 +20,9 @@ public class DFSAlgorithm extends Algorithm {
     private HashMap<Node, AlgorithmNodeStructure> nodes = new HashMap<>();
     private ArrayList<Edge> edges = new ArrayList<>();
 
+    @Override
+    public void displayStep(String text) {}
+
     public DFSAlgorithm() {
         this.startNode = null;
         this.currentNode = null;

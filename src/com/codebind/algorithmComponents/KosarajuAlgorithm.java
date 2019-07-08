@@ -36,6 +36,24 @@ public class KosarajuAlgorithm extends Algorithm {
         this.colorOfComponent = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
     }
 
+    @Override
+    public void displayStep(String text) {
+        switch(text) {
+            case "doDFSstep":
+                display.setText("Поиск в глубину");
+                break;
+            case "doTransposeStep":
+                display.setText("Транспонирование рёбер графа");
+                break;
+            case "doSearchComponentsStep":
+                display.setText("Нахождение компонет связности");
+                break;
+            default:
+                display.setText(" ");
+                break;
+        }
+    }
+
     private void wrappNodes() {
         for (Node node : graph.getNodes()) {
             nodes.put(node, new NodeWrapper());
@@ -83,18 +101,34 @@ public class KosarajuAlgorithm extends Algorithm {
     @Override
     public void doStep() {
         if (stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
+            //System.out.println("doUp");
             stepsColorDataBaseIterator++;
             stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
 
+//            if (stepsColorDataBase.get(stepsColorDataBaseIterator).stageOfAlgorithm.equals("doDFSstep")) {
+//                displayStep("doDFSstep");
+//                UnVisitedCounter++;
+//            }
+
             if (((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).transposed) {
+                //displayStep("doTransposeStep");
                 transpose();
             }
+
+//            if (stepsColorDataBase.get(stepsColorDataBaseIterator).stageOfAlgorithm.equals("doSearchComponentsStep")) {
+//                displayStep("doSearchComponentsStep");
+//            }
+
+//            stageOfAlgorithm = ((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).stageOfAlgorithm;
 
             graphicsPanel.repaint();
             return;
         }
 
         String currentStageOfAlgorithm = stageOfAlgorithm;
+       // setIteratorStage(stepsColorDataBaseIterator, stageOfAlgorithm);
+
+        //displayStep(stageOfAlgorithm);
 
         switch (stageOfAlgorithm) {
             case "doDFSstep":
@@ -111,7 +145,7 @@ public class KosarajuAlgorithm extends Algorithm {
                 break;
         }
 
-        System.out.println(stageOfAlgorithm);
+        //System.out.println(stageOfAlgorithm);
         updatePictures();
         graphicsPanel.repaint();
 
@@ -122,17 +156,25 @@ public class KosarajuAlgorithm extends Algorithm {
     @Override
     public void doBackwardsStep() {
         if (stepsColorDataBaseIterator != 0) {
-            if (stageOfAlgorithm.equals("doDFSstep")) {
-                UnVisitedCounter++;
-            }
-
+            System.out.println("doDown");
             System.out.println(stepsColorDataBaseIterator);
             stepsColorDataBaseIterator--;
             stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
 
+//            System.out.println(stepsColorDataBase.get(stepsColorDataBaseIterator).stageOfAlgorithm);
+//            if (stepsColorDataBase.get(stepsColorDataBaseIterator).stageOfAlgorithm.equals("doDFSstep")) {
+//                displayStep("doDFSstep");
+//                UnVisitedCounter++;
+//            }
+
             if (((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).transposed) {
+                //displayStep("doTransposeStep");
                 transpose();
             }
+
+//            if (stepsColorDataBase.get(stepsColorDataBaseIterator).stageOfAlgorithm.equals("doSearchComponentsStep")) {
+//                displayStep("doSearchComponentsStep");
+//            }
 
             graphicsPanel.repaint();
         }
@@ -154,7 +196,7 @@ public class KosarajuAlgorithm extends Algorithm {
 
     private void doDFSstep() {
         if (stack.isEmpty()) {
-            if (UnVisitedCounter > 0) {
+            //if (UnVisitedCounter > 0) {
                 for (Node node : graph.getNodes()) {
                     if (!nodes.get(node).isVisited) {
                         currentNode = node;
@@ -162,7 +204,7 @@ public class KosarajuAlgorithm extends Algorithm {
                         return;
                     }
                 }
-            }
+            //}
 
             stageOfAlgorithm = "doTransposeStep";
             return;
@@ -173,7 +215,7 @@ public class KosarajuAlgorithm extends Algorithm {
 
         for (Node neighbour: currentNode.getSmartNeighbours()) {
             if (!nodes.get(neighbour).isVisited) {
-                UnVisitedCounter--;
+                //UnVisitedCounter--;
                 edges.add(currentNode.getEdge(neighbour));
                 stack.push(neighbour);
                 return;
@@ -306,6 +348,7 @@ public class KosarajuAlgorithm extends Algorithm {
         edges.clear();
         nodes.clear();
         timeOutList.clear();
+        //displayStep(" ");
         stageOfAlgorithm = "doDFSstep";
     }
 
@@ -322,11 +365,10 @@ public class KosarajuAlgorithm extends Algorithm {
         }
     }
 
-
     private class KosarajuStepsColorDataBase extends StepsColorDataBase {
-        public boolean transposed = false;
+        public Boolean transposed = false;
 
-        public KosarajuStepsColorDataBase(Graph graph, boolean transposed) {
+        public KosarajuStepsColorDataBase(Graph graph, Boolean transposed) {
             super(graph);
             this.transposed = transposed;
         }
