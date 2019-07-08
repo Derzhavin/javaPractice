@@ -1,5 +1,7 @@
 package com.codebind.algorithmComponents;
 
+import com.codebind.Algorithms;
+import com.codebind.ButtonState;
 import com.codebind.GraphicsPanel;
 import com.codebind.graphComonents.Edge;
 import com.codebind.graphComonents.Graph;
@@ -14,6 +16,7 @@ import java.util.concurrent.Callable;
 public abstract class Algorithm {
     protected static final int TIMER_BASIC_DELAY = 400;
     protected boolean initialized = false;
+    protected boolean finished = false;
     protected int currentStep = 0;
     protected Timer timer = new Timer(TIMER_BASIC_DELAY, e->doStep());
 
@@ -25,7 +28,7 @@ public abstract class Algorithm {
     public abstract void initialize(Node node);
     public abstract void initialize(Edge edge);
 
-    public  boolean isInitialized() {
+    public boolean isInitialized() {
         return initialized;
     }
 
@@ -48,13 +51,15 @@ public abstract class Algorithm {
 
     public abstract void sayHello();
 
+    public abstract void goToEnd();
+
     public void stop() {
         timer.stop();
     }
 
     public void continueIfStoped() {
         if (initialized) {
-            timer.restart();
+            timer.start();
         }
     }
 
@@ -64,7 +69,35 @@ public abstract class Algorithm {
 
         timer.stop();
         initialized = false;
+        finished = false;
         currentStep = 0;
+    }
+
+    protected void updateButtons() {
+        if (finished && (stepsColorDataBaseIterator == stepsColorDataBase.size() - 1)) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+            Algorithms.buttonPanel.buttons.get(0).setState(ButtonState.INACTIVE);
+            Algorithms.buttonPanel.buttons.get(0).changeState();
+            Algorithms.buttonPanel.buttons.get(0).setEnabled(false);
+            Algorithms.buttonPanel.buttons.get(2).setEnabled(false);
+            Algorithms.buttonPanel.buttons.get(4).setEnabled(false);
+        }
+        else {
+            Algorithms.buttonPanel.buttons.get(0).setEnabled(true);
+            Algorithms.buttonPanel.buttons.get(2).setEnabled(true);
+            Algorithms.buttonPanel.buttons.get(4).setEnabled(true);
+        }
+
+        if (stepsColorDataBaseIterator == 0) {
+            Algorithms.buttonPanel.buttons.get(3).setEnabled(false);
+        }
+        else {
+            Algorithms.buttonPanel.buttons.get(3).setEnabled(true);
+        }
+
+        if (!finished || stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
+
+        }
     }
 
     protected class StepsColorDataBase {
