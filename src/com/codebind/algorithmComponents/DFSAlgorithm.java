@@ -63,40 +63,25 @@ public class DFSAlgorithm extends Algorithm {
         nodes.get(currentNode).setVisited(true);
         stack.push(startNode);
         updatePictures();
-        graphicsPanel.repaint();
-        stepsColorDataBase.add(new StepsColorDataBase(graph));
-
-        //timer.start();
+        stepsColorDataBase.add(new StepsColorDataBase(graph, "first DFS step"));
     }
 
     @Override
-    public void doStep() {
+    public void doForwardStep() {
         if (stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
             stepsColorDataBaseIterator++;
             stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
-
-            graphicsPanel.repaint();
-            updateButtons();
-
-            if (finished && stepsColorDataBaseIterator == stepsColorDataBase.size() - 1) {
-                timer.stop();
-            }
-
             return;
         }
 
         if (finished) {
-            updateButtons();
             return;
         }
 
         doDFSStep();
         updatePictures();
-        graphicsPanel.repaint();
-        stepsColorDataBase.add(new StepsColorDataBase(graph));
+        stepsColorDataBase.add(new StepsColorDataBase(graph,  stepsColorDataBaseIterator + 1 + "th DFS step"));
         stepsColorDataBaseIterator++;
-
-        updateButtons();
     }
 
     private void doDFSStep() {
@@ -116,22 +101,16 @@ public class DFSAlgorithm extends Algorithm {
         stack.pop();
 
         if (stack.isEmpty()) {
-            timer.stop();
             finished = true;
         }
     }
 
 
     @Override
-    public void doBackwardsStep() {
+    public void doBackwardStep() {
         if (stepsColorDataBaseIterator != 0) {
-            System.out.println(stepsColorDataBaseIterator);
             stepsColorDataBaseIterator--;
             stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
-
-            updateButtons();
-
-            graphicsPanel.repaint();
         }
     }
 
@@ -151,51 +130,10 @@ public class DFSAlgorithm extends Algorithm {
         }
     }
 
-    @Override
-    public void doWhile(Callable<?> func) {
-
-    }
-
-    @Override
-    public void sayHello() {
-
-    }
-
-    @Override
-    public void goToEnd() {
-        timer.stop();
-
-        while (stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
-            stepsColorDataBaseIterator++;
-            stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
-        }
-
-        while (!finished) {
-            doStep();
-        }
-
-        updateButtons();
-        updatePictures();
-        graphicsPanel.repaint();
-    }
 
     @Override
     public void reset() {
         super.reset();
-
-        if (graph != null) {
-            for (Node node : graph.getNodes()) {
-                node.getView().setColor(DrawNode.BASIC_COLOR);
-            }
-
-            for (Edge edge : edges) {
-                edge.getView().setColor(DrawEdge.BASIC_COLOR);
-            }
-
-            if (graphicsPanel != null) {
-                graphicsPanel.repaint();
-            }
-        }
 
         stack.clear();
         nodes.clear();

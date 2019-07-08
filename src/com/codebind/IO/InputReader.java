@@ -1,4 +1,4 @@
-package com.codebind;
+package com.codebind.IO;
 
 import javax.swing.*;
 import java.awt.geom.Point2D;
@@ -17,10 +17,10 @@ enum DataMode {
     COORDS
 }
 
-class InputReader {
+public class InputReader {
     private ArrayList<String> lines;
     private DataMode mode;
-    boolean FileOpen = false;
+    public boolean FileOpen = false;
 
     public InputReader(){
         lines = new ArrayList<String>(50);

@@ -1,5 +1,5 @@
 package com.codebind;
-import com.codebind.graphComonents.GraphEventManager;
+import com.codebind.Managers.GraphEventManager;
 import com.codebind.graphComonents.GraphStates;
 import com.codebind.viewComponents.DrawGraph;
 
@@ -81,6 +81,9 @@ public class GraphicsPanel extends JPanel {
         repaint();
     }
 
+    public void setGraphBasicColor() {
+        graph.resetColors();
+    }
 
     @Override
     public void paintComponent(Graphics g) {

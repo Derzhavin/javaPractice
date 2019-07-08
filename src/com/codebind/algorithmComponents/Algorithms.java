@@ -1,5 +1,6 @@
-package com.codebind;
+package com.codebind.algorithmComponents;
 
+import com.codebind.Managers.AlgorithmEventManager;
 import com.codebind.algorithmComponents.Algorithm;
 import com.codebind.algorithmComponents.AlgorithmButtons;
 import com.codebind.algorithmComponents.DFSAlgorithm;
@@ -10,8 +11,6 @@ import java.util.HashMap;
 
 public class Algorithms {
     private static HashMap<String, Algorithm> algorithmHashMap = new HashMap<>();
-    public static Algorithm currentAlgorithm = null;
-    public static AlgorithmButtons buttonPanel = new AlgorithmButtons();
     private static int delay = 500;
 
     public Algorithms() {}
@@ -20,16 +19,16 @@ public class Algorithms {
         algorithmHashMap.put("DFS", new DFSAlgorithm());
         algorithmHashMap.put("Kosaraju", new KosarajuAlgorithm());
 
-        currentAlgorithm = algorithmHashMap.get("DFS");
+        AlgorithmEventManager.getInstance().setAlgorithm(algorithmHashMap.get("DFS"));
     }
 
     public static void selectAlgorithmByName(String name) {
-        currentAlgorithm = algorithmHashMap.get(name);
-        currentAlgorithm.setDelay(delay);
+        AlgorithmEventManager.getInstance().setAlgorithm(algorithmHashMap.get(name));
+        AlgorithmEventManager.getInstance().setDelay(delay);
     }
 
     public static void setDelay(int _delay) {
         delay = _delay;
-        currentAlgorithm.setDelay(delay);
+        AlgorithmEventManager.getInstance().setDelay(delay);
     }
 }

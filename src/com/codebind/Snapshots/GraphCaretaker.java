@@ -1,7 +1,7 @@
 package com.codebind.Snapshots;
 
 import com.codebind.Button;
-import com.codebind.graphComonents.GraphEventManager;
+import com.codebind.Managers.GraphEventManager;
 
 import java.util.ArrayDeque;
 
