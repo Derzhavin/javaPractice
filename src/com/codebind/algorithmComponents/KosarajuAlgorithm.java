@@ -90,7 +90,17 @@ public class KosarajuAlgorithm extends Algorithm {
                 transpose();
             }
 
+            if (finished && stepsColorDataBaseIterator == stepsColorDataBase.size() - 1) {
+                timer.stop();
+            }
+
+            updateButtons();
             graphicsPanel.repaint();
+            return;
+        }
+
+        if (finished) {
+            updateButtons();
             return;
         }
 
@@ -117,6 +127,8 @@ public class KosarajuAlgorithm extends Algorithm {
 
         stepsColorDataBase.add(new KosarajuStepsColorDataBase(graph, currentStageOfAlgorithm.equals("doTransposeStep")));
         stepsColorDataBaseIterator++;
+
+        updateButtons();
     }
 
     @Override
@@ -126,13 +138,15 @@ public class KosarajuAlgorithm extends Algorithm {
                 UnVisitedCounter++;
             }
 
+            if (((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).transposed) {
+                transpose();
+            }
+
             System.out.println(stepsColorDataBaseIterator);
             stepsColorDataBaseIterator--;
             stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
 
-            if (((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).transposed) {
-                transpose();
-            }
+            updateButtons();
 
             graphicsPanel.repaint();
         }
@@ -227,6 +241,7 @@ public class KosarajuAlgorithm extends Algorithm {
     private void doSearchComponentsStep() {
         if (timeOutList.isEmpty()) {
             System.out.println("FINISH!!!");
+            finished = true;
             timer.stop();
             return;
         }
@@ -278,6 +293,29 @@ public class KosarajuAlgorithm extends Algorithm {
     @Override
     public void sayHello() {
 
+    }
+
+    @Override
+    public void goToEnd() {
+        timer.stop();
+
+        while (stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
+            stepsColorDataBaseIterator++;
+            stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
+
+            if (((KosarajuStepsColorDataBase)stepsColorDataBase.get(stepsColorDataBaseIterator)).transposed) {
+                transpose();
+            }
+        }
+
+        while (!finished) {
+            doStep();
+        }
+
+        updateButtons();
+
+        updatePictures();
+        graphicsPanel.repaint();
     }
 
     @Override

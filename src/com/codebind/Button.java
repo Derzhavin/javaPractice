@@ -4,15 +4,10 @@ import javax.swing.JButton;
 import java.awt.Color;
 
 
-enum ButtonState {
-    ACTIVE,
-    INACTIVE
-}
-
 public class Button extends JButton{
     private ButtonState state;
 
-    void changeState() {
+    public void changeState() {
         if (state == ButtonState.ACTIVE) {
             this.setBackground(new Color(170, 170, 199));
         } else {
@@ -20,7 +15,7 @@ public class Button extends JButton{
         }
     }
 
-    void setState(ButtonState state) {
+    public void setState(ButtonState state) {
         this.state = state;
     }
 

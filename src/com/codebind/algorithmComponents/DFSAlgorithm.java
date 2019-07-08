@@ -75,16 +75,31 @@ public class DFSAlgorithm extends Algorithm {
             stepsColorDataBaseIterator++;
             stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
 
-            //updatePictures();
             graphicsPanel.repaint();
+            updateButtons();
+
+            if (finished && stepsColorDataBaseIterator == stepsColorDataBase.size() - 1) {
+                timer.stop();
+            }
+
             return;
         }
 
-        if (stack.isEmpty()) {
-            timer.stop();
+        if (finished) {
+            updateButtons();
             return;
         }
 
+        doDFSStep();
+        updatePictures();
+        graphicsPanel.repaint();
+        stepsColorDataBase.add(new StepsColorDataBase(graph));
+        stepsColorDataBaseIterator++;
+
+        updateButtons();
+    }
+
+    private void doDFSStep() {
         currentNode = stack.peek();
         nodes.get(currentNode).setVisited(true);
 
@@ -94,21 +109,18 @@ public class DFSAlgorithm extends Algorithm {
             if (!nodes.get(neighbour).isVisited) {
                 edges.add(currentNode.getEdge(neighbour));
                 stack.push(neighbour);
-                updatePictures();
-                graphicsPanel.repaint();
-                stepsColorDataBase.add(new StepsColorDataBase(graph));
-                stepsColorDataBaseIterator++;
                 return;
             }
         }
 
         stack.pop();
-        updatePictures();
-        graphicsPanel.repaint();
 
-        stepsColorDataBase.add(new StepsColorDataBase(graph));
-        stepsColorDataBaseIterator++;
+        if (stack.isEmpty()) {
+            timer.stop();
+            finished = true;
+        }
     }
+
 
     @Override
     public void doBackwardsStep() {
@@ -117,7 +129,8 @@ public class DFSAlgorithm extends Algorithm {
             stepsColorDataBaseIterator--;
             stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
 
-            //updatePictures();
+            updateButtons();
+
             graphicsPanel.repaint();
         }
     }
@@ -146,6 +159,24 @@ public class DFSAlgorithm extends Algorithm {
     @Override
     public void sayHello() {
 
+    }
+
+    @Override
+    public void goToEnd() {
+        timer.stop();
+
+        while (stepsColorDataBaseIterator != (stepsColorDataBase.size() - 1)) {
+            stepsColorDataBaseIterator++;
+            stepsColorDataBase.get(stepsColorDataBaseIterator).resetColors();
+        }
+
+        while (!finished) {
+            doStep();
+        }
+
+        updateButtons();
+        updatePictures();
+        graphicsPanel.repaint();
     }
 
     @Override
