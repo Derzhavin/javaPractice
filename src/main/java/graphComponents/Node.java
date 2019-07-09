@@ -1,10 +1,11 @@
 package graphComponents;
 
+import Phisics.Droppable;
 import ViewCompomemts.DrawNode;
 
 import java.util.ArrayList;
 
-public class Node {
+public class Node extends Droppable {
     private ArrayList<Edge> edges = new ArrayList<>();
     private DrawNode nodeView;
 

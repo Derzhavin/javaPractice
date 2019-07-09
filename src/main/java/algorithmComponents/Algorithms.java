@@ -2,7 +2,6 @@ package algorithmComponents;
 
 import Managers.AlgorithmEventManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Algorithms {

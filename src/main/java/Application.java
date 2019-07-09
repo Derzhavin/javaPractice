@@ -2,6 +2,7 @@ import IO.InputReader;
 import IO.OutputWriter;
 import Managers.AlgorithmEventManager;
 import Managers.GraphEventManager;
+import Phisics.Gravitation;
 import Widgets.ButtonState;
 import Widgets.GraphicsPanel;
 import Widgets.Button;
@@ -30,6 +31,7 @@ class Application implements ActionListener {
     private JMenuBar menuBar;
     private JPanel statusBar;
     JPanel toolBar;
+    public Gravitation g;
     private HashMap<String, Button> buttonHashMap = new HashMap<String, Button>();
     private HashMap<String, Button> singleActiveButtonHashMap = new HashMap<>();
 
@@ -161,6 +163,8 @@ class Application implements ActionListener {
                 buttonHashMap.get("Сделать шаг назад"),
                 buttonHashMap.get("Результат"),
                 buttonHashMap.get("Начало")));
+
+        g = new Gravitation(graphicsPanel);
     }
 
 
@@ -293,6 +297,9 @@ class Application implements ActionListener {
                     GraphEventManager.getInstance().getGraph().restore(GraphCaretaker.poll());
                 }
                 break;
+            case "Гравитация":
+                Gravitation.GRAVITATION_ACTIVE = !Gravitation.GRAVITATION_ACTIVE;
+                break;
             default:
                 labelAction.setText("");
                 graphicsPanel.setGraphState(GraphStates.NOTHING);
@@ -374,6 +381,7 @@ class Application implements ActionListener {
                 "resources/img/Сделать шаг вперед.png",
                 "resources/img/Сделать шаг назад.png",
                 "resources/img/Конец.png",
+                "resources/img/Начало.png",
                 "resources/img/Начало.png"
         };
 
@@ -395,7 +403,8 @@ class Application implements ActionListener {
                 "Сделать шаг вперед",
                 "Сделать шаг назад",
                 "Результат",
-                "Начало"
+                "Начало",
+                "Гравитация"
         };
 
         ArrayList<String> singleActiveCommands = new ArrayList<>();
