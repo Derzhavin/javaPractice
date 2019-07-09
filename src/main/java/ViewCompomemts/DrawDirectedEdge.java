@@ -1,4 +1,4 @@
-package com.codebind.viewComponents;
+package ViewCompomemts;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

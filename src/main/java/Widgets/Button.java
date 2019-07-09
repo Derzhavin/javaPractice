@@ -1,4 +1,4 @@
-package com.codebind;
+package Widgets;
 
 import javax.swing.JButton;
 import java.awt.Color;
