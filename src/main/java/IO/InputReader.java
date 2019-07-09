@@ -22,6 +22,27 @@ public class InputReader {
     private DataMode mode;
     public boolean FileOpen = false;
 
+    public InputReader(String fileName) {
+        lines = new ArrayList<String>(50);
+
+        File file = new File(fileName);
+
+        if (file != null) {
+            FileOpen = true;
+        }
+
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))){
+            String line;
+            while((line = reader.readLine()) != null){
+                if (!line.equals(""))lines.add(line);
+            }
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     public InputReader(){
         lines = new ArrayList<String>(50);
         JFileChooser fileopen = new JFileChooser(new File("./GraphExamples"));
