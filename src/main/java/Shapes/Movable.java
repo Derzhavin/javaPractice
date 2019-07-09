@@ -1,4 +1,4 @@
-package com.codebind.Shapes;
+package Shapes;
 
 import java.awt.geom.Rectangle2D;
 

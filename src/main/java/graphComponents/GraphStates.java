@@ -1,4 +1,4 @@
-package com.codebind.graphComonents;
+package graphComponents;
 
 public enum GraphStates {
     CREATE_NODE,

@@ -1,0 +1,5 @@
+Location: by coordinates 
+am(400; 40)   b c  d
+b (700;400) d c
+c(100;400) d
+d(400;200) am b 

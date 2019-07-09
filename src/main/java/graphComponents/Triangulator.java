@@ -1,4 +1,4 @@
-package com.codebind.graphComonents;
+package graphComponents;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
