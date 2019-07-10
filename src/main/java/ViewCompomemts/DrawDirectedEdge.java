@@ -19,10 +19,21 @@ public class DrawDirectedEdge extends DrawEdge {
     public void draw(Graphics2D g) {
         super.draw(g);
 
+        double angle = Math.atan2(destPosition.x - circleCenter.x, destPosition.y - circleCenter.y);
+
+        if (angle < 0) {
+            angle += 2 * Math.PI;
+        }
+
+        angle = 2 * Math.PI - angle;
+        System.out.println(Math.toDegrees(angle));
+
+        Point2D.Double unitVector = new Point2D.Double(Math.cos(angle), Math.sin(angle));
+
         Point2D.Double[] polygonPoints = new Point2D.Double[3];
-        Point2D.Double vector = new Point2D.Double(sourcePosition.x - destPosition.x, sourcePosition.y - destPosition.y);
-        double vectorLength = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
-        Point2D.Double unitVector = new Point2D.Double(vector.x / vectorLength, vector.y / vectorLength);
+        //Point2D.Double vector = new Point2D.Double(sourcePosition.x - destPosition.x, sourcePosition.y - destPosition.y);
+        //double vectorLength = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+        //Point2D.Double unitVector = new Point2D.Double(vector.x / vectorLength, vector.y / vectorLength);
         unitVector.x *= POLYGON_SIZE * DrawNode.scale;
         unitVector.y *= POLYGON_SIZE * DrawNode.scale;
 
