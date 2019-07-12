@@ -1,2 +1,2 @@
 # javaPractice
-(https://github.com/Derzhavin/javaPractice/confirmed.jpg)
+![alt text](https://github.com/Derzhavin/javaPractice/raw/master/confirmed.jpg)
